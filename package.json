@@ -1,0 +1,23 @@
+{
+  "name": "gdsc_wallet_backend",
+  "version": "0.0.1",
+  "description": "GDSC_wallet project's backend",
+  "main": "index.js",
+  "scripts": {
+    "serve": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/williiam/GDSC_wallet_backend.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/williiam/GDSC_wallet_backend/issues"
+  },
+  "homepage": "https://github.com/williiam/GDSC_wallet_backend#readme",
+  "dependencies": {
+    "express": "^4.17.3"
+  }
+}
