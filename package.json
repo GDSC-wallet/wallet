@@ -18,6 +18,12 @@
   },
   "homepage": "https://github.com/williiam/GDSC_wallet_backend#readme",
   "dependencies": {
-    "express": "^4.17.3"
+    "connect-sqlite3": "^0.9.13",
+    "dotenv": "^16.0.0",
+    "express": "^4.17.3",
+    "express-session": "^1.17.2",
+    "http-proxy-middleware": "^2.0.4",
+    "passport": "^0.5.2",
+    "passport-google-oidc": "^0.1.0"
   }
 }
