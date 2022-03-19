@@ -11,6 +11,6 @@ app.listen(port, () => {
   console.log(`Example app listening on port http://localhost:${port}`)
 })
 
-app.post('/login_success', (req, res) => {
-    db.get_login();
+app.get('/user/data/get', (req, res) => {
+    res.send(db.get_login());
 })

@@ -12,18 +12,85 @@ function get_login() {
         port: 3306,
         database: 'GDSC_wallet'
     });
-    connection.connect();
 
-    var sql = "SELECT * FROM user JOIN wallet ON wallet.user_id=user.id JOIN wallet_record ON wallet_record.wallet_id=wallet.id";
+    connection.connect(function(err){
+        if(err)
+            return "Connect to mysql failed.";
+        else
+            console.log("Successfully connect to mysql : root@localhost ");
+    });
+
+    var sql = "SELECT * FROM user JOIN wallet ON wallet.user_id=user.id JOIN wallet_record ON wallet_record.wallet_id=wallet.wallet_id";
     try{
-        connection.query(sql, function(err, results, fields){
-            if(error) {
+        connection.query(sql, function(err, result, fields) {
+            if(err) {
                 throw err;
             }
-            console.log(results);
+            console.log("Selected " + result.length + " row(s).");
+            for(let i=0; i<result.length; ++i) {
+                console.log("Row: " + JSON.stringify(result[i]) + '\n');
+            }
+            // 回傳的json格式
+            /*
+            results.forEach(function(result, idx){
+                var response:
+                {
+                    status:"error"/"success"
+                    message:"info for user_id1"
+                    data:{
+                        user_id: result.user_id,
+                        selected_wallet_id:"a",
+                        wallets:[
+                            "wallet-a":{
+                                wallet_id: result.wallet_id,
+                                wallet_name: result.username,
+                                selected: "True" // true or false, True for now testing
+                                records:[
+                                    {
+                                        record_id:"wallet-a-record-1",
+                                        wallet_record_tag_id: result.wallet_record_tag_id,
+                                        record_ordinary: result.ordinary,
+                                        record_name: result.record_name,
+                                        record_description: result.description,
+                                        record_amount: result.amount,
+                                        record_type: result.type,
+                                        record_date: result.date,
+                                        record_created_time: result.record_created_time
+                                    },
+                                    {
+                                        record_id:"wallet-a-record-2",
+                                        wallet_record_tag_id:
+                                        record_ordinary:
+                                        record_name:
+                                        record_description:
+                                        record_amount:
+                                        record_type:
+                                        record_date:
+                                        record_created_time:
+                                    }
+                                ]
+                            },
+                            "wallet-b":{
+                                wallet_id:,
+                                wallet_name:,
+                                selected: // 若selected==false則records為空陣列
+                                records:[    
+                                ]
+                            }
+                        ]
+                    }
+                }
+                return 
+            });
+            */
+        });
+        return result;
     } catch (e) {
-        console.log("ERROR: " + e.message);
+        console.log("ERROR__: " + e.message);
+        return "Error happened."
     }
-})
+    // 斷開資料庫連線
+    connection.end();
+}
 
 exports.get_login = get_login;
