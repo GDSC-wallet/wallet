@@ -29,12 +29,11 @@ function get_login() {
             }
             console.log("Selected " + result.length + " row(s).");
             for(let i=0; i<result.length; ++i) {
-                console.log("Row: " + JSON.stringify(result[i]) + '\n');
                 res += JSON.stringify(result[i]);
             }
             // 回傳的json格式
             /*
-            results.forEach(function(result, idx){
+            result.forEach(function(result, idx){
                 var response:
                 {
                     status:"error"/"success"

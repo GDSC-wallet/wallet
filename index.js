@@ -1,11 +1,11 @@
 const db = require('./db.js')
 const express = require('express')
+const bodyParser = require('body-parser')
 const app = express()
 const port = 3000
 
-app.get('/', (req, res) => {
-  res.send('Hello World!')
-})
+app.use(express.urlencoded({ extended : false }));
+app.use(express.static('dist'));
 
 app.listen(port, () => {
   console.log(`Example app listening on port http://localhost:${port}`)
