@@ -12,7 +12,6 @@ function get_login() {
         port: 3306,
         database: 'GDSC_wallet'
     });
-
     connection.connect(function(err){
         if(err)
             return "Connect to mysql failed.";
@@ -20,6 +19,7 @@ function get_login() {
             console.log("Successfully connect to mysql : root@localhost ");
     });
 
+    // 讀取database資料
     var sql = "SELECT * FROM user JOIN wallet ON wallet.user_id=user.id JOIN wallet_record ON wallet_record.wallet_id=wallet.wallet_id";
     try{
         //var temp = {};
@@ -85,17 +85,20 @@ function get_login() {
                 return 
             });
             */
-
             console.log("res is :");
             console.log(res);
+            throw res;
         });
     } catch (e) {
-        console.log("ERROR__: " + e.message);
-        return "Error happened."
+        console.log("ERROR: " + e.message);
+        return "ERROR HAPPENED.";
     }
     // 斷開資料庫連線
     connection.end();
-    // 太早回傳導致res還沒有抓到東西就回傳,改用promise
+    /*
+    若在callback function中return就不會return回router
+    但直接return又會因為異步執行導致還沒抓到資料就回傳
+    */
     return res;
 }
 
