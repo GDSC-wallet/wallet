@@ -12,5 +12,7 @@ app.listen(port, () => {
 })
 
 app.get('/user/data/get', (req, res) => {
-    res.send(db.get_login());
+    var sql_data = db.get_login();
+    console.log(sql_data);
+    res.send(sql_data);
 })

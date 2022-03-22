@@ -22,14 +22,15 @@ function get_login() {
 
     var sql = "SELECT * FROM user JOIN wallet ON wallet.user_id=user.id JOIN wallet_record ON wallet_record.wallet_id=wallet.wallet_id";
     try{
-        var res = {};
+        //var temp = {};
+        var res = [];
         connection.query(sql, function(err, result, fields) {
             if(err) {
                 throw err;
             }
             console.log("Selected " + result.length + " row(s).");
             for(let i=0; i<result.length; ++i) {
-                res += JSON.stringify(result[i]);
+                res.push(JSON.stringify(result[i]));
             }
             // 回傳的json格式
             /*
@@ -87,7 +88,6 @@ function get_login() {
 
             console.log("res is :");
             console.log(res);
-            return res;
         });
     } catch (e) {
         console.log("ERROR__: " + e.message);
@@ -95,6 +95,8 @@ function get_login() {
     }
     // 斷開資料庫連線
     connection.end();
+    // 太早回傳導致res還沒有抓到東西就回傳,改用promise
+    return res;
 }
 
 exports.get_login = get_login;
