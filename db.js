@@ -22,6 +22,7 @@ function get_login() {
 
     var sql = "SELECT * FROM user JOIN wallet ON wallet.user_id=user.id JOIN wallet_record ON wallet_record.wallet_id=wallet.wallet_id";
     try{
+        var res = {};
         connection.query(sql, function(err, result, fields) {
             if(err) {
                 throw err;
@@ -29,6 +30,7 @@ function get_login() {
             console.log("Selected " + result.length + " row(s).");
             for(let i=0; i<result.length; ++i) {
                 console.log("Row: " + JSON.stringify(result[i]) + '\n');
+                res += JSON.stringify(result[i]);
             }
             // 回傳的json格式
             /*
@@ -83,8 +85,11 @@ function get_login() {
                 return 
             });
             */
+
+            console.log("res is :");
+            console.log(res);
+            return res;
         });
-        return result;
     } catch (e) {
         console.log("ERROR__: " + e.message);
         return "Error happened."
