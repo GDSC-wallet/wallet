@@ -32,67 +32,13 @@ function get_login() {
             for(let i=0; i<result.length; ++i) {
                 res.push(JSON.stringify(result[i]));
             }
-            // 回傳的json格式
-            /*
-            result.forEach(function(result, idx){
-                var response:
-                {
-                    status:"error"/"success"
-                    message:"info for user_id1"
-                    data:{
-                        user_id: result.user_id,
-                        selected_wallet_id:"a",
-                        wallets:[
-                            "wallet-a":{
-                                wallet_id: result.wallet_id,
-                                wallet_name: result.username,
-                                selected: "True" // true or false, True for now testing
-                                records:[
-                                    {
-                                        record_id:"wallet-a-record-1",
-                                        wallet_record_tag_id: result.wallet_record_tag_id,
-                                        record_ordinary: result.ordinary,
-                                        record_name: result.record_name,
-                                        record_description: result.description,
-                                        record_amount: result.amount,
-                                        record_type: result.type,
-                                        record_date: result.date,
-                                        record_created_time: result.record_created_time
-                                    },
-                                    {
-                                        record_id:"wallet-a-record-2",
-                                        wallet_record_tag_id:
-                                        record_ordinary:
-                                        record_name:
-                                        record_description:
-                                        record_amount:
-                                        record_type:
-                                        record_date:
-                                        record_created_time:
-                                    }
-                                ]
-                            },
-                            "wallet-b":{
-                                wallet_id:,
-                                wallet_name:,
-                                selected: // 若selected==false則records為空陣列
-                                records:[    
-                                ]
-                            }
-                        ]
-                    }
-                }
-                return 
-            });
-            */
-            console.log("res is :");
-            console.log(res);
-            throw res;
         });
+        console.log("res is :");
+        console.log(res);
     } catch (e) {
         console.log("ERROR: " + e.message);
         return "ERROR HAPPENED.";
-    }
+
     // 斷開資料庫連線
     connection.end();
     /*
