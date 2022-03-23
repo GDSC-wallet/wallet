@@ -7,7 +7,7 @@ var sql = "SELECT * FROM user JOIN wallet ON wallet.user_id=user.id JOIN wallet_
 var connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: '620109roy',
+    password: '1234567',
     port: 3306,
     database: 'GDSC_wallet'
 });
