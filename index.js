@@ -12,7 +12,19 @@ app.listen(port, () => {
 })
 
 app.get('/user/data/get', (req, res) => {
-    var sql_data = db.get_login();
-    console.log(sql_data);
-    res.send(sql_data);
-})
+    var sql_data = db.get_wallet();
+    var arr_data = [];
+    db.get_wallet()
+    .then(results => {
+        for(let i=0; i<results.length; ++i){
+            arr_data.push(JSON.stringify(results[i]));
+        }
+        console.log(arr_data);
+        res.send(arr_data);
+        db.close_sql_connection();
+        // return arr_data;
+    }).catch(err => {
+        res.status(500).json({ message: 'Server error' });
+        db.close_sql_connection();
+    });
+});
