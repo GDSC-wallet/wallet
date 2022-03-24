@@ -11,7 +11,7 @@ app.listen(port, () => {
   console.log(`Example app listening on port http://localhost:${port}`);
 });
 
-app.get('user/data/get' ,(req, res) => {
+app.get('/user/data/get' ,(req, res) => {
     var message = db_caller.get_login();
     res.send(message);
 });
