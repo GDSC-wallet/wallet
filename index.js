@@ -1,4 +1,5 @@
 const db_caller = require('./db_caller.js')
+const db_dealer = require('./db_dealer.js')
 const express = require('express')
 const bodyParser = require('body-parser')
 const app = express()
@@ -8,21 +9,25 @@ app.use(express.urlencoded({ extended : false }));
 app.use(express.static('dist'));
 
 app.listen(port, () => {
-  console.log(`Example app listening on port http://localhost:${port}`);
+    console.log(`Example app listening on port http://localhost:${port}`);
 });
 
 app.get('/user/data/get' ,(req, res) => {
-    // 只要確保db_caller.get_login()先被執行就好
-    const promise = new Promise(function(resolve, reject) {
-        var message = db_caller.get_login();
-        resolve(message);
-        reject();
-    });
-    promise.then(message => {
-        console.log(message);
-        res.send(message);
+    var arr_data = [];
+    db_dealer.get_wallet()
+    .then(results => {
+        console.log("entry get_wallet.resolve function.");
+        for(let i=0; i<results.length; ++i){
+            arr_data.push(JSON.stringify(results[i]));
+        }
+        console.log(arr_data);
+        db_dealer.close_sql_connection();
+        console.log("get_login function is done.");
+        res.send(arr_data);
     }).catch(err => {
-        console.log("Error");
-        res.send("Error");
+        console.log("entry get_wallet.reject function.");
+        db_dealer.close_sql_connection();
+        console.log("get_login function is done.");
+        res.send(err);
     });
 });

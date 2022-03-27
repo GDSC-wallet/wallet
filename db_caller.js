@@ -19,26 +19,4 @@ function authenticate (id) {
     });
 }
 
-// 登入成功回傳該user資料
-function get_login() {
-    console.log("entry get_login function.");
-    var arr_data = [];
-    db_dealer.get_wallet()
-    .then(results => {
-        for(let i=0; i<results.length; ++i){
-            arr_data.push(JSON.stringify(results[i]));
-        }
-        console.log(arr_data);
-        db_dealer.close_sql_connection();
-        return arr_data;
-    }).catch(err => {
-        db_dealer.close_sql_connection();
-        return err;
-    });
-};
-
-
-exports.get_login = get_login;
 exports.authenticate = authenticate;
-
-
