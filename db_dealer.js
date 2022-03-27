@@ -20,6 +20,7 @@ connection.connect(function(err){
 
 // request dealer
 const get_wallet = () => {
+    console.log("entry get_wallet function.");
     var sql = "SELECT * FROM user JOIN wallet ON wallet.user_id=user.id JOIN wallet_record ON wallet_record.wallet_id=wallet.wallet_id";
     return new Promise((resolve, reject) => {
         connection.query(sql, (err, results, fields) => {

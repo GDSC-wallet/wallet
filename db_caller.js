@@ -21,7 +21,7 @@ function authenticate (id) {
 
 // 登入成功回傳該user資料
 function get_login() {
-    var sql_data = db_dealer.get_wallet();
+    console.log("entry get_login function.");
     var arr_data = [];
     db_dealer.get_wallet()
     .then(results => {
