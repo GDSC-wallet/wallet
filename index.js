@@ -55,27 +55,39 @@ app.get('/user/data/get' ,(req, res) => {
                     ]
                 }
             }
+
+            var idx = 0;    // the results' index
             for(let i = 0; i < results[0].wallet_length; ++i) {
+                // construct a wallet object
+                var wallet_obj = {
+                    wallet_id: results[idx].wallet_id,
+                    wallet_name: results[idx].wallet_name,
+                    selected: "True",   // only true for now testing
+                    records:[]
+                };
+                // construct a record array
                 var record_arr = [];
-                for(let j = 0; j < wallet[i].record_length; ++j) {
+                for(let j = 0; j < results[idx].record_length; ++j) {
                     var record_obj = {
-                        {
-                            record_id:"",
-                            wallet_record_tag_id:,
-                            record_ordinary:,
-                            record_name:,
-                            record_description:,
-                            record_amount:,
-                            record_type:,
-                            record_data:,
-                            record_created_time:,
-                            record_updated_time:
-                        }
+                        record_id: results[idx+j].record_id,
+                        wallet_record_tag_id: results[idx+j].wallet_record_tag_id,
+                        record_ordinary: results[idx+j].record_ordinary,
+                        record_name: results[idx+j].record_name,
+                        record_description: results[idx+j].desciption,
+                        record_amount: results[idx+j].amount,
+                        record_type: results[idx+j].type,
+                        record_date: results[idx+j].date,
+                        record_created_time: results[idx+j].record_created_time,
+                        record_updated_time: results[idx+j].record_updated_time
                     }
                     record_arr += record_obj;
                 }
-                response.data.wallets[i].records += record_arr;
+                idx += results[idx].record_length;
+                // put record array into wallet object and pu wallet object into response.data.wallets
+                wallet_obj.records += record_arr;
+                response.data.wallets += wallet_obj;
             }
+
             console.log(response);
             db_dealer.close_sql_connection();
             res.send(response);
