@@ -80,12 +80,12 @@ app.get('/user/data/get' ,(req, res) => {
                         record_created_time: results[idx+j].record_created_time,
                         record_updated_time: results[idx+j].record_updated_time
                     }
-                    record_arr += record_obj;
+                    record_arr.push(record_obj);
                 }
                 idx += results[idx].record_length;
                 // put record array into wallet object and pu wallet object into response.data.wallets
-                wallet_obj.records += record_arr;
-                response.data.wallets += wallet_obj;
+                wallet_obj.records = record_arr;
+                response.data.wallets.push(wallet_obj);
             }
 
             console.log(response);
