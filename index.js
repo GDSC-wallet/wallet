@@ -54,10 +54,11 @@ app.get('/user/data/get' ,(req, res) => {
                         */
                     ]
                 }
-            }
-
+            };
+            
             var idx = 0;    // the results' index
-            for(let i = 0; i < results[0].wallet_length; ++i) {
+            for(let i = 0; i < results[0].wallet_num; ++i) {
+                console.log("entry first for loop.");
                 // construct a wallet object
                 var wallet_obj = {
                     wallet_id: results[idx].wallet_id,
@@ -67,7 +68,8 @@ app.get('/user/data/get' ,(req, res) => {
                 };
                 // construct a record array
                 var record_arr = [];
-                for(let j = 0; j < results[idx].record_length; ++j) {
+                for(let j = 0; j < results[idx].record_num; ++j) {
+                    console.log("entry second for loop.");
                     var record_obj = {
                         record_id: results[idx+j].record_id,
                         wallet_record_tag_id: results[idx+j].wallet_record_tag_id,
@@ -80,14 +82,19 @@ app.get('/user/data/get' ,(req, res) => {
                         record_created_time: results[idx+j].record_created_time,
                         record_updated_time: results[idx+j].record_updated_time
                     }
+                    console.log("record obj: ");
+                    console.log(record_obj);
                     record_arr.push(record_obj);
                 }
                 idx += results[idx].record_length;
                 // put record array into wallet object and pu wallet object into response.data.wallets
                 wallet_obj.records = record_arr;
+                console.log("wallet_obj is: ");
+                console.log(wallet_obj);
                 response.data.wallets.push(wallet_obj);
             }
-
+            
+            console.log("response is: ");
             console.log(response);
             db_dealer.close_sql_connection();
             res.send(response);
