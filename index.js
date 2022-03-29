@@ -12,6 +12,7 @@ app.listen(port, () => {
     console.log(`Example app listening on port http://localhost:${port}`);
 });
 
+// login 成功回傳資料
 app.get('/user/data/get' ,(req, res) => {
     db_dealer.get_user('1')    // 之後parse req得到要求的user id,暫定1
         .then(results => {
@@ -21,10 +22,9 @@ app.get('/user/data/get' ,(req, res) => {
             else
                 user_status = "error";
 
-            // 確認被選擇的wallet
+            // 確認被選擇的wallet, 而被選擇的wallet必須只有一個
             var selected_wallet;
             for(let i = 0; i < results.length; ++i) {
-                // 必須確保只有一個被選擇的wallet
                 if(results[i].selected == 1) {
                     selected_wallet = results[i].wallet_id;
                     break;
