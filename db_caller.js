@@ -8,9 +8,6 @@ const port = 3000
 function authenticate (id) {
     db_dealer.user_exist(id)
         .then(results => {
-            console.log("authentication says:")
-            console.log(results);
-            console.log(results.length);
             if(results.length == 0) {
                 return false;
             } else {

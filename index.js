@@ -13,14 +13,23 @@ app.listen(port, () => {
 });
 
 app.get('/user/data/get' ,(req, res) => {
-    db_dealer.get_wallet('1')    // 之後parse req得到要求的user id,暫定1
+    db_dealer.get_user('1')    // 之後parse req得到要求的user id,暫定1
         .then(results => {
             var user_status;
-            var stt = db_caller.authenticate('1');  // 目前會因為非同步執行使stt為false,等之後接起來再寫promise
-            if(stt)
+            if(results.length > 0)
                 user_status = "success";
             else
                 user_status = "error";
+
+            // 確認被選擇的wallet
+            var selected_wallet;
+            for(let i = 0; i < results.length; ++i) {
+                // 必須確保只有一個被選擇的wallet
+                if(results[i].selected == 1) {
+                    selected_wallet = results[i].wallet_id;
+                    break;
+                }
+            }
 
             // 將資料轉成需要的JSON格式
             var response = {
@@ -30,19 +39,20 @@ app.get('/user/data/get' ,(req, res) => {
                     user_id: results[0].user_id,
                     user_name: results[0].username,
                     nick_name: results[0].nick_name,
-                    selected_wallet_id:"haven't done",
+                    selected_wallet_id: selected_wallet,
                     wallets:[
                     ]
                 }
             };
             
+            // 填寫wallets陣列和wallets陣列中的records陣列
             var idx = 0;    // the results' index
             for(let i = 0; i < results[0].wallet_num; ++i) {
                 // construct a wallet object
                 var wallet_obj = {
                     wallet_id: results[idx].wallet_id,
                     wallet_name: results[idx].wallet_name,
-                    selected: "True",   // only true for now testing
+                    selected: results[idx].selected,   // only true for now testing
                     records:[]
                 };
                 // construct a record array
