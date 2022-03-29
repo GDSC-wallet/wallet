@@ -32,33 +32,12 @@ app.get('/user/data/get' ,(req, res) => {
                     nick_name: results[0].nick_name,
                     selected_wallet_id:"haven't done",
                     wallets:[
-                        /*
-                        "wallet-a":{
-                            wallet_id: results[i].wallet_id,
-                            wallet_name: results[i].wallet_name,
-                            selected: "True", // true or false, True for now testing
-                            records:[
-                                {
-                                    record_id:"wallet-a-record-1",
-                                    wallet_record_tag_id: results[i].wallet_record_tag_id,
-                                    record_ordinary: results[i].record_ordinary,
-                                    record_name: results[i].record_name,
-                                    record_description: results[i].description,
-                                    record_amount: results[i].amount,
-                                    record_type: results[i].type,
-                                    record_date: results[i].date,
-                                    record_created_time: results[i].record_created_time
-                                }
-                            ]
-                        }
-                        */
                     ]
                 }
             };
             
             var idx = 0;    // the results' index
             for(let i = 0; i < results[0].wallet_num; ++i) {
-                console.log("entry first for loop.");
                 // construct a wallet object
                 var wallet_obj = {
                     wallet_id: results[idx].wallet_id,
@@ -69,7 +48,6 @@ app.get('/user/data/get' ,(req, res) => {
                 // construct a record array
                 var record_arr = [];
                 for(let j = 0; j < results[idx].record_num; ++j) {
-                    console.log("entry second for loop.");
                     var record_obj = {
                         record_id: results[idx+j].record_id,
                         wallet_record_tag_id: results[idx+j].wallet_record_tag_id,
@@ -82,15 +60,11 @@ app.get('/user/data/get' ,(req, res) => {
                         record_created_time: results[idx+j].record_created_time,
                         record_updated_time: results[idx+j].record_updated_time
                     }
-                    console.log("record obj: ");
-                    console.log(record_obj);
                     record_arr.push(record_obj);
                 }
-                idx += results[idx].record_length;
+                idx += results[idx].record_num;
                 // put record array into wallet object and pu wallet object into response.data.wallets
                 wallet_obj.records = record_arr;
-                console.log("wallet_obj is: ");
-                console.log(wallet_obj);
                 response.data.wallets.push(wallet_obj);
             }
             

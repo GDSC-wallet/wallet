@@ -12,10 +12,8 @@ function authenticate (id) {
             console.log(results);
             console.log(results.length);
             if(results.length == 0) {
-                console.log("return false");
                 return false;
             } else {
-                console.log("return true");
                 return true;
             }
         }).catch(err => {
