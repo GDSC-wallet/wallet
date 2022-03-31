@@ -6,7 +6,6 @@ import cors from "cors";
 import session from "express-session";
 import passport from "passport";
 import dotenv from "dotenv";
-import GoogleStrategy from "passport-google-oauth20";
 
 import userRouter from "./routes/user.js";
 import courseRoutes from "./routes/course.js";
