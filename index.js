@@ -14,6 +14,7 @@ app.listen(port, () => {
 
 // login 成功回傳資料
 app.get('/user/data/get' ,(req, res) => {
+    // 要求使用者資料函式呼叫
     db_caller.user_data()
     .then(response => {
         res.send(response);

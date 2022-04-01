@@ -29,9 +29,9 @@ const user_data = () => {
         await db_dealer.get_user('1')    // 之後parse req得到要求的user id,暫定1
             .then(results => {
                 if(results.length > 0)
-                    user_status = "success";
+                    user_status = "true";
                 else
-                    user_status = "error";
+                    user_status = "false";
 
                 // 確認被選擇的wallet, 而被選擇的wallet必須只有一個
                 for(let i = 0; i < results.length; ++i) {
@@ -42,13 +42,13 @@ const user_data = () => {
                 }
 
                 // 將資料轉成需要的JSON格式
-                var data = {
-                    status: user_status,
+                var Data = {
+                    success: user_status,
                     message:"info for user_id1",
                     data:{
-                        user_id: results[0].user_id,
-                        user_name: results[0].username,
-                        nick_name: results[0].nick_name,
+                        user_id: results[0].id,
+                        username: results[0].username,
+                        nickname: results[0].nickname,
                         selected_wallet_id: selected_wallet,
                         wallets:[
                         ]
@@ -73,10 +73,10 @@ const user_data = () => {
                             wallet_record_tag_id: results[idx+j].wallet_record_tag_id,
                             record_ordinary: results[idx+j].record_ordinary,
                             record_name: results[idx+j].record_name,
-                            record_description: results[idx+j].desciption,
-                            record_amount: results[idx+j].amount,
-                            record_type: results[idx+j].type,
-                            record_date: results[idx+j].date,
+                            record_description: results[idx+j].record_description,  //
+                            record_amount: results[idx+j].record_amount,    //
+                            record_type: results[idx+j].record_type,    //
+                            record_date: results[idx+j].record_date,    //
                             record_created_time: results[idx+j].record_created_time,
                             record_updated_time: results[idx+j].record_updated_time
                         }
@@ -85,18 +85,22 @@ const user_data = () => {
                     idx += results[idx].record_num;
                     // put record array into wallet object and pu wallet object into response.data.wallets
                     wallet_obj.records = record_arr;
-                    data.data.wallets.push(wallet_obj);
+                    console.log(wallet_obj);
+                    Data.data.wallets.push(wallet_obj);
                 }
 
-                console.log("data is: ");
-                console.log(data);
-                response = data;
-                db_dealer.close_sql_connection();
+                console.log("Data is: ");
+                console.log(Data);
+                response = Data;
             }).catch(err => {
-                db_dealer.close_sql_connection();
+                console.log('ERROR: ' + err.message);
+                reject(err);
             });
         resolve(response);
     });
 }
+
+// 暫時先不做關閉資料庫的動作
+
 exports.user_data = user_data;
 exports.authenticate = authenticate;
