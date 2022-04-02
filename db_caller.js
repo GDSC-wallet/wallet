@@ -6,17 +6,17 @@ const port = 3000
 
 // 問資料庫user是否存在
 const authenticate = (id) => {
-    return new Promise((resolve, reject) => {
-        db_dealer.user_exist(id)
+    return new Promise( async(resolve, reject) => {
+        await db_dealer.user_exist(id)
             .then(results => {
                 if(results.length == 0) {
-                    return false;
+                    resolve(false);
                 } else {
-                    return true;
+                    resolve(true);
                 }
             }).catch(err => {
                 console.log("ERROR: " + err.message);
-                return false;
+                reject(err);
             });
     });
 }

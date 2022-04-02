@@ -6,7 +6,7 @@ const app = express();
 var connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: '123456',
+    password: '1234567',
     port: 3306,
     database: 'GDSC_wallet'
 });
@@ -39,45 +39,59 @@ const user_exist = (id) => {
     });
 };
 
-//  insert, alter and delete database
-
+/***********************************************
+ * insert, update and delete database function *
+************************************************/
 
 const insert_user = (channel, channel_id, email, username, nickname) => {
+    // generate uuid for the user
     var id = 'user_' + uuid.v4();
     var sql = "INSERT INTO user VALUE(?,?,?,?,?,?,NOW(),NOW(),1)";
-    connection.query(sql, id, channel, channel_id, email, username, nickname, (err, results, fields) => {
+    connection.query(sql, [id, channel, channel_id, email, username, nickname], (err, results, fields) => {
         if(err)
-            console.log("user: insertion error: " + err.message);
+            console.log("db: user insertion error: " + err.message);
         else
-            console.log("user: data insert successfully.");
-    })
+            console.log("db: user insert successfully.");
+    });
 };
 
-
-const update_user = () => {
-
+// id判斷用,channel,channel_id不給改
+const update_user = (id, email, username, nickname, created_time) => {
+    var sql = "UPDATE user SET email = ? username = ? nickname = ? created_time = ? updated_time = NOW() WHERE id = ?";
+    connection.query(sql, [email, username, nickname, created_time], id, (err, results, fields) => {
+        if(err)
+            console.log("db: user update error: " + err.message);
+        else
+            console.log("db: user update successfully.");
+    });
 };
 
-const delete_user = () => {
-
+const delete_user = (id) => {
+    var sql = "DELETE FROM user WHERE id = ?";
+    connection.query(sql, id, (err, results, fields) => {
+        if(err)
+            console.log("db: user deletion error: " + err.message);
+        else
+            console.log("db: user deleted successfully.");
+    });
 };
 
 const insert_wallet = (user_id, selected, wallet_name, wallet_total, wallet_title, wallet_description) => {
     var wallet_id = 'wallet_' + uuid.v4();
     var sql = "INSERT INTO wallet VALUE(?,?,?,?,?,?,?,NOW(),NOW(),0)";
-    connection.query(sql, wallet_id, user_id, selected, wallet_name, wallet_total, wallet_title, wallet_description, (err, results, fields) => {
+    connection.query(sql, [wallet_id, user_id, selected, wallet_name, wallet_total, wallet_title, wallet_description], (err, results, fields) => {
         if(err)
-            console.log("wallet: insertion error: " + err.message);
+            console.log("db: wallet insertion error: " + err.message);
         else
-            console.log("wallet: data insert successfully.");
-    })
-    var sql2 = "UPDATE TABLE user SET wallet_num = wallet_num + 1 WHERE id = ?";
+            console.log("db: wallet insert successfully.");
+    });
+    var sql2 = "UPDATE user SET wallet_num = wallet_num + 1 WHERE id = ?";
     connection.query(sql2, user_id, (err, results, fields) => {
         if(err)
-            console.log("wallet: user table update error: " + err.message);
+            console.log("db: user update error: " + err.message);
         else
-            console.log("wallet: user table data updated successfully.");
-    })
+            console.log("db: user updated successfully.");
+    });
 };
 
 const update_wallet = () => {
