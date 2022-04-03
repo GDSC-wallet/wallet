@@ -23,8 +23,8 @@ const authenticate = (id) => {
 }
 const user_data = () => {
     return new Promise( async (resolve, reject) => {
-        //await db_dealer.insert_wallet('1', 1, 'banqiao', 7414, 'hahaha','hahahaha....');
-        //await db_dealer.delete_wallet('5');
+        //await db_dealer.insert_wallet('3', 1, 'midnight', 8888, 'oooo','olololol....');
+        //await db_dealer.delete_wallet('3','');
         //await db_dealer.insert_record('wallet_97e2315d-8f4b-48c4-926c-e1c62dfda11c','tag_1',1,'test_record','no',9898,'income','2022-04-03 21:00:00');
         var user_status;
         var selected_wallet;
@@ -63,7 +63,7 @@ const user_data = () => {
                 for(let i = 0; i < results[0].wallet_num; ++i) {
                     
                     // 避免報錯, 如果idx >= results.length則表示已經沒有資料
-                    // 造成在這裡可能發生錯誤的原因是某個錢包中沒有record
+                    // 發生的原因是某個錢包中沒有record
                     // 而沒有record的錢包目前不會被傳回
                     // solution: 新增預設record
                     if(idx >= results.length){ 

@@ -1,12 +1,13 @@
 const express = require('express')
 const mysql = require('mysql')
 const uuid = require('uuid')
+const dateTime = require('node-datetime')
 const app = express();
 
 var connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: '620109roy',
+    password: '1234567',
     port: 3306,
     database: 'GDSC_wallet'
 });
@@ -76,12 +77,14 @@ const delete_user = (id) => {
         else
             console.log("db: user deleted successfully.");
     });
+    // delete user將delete所有其下的wallet
+    // ...
 };
 
-const insert_wallet = (user_id, selected, wallet_name, wallet_total, wallet_title, wallet_description) => {
+const insert_wallet = async (user_id, selected, wallet_name, wallet_total, wallet_title, wallet_description) => {
     var wallet_id = 'wallet_' + uuid.v4();
-    var sql = "INSERT INTO wallet VALUE(?,?,?,?,?,?,?,NOW(),NOW(),1)";
-    connection.query(sql, [wallet_id, user_id, selected, wallet_name, wallet_total, wallet_title, wallet_description], (err, results, fields) => {
+    var sql = "INSERT INTO wallet VALUE(?,?,?,?,?,?,?,NOW(),NOW(),0)";
+    await connection.query(sql, [wallet_id, user_id, selected, wallet_name, wallet_total, wallet_title, wallet_description], (err, results, fields) => {
         if(err)
             console.log("db: wallet insertion error: " + err.message);
         else
@@ -95,7 +98,12 @@ const insert_wallet = (user_id, selected, wallet_name, wallet_total, wallet_titl
         else
             console.log("db: user updated successfully.");
     });
+
     // 可能會在新增wallet的時候預設一筆record
+    var dt = dateTime.create();
+    var formatted = dt.format('Y-m-d H:M:S');
+    var curtime = new Date(formatted);
+    insert_record(wallet_id, 'tag_1', 1,'preset','preset_record',0,'not set',curtime);
 };
 
 // wallet_id, user_id不給改, wallet_id判斷用
@@ -109,9 +117,9 @@ const update_wallet = (wallet_id, selected, wallet_name, wallet_total, wallet_ti
     })
 };
 
-const delete_wallet = (user_id, wallet_id) => {
+const delete_wallet = async (user_id, wallet_id) => {
     var sql = "DELETE FROM wallet WHERE wallet_id = ?";
-    connection.query(sql, wallet_id, (err, results, fields) => {
+    await connection.query(sql, wallet_id, (err, results, fields) => {
         if(err)
             console.log("db: wallet deletion error: " + err.message);
         else
@@ -124,12 +132,14 @@ const delete_wallet = (user_id, wallet_id) => {
         else
             console.log("db: wallet update user successfully.");
     })
+    // delete wallet將delete其下所有record
+    // ...
 };
 
-const insert_record = (wallet_id, wallet_record_tag_id, record_ordinary, record_name, record_description, record_amount, record_type, record_date) => {
+const insert_record = async (wallet_id, wallet_record_tag_id, record_ordinary, record_name, record_description, record_amount, record_type, record_date) => {
     var record_id = "record_" + uuid.v4();
-    var sql = "INSERT INTO wallet_record VALUE(record_id = ? wallet_id = ? wallet_record_tag_id = ? record_ordinary = ? record_name = ? record_description = ? record_amount = ? record_type = ? record_date = ? created_time = NOW() updated_time = NOW())";
-    connection.query(sql, [record_id, wallet_id, wallet_record_tag_id, record_ordinary, record_name, record_description, record_amount, record_type, record_date], (err, results, fields) => {
+    var sql = "INSERT INTO wallet_record VALUE(?,?,?,?,?,?,?,?,?,NOW(),NOW())";
+    await connection.query(sql, [record_id, wallet_id, wallet_record_tag_id, record_ordinary, record_name, record_description, record_amount, record_type, record_date], (err, results, fields) => {
         if(err)
             console.log("db: record insertion error: " + err.message);
         else
@@ -137,7 +147,7 @@ const insert_record = (wallet_id, wallet_record_tag_id, record_ordinary, record_
     })
     // update wallet's record_num
     var sql2 = "UPDATE wallet SET record_num = record_num + 1 WHERE wallet_id = ?";
-    connection.query(sql, wallet_id, (err, results, fields) => {
+    connection.query(sql2, wallet_id, (err, results, fields) => {
         if(err)
             console.log("db: record wallet update error: " + err.message);
         else
@@ -156,9 +166,9 @@ const update_record = (record_id, wallet_record_tag_id, record_ordinary, record_
     })
 };
 
-const delete_record = (record_id, wallet_id) => {
+const delete_record = async (record_id, wallet_id) => {
     var sql = "DELETE FROM wallet_record WHERE record_id = ?";
-    connection.query(sql, record_id, (err, results, fields) => {
+    await connection.query(sql, record_id, (err, results, fields) => {
         if(err)
             console.log("db: record deletion error: " + err.message);
         else
