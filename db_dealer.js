@@ -7,7 +7,7 @@ const app = express();
 var connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: '620109roy',
+    password: '123456',
     port: 3306,
     database: 'GDSC_wallet'
 });
