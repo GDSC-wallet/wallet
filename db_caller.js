@@ -1,6 +1,7 @@
 const db_dealer = require('./db_dealer.js')
 const express = require('express')
 const app = express()
+const uuid = require('uuid')
 const port = 3000
 
 
@@ -20,9 +21,10 @@ const authenticate = (id) => {
             });
     });
 }
-
 const user_data = () => {
     return new Promise( async (resolve, reject) => {
+        //await db_dealer.insert_wallet('1', 1, 'banqiao', 7414, 'hahaha','hahahaha....');
+        //await db_dealer.delete_wallet('5');
         var user_status;
         var selected_wallet;
         var response = {};
@@ -60,13 +62,20 @@ const user_data = () => {
                 for(let i = 0; i < results[0].wallet_num; ++i) {
                     // construct a wallet object
                     var wallet_obj = {
-                        wallet_id: results[idx].wallet_id,
-                        wallet_name: results[idx].wallet_name,
-                        selected: results[idx].selected,   // only true for now testing
+                        wallet_id: results[0].wallet_id,
+                        wallet_name: results[0].wallet_name,
+                        selected: results[0].selected,   // only true for now testing
                         records:[]
                     };
                     // construct a record array
                     var record_arr = [];
+
+                    // 避免報錯, 如果idx >= results.length則表示已經沒有資料
+                    // 造成在這裡可能發生錯誤的原因是某個錢包中沒有record
+                    // 而沒有record的錢包目前還不會被傳回
+                    if(idx >= results.length) 
+                        break;
+
                     for(let j = 0; j < results[idx].record_num; ++j) {
                         var record_obj = {
                             record_id: results[idx+j].record_id,
@@ -83,7 +92,7 @@ const user_data = () => {
                         record_arr.push(record_obj);
                     }
                     idx += results[idx].record_num;
-                    // put record array into wallet object and pu wallet object into response.data.wallets
+                    // put record array into wallet object and put wallet object into response.data.wallets
                     wallet_obj.records = record_arr;
                     console.log(wallet_obj);
                     Data.data.wallets.push(wallet_obj);

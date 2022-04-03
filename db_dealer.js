@@ -6,7 +6,7 @@ const app = express();
 var connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: '1234567',
+    password: '620109roy',
     port: 3306,
     database: 'GDSC_wallet'
 });
@@ -40,8 +40,10 @@ const user_exist = (id) => {
 };
 
 /***********************************************
+ *                                             *
  * insert, update and delete database function *
-************************************************/
+ *                                             *
+ ************************************************/
 
 const insert_user = (channel, channel_id, email, username, nickname) => {
     // generate uuid for the user
@@ -85,6 +87,7 @@ const insert_wallet = (user_id, selected, wallet_name, wallet_total, wallet_titl
         else
             console.log("db: wallet insert successfully.");
     });
+    // user.wallet_num increment
     var sql2 = "UPDATE user SET wallet_num = wallet_num + 1 WHERE id = ?";
     connection.query(sql2, user_id, (err, results, fields) => {
         if(err)
@@ -94,12 +97,32 @@ const insert_wallet = (user_id, selected, wallet_name, wallet_total, wallet_titl
     });
 };
 
-const update_wallet = () => {
-
+// wallet_id, user_id不給改, wallet_id判斷用
+const update_wallet = (wallet_id, selected, wallet_name, wallet_total, wallet_title, wallet_description) => {
+    var sql = "UPDATE wallet SET selected = ? wallet_name = ? wallet_total = ? wallet_title = ? wallet_description = ? updated_time = NOW() WHERE wallet_id = ?";
+    connection.query(sql, [selected, wallet_name, wallet_total, wallet_title, wallet_description, wallet_id], (err, results, fields) => {
+        if(err)
+            console.log("db: wallet update error: " + err.message);
+        else
+            console.log("db: wallet update successfully.");
+    })
 };
 
-const delete_wallet = () => {
-
+const delete_wallet = (wallet_id) => {
+    var sql = "DELETE FROM wallet WHERE wallet_id = ?";
+    connection.query(sql, wallet_id, (err, results, fields) => {
+        if(err)
+            console.log("db: wallet deletion error: " + err.message);
+        else
+            console.log("db: wallet delete successfully.");
+    })
+    var sql2 = "UPDATE user SET wallet_num = wallet_num - 1 WHERE id = ?";
+    connection.query(sql2, wallet_id, (err, results, fields) => {
+        if(err)
+            console.log("db: wallet update user error: " + message);
+        else
+            console.log("db: wallet update user successfully.");
+    })
 };
 
 const insert_record = () => {
