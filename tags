@@ -5,20 +5,17 @@ app	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^const app = express();$/;
 authenticate	/home/roy/codes/GDSC_wallet/backend/db_caller.js	/^const authenticate = (id) => {$/;"	C	language:JavaScript
 close_sql_connection	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^function close_sql_connection () {$/;"	f	language:JavaScript
 connection	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^var connection = mysql.createConnection({$/;"	v	language:JavaScript
-curtime	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^    var curtime = new Date(formatted);$/;"	v	language:JavaScript
 dateTime	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^const dateTime = require('node-datetime')$/;"	C	language:JavaScript
 db_dealer	/home/roy/codes/GDSC_wallet/backend/db_caller.js	/^const db_dealer = require('.\/db_dealer.js')$/;"	C	language:JavaScript
-delete_record	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^const delete_record = async (record_id, wallet_id) => {$/;"	C	language:JavaScript
+delete_record	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^const delete_record = async (record_id, record_wallet_id) => {$/;"	C	language:JavaScript
 delete_tag	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^const delete_tag = () => {$/;"	C	language:JavaScript
 delete_user	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^const delete_user = (id) => {$/;"	C	language:JavaScript
 delete_wallet	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^const delete_wallet = async (user_id, wallet_id) => {$/;"	C	language:JavaScript
-dt	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^    var dt = dateTime.create();$/;"	v	language:JavaScript
 express	/home/roy/codes/GDSC_wallet/backend/db_caller.js	/^const express = require('express')$/;"	C	language:JavaScript
 express	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^const express = require('express')$/;"	C	language:JavaScript
-formatted	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^    var formatted = dt.format('Y-m-d H:M:S');$/;"	v	language:JavaScript
 get_user	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^const get_user = (id) => {$/;"	C	language:JavaScript
 id	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^    var id = 'user_' + uuid.v4();$/;"	v	language:JavaScript
-insert_record	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^const insert_record = async (wallet_id, wallet_record_tag_id, record_ordinary, record_name, reco/;"	C	language:JavaScript
+insert_record	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^const insert_record = async (record_wallet_id, wallet_record_tag_id, record_ordinary, record_nam/;"	C	language:JavaScript
 insert_tag	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^const insert_tag = () => {$/;"	C	language:JavaScript
 insert_user	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^const insert_user = (channel, channel_id, email, username, nickname) => {$/;"	C	language:JavaScript
 insert_wallet	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^const insert_wallet = async (user_id, selected, wallet_name, wallet_total, wallet_title, wallet_/;"	C	language:JavaScript
@@ -35,6 +32,7 @@ sql	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^    var sql = "SELECT * F
 sql	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^    var sql = "UPDATE user SET email = ? username = ? nickname = ? created_time = ? updated_time/;"	v	language:JavaScript
 sql	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^    var sql = "UPDATE wallet SET selected = ? wallet_name = ? wallet_total = ? wallet_title = ? /;"	v	language:JavaScript
 sql	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^    var sql = "UPDATE wallet_record SET wallet_record_tag_id = ? record_ordinary = ? record_name/;"	v	language:JavaScript
+sql2	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^    var sql2 = "DELETE FROM wallet WHERE user_id = ?";$/;"	v	language:JavaScript
 sql2	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^    var sql2 = "UPDATE user SET wallet_num = wallet_num + 1 WHERE id = ?";$/;"	v	language:JavaScript
 update_record	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^const update_record = (record_id, wallet_record_tag_id, record_ordinary, record_name, record_des/;"	C	language:JavaScript
 update_tag	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^const update_tag = () => {$/;"	C	language:JavaScript
