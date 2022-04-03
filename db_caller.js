@@ -25,6 +25,7 @@ const user_data = () => {
     return new Promise( async (resolve, reject) => {
         //await db_dealer.insert_wallet('1', 1, 'banqiao', 7414, 'hahaha','hahahaha....');
         //await db_dealer.delete_wallet('5');
+        //await db_dealer.insert_record('wallet_97e2315d-8f4b-48c4-926c-e1c62dfda11c','tag_1',1,'test_record','no',9898,'income','2022-04-03 21:00:00');
         var user_status;
         var selected_wallet;
         var response = {};
@@ -60,21 +61,23 @@ const user_data = () => {
                 // 填寫wallets陣列和wallets陣列中的records陣列
                 var idx = 0;    // the results' index
                 for(let i = 0; i < results[0].wallet_num; ++i) {
+                    
+                    // 避免報錯, 如果idx >= results.length則表示已經沒有資料
+                    // 造成在這裡可能發生錯誤的原因是某個錢包中沒有record
+                    // 而沒有record的錢包目前不會被傳回
+                    // solution: 新增預設record
+                    if(idx >= results.length){ 
+                        break;
+                    }
                     // construct a wallet object
                     var wallet_obj = {
-                        wallet_id: results[0].wallet_id,
-                        wallet_name: results[0].wallet_name,
-                        selected: results[0].selected,   // only true for now testing
+                        wallet_id: results[idx].wallet_id,
+                        wallet_name: results[idx].wallet_name,
+                        selected: results[idx].selected,   // only true for now testing
                         records:[]
                     };
                     // construct a record array
                     var record_arr = [];
-
-                    // 避免報錯, 如果idx >= results.length則表示已經沒有資料
-                    // 造成在這裡可能發生錯誤的原因是某個錢包中沒有record
-                    // 而沒有record的錢包目前還不會被傳回
-                    if(idx >= results.length) 
-                        break;
 
                     for(let j = 0; j < results[idx].record_num; ++j) {
                         var record_obj = {
