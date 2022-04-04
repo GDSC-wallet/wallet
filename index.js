@@ -14,7 +14,7 @@ app.listen(port, () => {
 // login 成功回傳資料
 app.get('/user/data/get' , async (req, res) => {
     // 要求使用者資料函式呼叫
-    await db_caller.authenticate('1')
+    await db_caller.authenticate('user_7552f100-eba2-44e1-bc7f-7a1690fd4913')
     .then(stt => {
         console.log("User status: " + stt);
     })

@@ -7,7 +7,7 @@ const app = express();
 var connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: '123456',
+    password: '1234567',
     port: 3306,
     database: 'GDSC_wallet'
 });
@@ -22,7 +22,7 @@ connection.connect(function(err){
 // request dealer
 const get_user = (id) => {
     return new Promise((resolve, reject) => {
-        var sql = "SELECT * FROM user JOIN wallet ON wallet.user_id=user.id LEFT JOIN wallet_record ON wallet_record.record_wallet_id=wallet.wallet_id WHERE user.id = ? ORDER BY CAST(wallet_record.record_wallet_id AS UNSIGNED)";   //  判斷+-6個月未做
+        var sql = "SELECT id,username,nickname,wallet_id,wallet_name,selected,record_id,wallet_record_tag_id,record_ordinary,record_name,record_description,record_amount,record_type,record_date,record_created_time,record_updated_time,wallet_num,record_num FROM user JOIN wallet ON wallet.user_id=user.id LEFT JOIN wallet_record ON wallet_record.record_wallet_id=wallet.wallet_id WHERE user.id = ? ORDER BY CAST(wallet_record.record_wallet_id AS UNSIGNED)";   //  判斷+-6個月未做
         connection.query(sql, id, (err, results, fields) => {
             if(err) reject(err);
             else resolve(results);
@@ -46,20 +46,22 @@ const user_exist = (id) => {
  *                                             *
  ************************************************/
 
-const insert_user = (channel, channel_id, email, username, nickname) => {
+const insert_user = async (channel, channel_id, email, username, nickname) => {
     // generate uuid for the user
     var id = 'user_' + uuid.v4();
-    var sql = "INSERT INTO user VALUE(?,?,?,?,?,?,NOW(),NOW(),1)";
+    var sql = "INSERT INTO user VALUE(?,?,?,?,?,?,NOW(),NOW(),0)";
     connection.query(sql, [id, channel, channel_id, email, username, nickname], (err, results, fields) => {
         if(err)
             console.log("db: user insertion error: " + err.message);
         else
             console.log("db: user insert successfully.");
     });
+    // 預設給user一個wallet
+    await insert_wallet(id, 1, 'preset_wallet',0,'preset_wallet','This is a preset_wallet for user');
 };
 
 // id判斷用,channel,channel_id不給改
-const update_user = (id, email, username, nickname, created_time) => {
+const update_user = async (id, email, username, nickname, created_time) => {
     var sql = "UPDATE user SET email = ? username = ? nickname = ? created_time = ? updated_time = NOW() WHERE id = ?";
     connection.query(sql, [email, username, nickname, created_time], id, (err, results, fields) => {
         if(err)
@@ -69,7 +71,7 @@ const update_user = (id, email, username, nickname, created_time) => {
     });
 };
 
-const delete_user = (id) => {
+const delete_user = async (id) => {
     var sql = "DELETE FROM user WHERE id = ?";
     connection.query(sql, id, (err, results, fields) => {
         if(err)
@@ -77,14 +79,7 @@ const delete_user = (id) => {
         else
             console.log("db: user deleted successfully.");
     });
-    // delete user將delete所有其下的wallet
-    var sql2 = "DELETE FROM wallet WHERE user_id = ?";
-    connection.query(sql2, id, (err, results, fields) => {
-        if(err)
-            console.log("db: user deletion error: " + err.message);
-        else
-            console.log("db: user deleted successfully.");
-    })
+    // user有的wallet以foreign key on delete cascade一併刪除
 };
 
 const insert_wallet = async (user_id, selected, wallet_name, wallet_total, wallet_title, wallet_description) => {
@@ -107,7 +102,7 @@ const insert_wallet = async (user_id, selected, wallet_name, wallet_total, walle
 };
 
 // wallet_id, user_id不給改, wallet_id判斷用
-const update_wallet = (wallet_id, selected, wallet_name, wallet_total, wallet_title, wallet_description) => {
+const update_wallet = async (wallet_id, selected, wallet_name, wallet_total, wallet_title, wallet_description) => {
     var sql = "UPDATE wallet SET selected = ? wallet_name = ? wallet_total = ? wallet_title = ? wallet_description = ? updated_time = NOW() WHERE wallet_id = ?";
     connection.query(sql, [selected, wallet_name, wallet_total, wallet_title, wallet_description, wallet_id], (err, results, fields) => {
         if(err)
@@ -132,14 +127,7 @@ const delete_wallet = async (user_id, wallet_id) => {
         else
             console.log("db: wallet update user successfully.");
     })
-    // delete wallet將delete其下所有record
-    var sql3 = "DELETE FROM wallet_record WHERE record_wallet_id = ?";
-    connection.query(sql3, wallet_id, (err, results, fields) => {
-        if(err)
-            console.log("db: wallet delete record error: " + err.message);
-        else
-            console.log("db: wallet delete record successfully.");
-    })
+    // 被刪除的wallet的record與tag都以foreign key on delete cascade一併刪除
 };
 
 const insert_record = async (record_wallet_id, wallet_record_tag_id, record_ordinary, record_name, record_description, record_amount, record_type, record_date) => {
@@ -162,7 +150,7 @@ const insert_record = async (record_wallet_id, wallet_record_tag_id, record_ordi
 };
 
 // record_id, wallet_id不給改
-const update_record = (record_id, wallet_record_tag_id, record_ordinary, record_name, record_description, record_amount, record_type, record_date) => {
+const update_record = async (record_id, wallet_record_tag_id, record_ordinary, record_name, record_description, record_amount, record_type, record_date) => {
     var sql = "UPDATE wallet_record SET wallet_record_tag_id = ? record_ordinary = ? record_name = ? record_description = ? record_amount = ? record_type = ? record_date = ? record_updated_time = NOW() WHERE record_id = ?";
     connection.query(sql, [wallet_record_tag_id, record_ordinary, record_name, record_description, record_amount, record_type, record_date, record_id], (err, results, fields) => {
         if(err)
@@ -189,16 +177,36 @@ const delete_record = async (record_id, record_wallet_id) => {
     })
 };
 
-const insert_tag = () => {
-
+const insert_tag = async (wallet_id, tag_ordinary, tag_name, tag_type) => {
+    var tag_id = "tag_" + uuid.v4();
+    var sql = "INSERT INTO wallet_record_tag_id VALUE(?,?,?,?,?,NOW(),NOW())";
+    connection.query(sql, [tag_id, wallet_id, tag_ordinary, tag_name, tag_type], (err, results, fields) => {
+        if(err)
+            console.log("db: tag insertion error: " + err.message);
+        else
+            console.log("db: tag inserted successfully.");
+    })
 };
 
-const update_tag = () => {
-
+// tag_id, wallet_id不給改
+const update_tag = async (tag_ordinary, tag_name, tag_type) => {
+    var sql = "UPDATE wallet_record_tag_id SET tag_ordinary = ? tag_name = ? tag_type = ?";
+    connection.query(sql, [tag_ordinary, tag_name, tag_type], (err, results, fields) => {
+        if(err)
+            console.log("db: tag update error: " + err.message);
+        else
+            console.log("db: tag update successfully.");
+    })
 };
 
-const delete_tag = () => {
-
+const delete_tag = async (tag_id) => {
+    var sql = "DELETE FROM wallet_record_tag_id WHERE tag_id = ?";
+    connection.query(sql, tag_id, (err, results, fields) => {
+        if(err)
+            console.log("db: tag deletion error: " + err.message);
+        else
+            console.log("db: tag deleted successfully.");
+    })
 };
 
 function close_sql_connection () {

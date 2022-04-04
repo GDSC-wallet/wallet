@@ -23,13 +23,15 @@ const authenticate = (id) => {
 }
 const user_data = () => {
     return new Promise( async (resolve, reject) => {
-        //await db_dealer.insert_wallet('3', 1, 'midnight', 8888, 'oooo','olololol....');
+        // await db_dealer.insert_user('google','1','roych.shao@gmail.com','Roy Shao','roy');
+        //await db_dealer.delete_user('user_7417323a-a5f6-414a-b2e6-2c3d8d69f754');
+        //await db_dealer.insert_wallet('user_7552f100-eba2-44e1-bc7f-7a1690fd4913', 0, 'wallet_1', 1000, 'my wallet','my own wallet');
         //await db_dealer.delete_wallet('3','wallet_0754c072-ebe3-407d-9eb9-0f19429a3559');
         //await db_dealer.insert_record('wallet_97e2315d-8f4b-48c4-926c-e1c62dfda11c','tag_1',1,'test_record','no',9898,'income','2022-04-03 21:00:00');
         var user_status;
         var selected_wallet;
         var response = {};
-        await db_dealer.get_user('1')    // 之後parse req得到要求的user id,暫定1
+        await db_dealer.get_user('user_7552f100-eba2-44e1-bc7f-7a1690fd4913')    // 之後parse req得到要求的user id,暫定1
             .then(results => {
                 if(results.length > 0)
                     user_status = "true";
@@ -60,7 +62,7 @@ const user_data = () => {
                 // 填寫wallets陣列和wallets陣列中的records陣列
                 var idx = 0;    // the results' index
                 for(let i = 0; i < results[0].wallet_num; ++i) {
-                    
+
                     // 避免報錯, 如果idx >= results.length則表示已經沒有資料
                     if(idx >= results.length){ 
                         break;
@@ -102,6 +104,9 @@ const user_data = () => {
                 console.log("Data is: ");
                 console.log(Data);
                 response = Data;
+
+                //console.log(results);
+                //resolve(results);
             }).catch(err => {
                 console.log('ERROR: ' + err.message);
                 reject(err);
