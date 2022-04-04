@@ -7,7 +7,6 @@ authenticate	/home/roy/codes/GDSC_wallet/backend/db_caller.js	/^const authentica
 bodyParser	/home/roy/codes/GDSC_wallet/backend/index.js	/^const bodyParser = require('body-parser')$/;"	C	language:JavaScript
 close_sql_connection	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^function close_sql_connection () {$/;"	f	language:JavaScript
 connection	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^var connection = mysql.createConnection({$/;"	v	language:JavaScript
-dateTime	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^const dateTime = require('node-datetime')$/;"	C	language:JavaScript
 db_caller	/home/roy/codes/GDSC_wallet/backend/index.js	/^const db_caller = require('.\/db_caller.js')$/;"	C	language:JavaScript
 db_dealer	/home/roy/codes/GDSC_wallet/backend/db_caller.js	/^const db_dealer = require('.\/db_dealer.js')$/;"	C	language:JavaScript
 delete_record	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^const delete_record = async (record_id, record_wallet_id) => {$/;"	C	language:JavaScript

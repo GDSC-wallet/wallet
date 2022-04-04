@@ -1,13 +1,12 @@
 const express = require('express')
 const mysql = require('mysql')
 const uuid = require('uuid')
-const dateTime = require('node-datetime')
 const app = express();
 
 var connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: '1234567',
+    password: '620109roy',
     port: 3306,
     database: 'GDSC_wallet'
 });
@@ -22,7 +21,7 @@ connection.connect(function(err){
 // request dealer
 const get_user = (id) => {
     return new Promise((resolve, reject) => {
-        var sql = "SELECT id,username,nickname,wallet_id,wallet_name,selected,record_id,wallet_record_tag_id,record_ordinary,record_name,record_description,record_amount,record_type,record_date,record_created_time,record_updated_time,wallet_num,record_num FROM user JOIN wallet ON wallet.user_id=user.id LEFT JOIN wallet_record ON wallet_record.record_wallet_id=wallet.wallet_id WHERE user.id = ? ORDER BY CAST(wallet_record.record_wallet_id AS UNSIGNED)";   //  判斷+-6個月未做
+        var sql = "SELECT id,username,nickname,wallet_id,wallet_total,wallet_name,selected,record_id,wallet_record_tag_id,record_ordinary,record_name,record_description,record_amount,record_type,record_date,record_created_time,record_updated_time,wallet_num,record_num FROM user JOIN wallet ON wallet.user_id=user.id LEFT JOIN wallet_record ON wallet_record.record_wallet_id=wallet.wallet_id WHERE user.id = ? ORDER BY CAST(wallet_record.record_wallet_id AS UNSIGNED)";   //  判斷record+-6個月未做
         connection.query(sql, id, (err, results, fields) => {
             if(err) reject(err);
             else resolve(results);
@@ -141,11 +140,19 @@ const insert_record = async (record_wallet_id, wallet_record_tag_id, record_ordi
     })
     // update wallet's record_num
     var sql2 = "UPDATE wallet SET record_num = record_num + 1 WHERE wallet_id = ?";
-    connection.query(sql2, record_wallet_id, (err, results, fields) => {
+    await connection.query(sql2, record_wallet_id, (err, results, fields) => {
         if(err)
             console.log("db: record wallet update error: " + err.message);
         else
             console.log("db: record wallet update successfully.");
+    })
+    // add amount to wallet_total
+    var sql3 = "UPDATE wallet SET wallet_total = wallet_total + ? WHERE wallet_id = ?";
+    connection.query(sql3, [record_amount, record_wallet_id], (err, results, fields) => {
+        if(err)
+            console.log("db: record add amount to wallet error: " + err.message);
+        else
+            console.log("db: record add amount to wallet successfully.");
     })
 };
 
