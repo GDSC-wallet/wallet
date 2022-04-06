@@ -25,16 +25,17 @@ insert_wallet	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^const insert_wa
 mysql	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^const mysql = require('mysql')$/;"	C	language:JavaScript
 port	/home/roy/codes/GDSC_wallet/backend/db_caller.js	/^const port = 3000$/;"	C	language:JavaScript
 port	/home/roy/codes/GDSC_wallet/backend/index.js	/^const port = 3000$/;"	C	language:JavaScript
+record_amount	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^    var record_amount = 0;$/;"	v	language:JavaScript
 record_id	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^    var record_id = "record_" + uuid.v4();$/;"	v	language:JavaScript
 sql	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^    var sql = "DELETE FROM user WHERE id = ?";$/;"	v	language:JavaScript
 sql	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^    var sql = "DELETE FROM wallet WHERE wallet_id = ?";$/;"	v	language:JavaScript
-sql	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^    var sql = "DELETE FROM wallet_record WHERE record_id = ?";$/;"	v	language:JavaScript
 sql	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^    var sql = "DELETE FROM wallet_record_tag_id WHERE tag_id = ?";$/;"	v	language:JavaScript
 sql	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^    var sql = "INSERT INTO user VALUE(?,?,?,?,?,?,NOW(),NOW(),0)";$/;"	v	language:JavaScript
 sql	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^    var sql = "INSERT INTO wallet VALUE(?,?,?,?,?,?,?,NOW(),NOW(),0)";$/;"	v	language:JavaScript
 sql	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^    var sql = "INSERT INTO wallet_record VALUE(?,?,?,?,?,?,?,?,?,NOW(),NOW())";$/;"	v	language:JavaScript
 sql	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^    var sql = "INSERT INTO wallet_record_tag_id VALUE(?,?,?,?,?,NOW(),NOW())";$/;"	v	language:JavaScript
 sql	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^    var sql = "SELECT * FROM user WHERE id = ?";$/;"	v	language:JavaScript
+sql	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^    var sql = "SELECT record_amount FROM wallet_record WHERE record_id = ?";$/;"	v	language:JavaScript
 sql	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^    var sql = "UPDATE user SET email = ? username = ? nickname = ? created_time = ? updated_time/;"	v	language:JavaScript
 sql	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^    var sql = "UPDATE wallet SET selected = ? wallet_name = ? wallet_total = ? wallet_title = ? /;"	v	language:JavaScript
 sql	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^    var sql = "UPDATE wallet_record SET wallet_record_tag_id = ? record_ordinary = ? record_name/;"	v	language:JavaScript

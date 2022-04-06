@@ -21,10 +21,13 @@ connection.connect(function(err){
 // request dealer
 const get_user = (id) => {
     return new Promise((resolve, reject) => {
-        var sql = "SELECT id,username,nickname,wallet_id,wallet_total,wallet_name,selected,record_id,wallet_record_tag_id,record_ordinary,record_name,record_description,record_amount,record_type,record_date,record_created_time,record_updated_time,wallet_num,record_num FROM user JOIN wallet ON wallet.user_id=user.id LEFT JOIN wallet_record ON wallet_record.record_wallet_id=wallet.wallet_id WHERE user.id = ? ORDER BY CAST(wallet_record.record_wallet_id AS UNSIGNED)";   //  判斷record+-6個月未做
+        var sql = "SELECT id,username,nickname,wallet_id,wallet_total,wallet_name,selected,record_id,wallet_record_tag_id,record_ordinary,record_name,record_description,record_amount,record_type,record_date,record_created_time,record_updated_time,wallet_num,record_num FROM user JOIN wallet ON wallet.user_id=user.id LEFT JOIN wallet_record ON wallet_record.record_wallet_id=wallet.wallet_id WHERE user.id = ? AND record_date BETWEEN date_sub(NOW(),interval 6 MONTH) AND date_add(NOW(),interval 6 MONTH) ORDER BY CAST(wallet_record.record_wallet_id AS UNSIGNED)";
         connection.query(sql, id, (err, results, fields) => {
             if(err) reject(err);
-            else resolve(results);
+            else {
+                console.log(results);
+                resolve(results);
+            }
         });
     });
 }
@@ -168,19 +171,32 @@ const update_record = async (record_id, wallet_record_tag_id, record_ordinary, r
 };
 
 const delete_record = async (record_id, record_wallet_id) => {
-    var sql = "DELETE FROM wallet_record WHERE record_id = ?";
+    // 獲得record_amount
+    var sql = "SELECT record_amount FROM wallet_record WHERE record_id = ?";
+    var record_amount = 0;
     await connection.query(sql, record_id, (err, results, fields) => {
         if(err)
-            console.log("db: record deletion error: " + err.message);
-        else
-            console.log("db: record delete successfully.");
+            console.log("db: record get amount error: " + err.message);
+        else {
+            console.log("db: record get amount successfully.");
+            record_amount = results[0];
+        }
     })
-    var sql2 = "UPDATE wallet SET record_num = record_num - 1 WHERE wallet_id = ?";
-    connection.query(sql2, record_wallet_id, (err, results, fields) => {
+    // 刪減wallet中的record_num和wallet_total
+    var sql2 = "UPDATE wallet SET record_num = record_num - 1 wallet_total = wallet_total - ? WHERE wallet_id = ?";
+    await connection.query(sql2, [record_amount, record_wallet_id], (err, results, fields) => {
         if(err)
             console.log("db: record wallet update error: " + err.message);
         else
             console.log("db: record wallet update successfully.");
+    })
+    // 最後刪除record
+    var sql3 = "DELETE FROM wallet_record WHERE record_id = ?";
+    await connection.query(sql3, record_id, (err, results, fields) => {
+        if(err)
+            console.log("db: record deletion error: " + err.message);
+        else
+            console.log("db: record delete successfully.");
     })
 };
 

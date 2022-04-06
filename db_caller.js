@@ -23,11 +23,11 @@ const authenticate = (id) => {
 }
 const user_data = () => {
     return new Promise( async (resolve, reject) => {
-        // await db_dealer.insert_user('google','1','roych.shao@gmail.com','Roy Shao','roy');
+        //await db_dealer.insert_user('google','1','roych.shao@gmail.com','Roy Shao','roy');
         //await db_dealer.delete_user('user_7417323a-a5f6-414a-b2e6-2c3d8d69f754');
         //await db_dealer.insert_wallet('user_7552f100-eba2-44e1-bc7f-7a1690fd4913', 0, 'wallet_1', 1000, 'my wallet','my own wallet');
         //await db_dealer.delete_wallet('3','wallet_0754c072-ebe3-407d-9eb9-0f19429a3559');
-        //await db_dealer.insert_record('wallet_4acf9f9f-215a-4fd6-af5c-01705ce4a50e','tag_402d95e2-2441-441b-95a1-7f98fa74ccc0',2,'test_record2','no description',1000,'income','2022-04-03 21:00:00');
+        //await db_dealer.insert_record('wallet_dacbbdb7-4e2b-47ed-ad42-da878ab81890','tag_402d95e2-2441-441b-95a1-7f98fa74ccc0',1,'test_record1','no description',1500,'income','2022-04-06 23:00:00');
         //await db_dealer.insert_tag('wallet_4acf9f9f-215a-4fd6-af5c-01705ce4a50e',1,'tag_1','income');
         var user_status;
         var selected_wallet;
@@ -63,7 +63,6 @@ const user_data = () => {
                 // 填寫wallets陣列和wallets陣列中的records陣列
                 var idx = 0;    // the results' index
                 for(let i = 0; i < results[0].wallet_num; ++i) {
-
                     // 避免報錯, 如果idx >= results.length則表示已經沒有資料
                     if(idx >= results.length){ 
                         break;
@@ -80,6 +79,9 @@ const user_data = () => {
                     var record_arr = [];
 
                     for(let j = 0; j < results[idx].record_num; ++j) {
+                        // 若已是不同wallet,則提早break
+                        if(results[idx+j].wallet_id != results[idx].wallet_id)
+                            break;
                         var record_obj = {
                             record_id: results[idx+j].record_id,
                             wallet_record_tag_id: results[idx+j].wallet_record_tag_id,
