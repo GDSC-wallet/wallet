@@ -27,9 +27,9 @@ const user_data = () => {
         //await db_dealer.delete_user('user_7417323a-a5f6-414a-b2e6-2c3d8d69f754');
         //await db_dealer.insert_wallet('user_7552f100-eba2-44e1-bc7f-7a1690fd4913', 0, 'wallet_1', 1000, 'my wallet','my own wallet');
         //await db_dealer.delete_wallet('3','wallet_0754c072-ebe3-407d-9eb9-0f19429a3559');
-        //await db_dealer.insert_record('wallet_dacbbdb7-4e2b-47ed-ad42-da878ab81890','tag_402d95e2-2441-441b-95a1-7f98fa74ccc0',1,'test_record1','no description',1500,'income','2022-04-06 23:00:00');
+        //await db_dealer.insert_record('wallet_dacbbdb7-4e2b-47ed-ad42-da878ab81890','tag_402d95e2-2441-441b-95a1-7f98fa74ccc0',2,'test_record2','no description',300,'income','2022-04-06 23:00:00');
         //await db_dealer.insert_tag('wallet_4acf9f9f-215a-4fd6-af5c-01705ce4a50e',1,'tag_1','income');
-        //await db_dealer.delete_record('record_74c24855-1a63-47e7-979e-a9859d81b3c4','wallet_dacbbdb7-4e2b-47ed-ad42-da878ab81890');
+        //await db_dealer.delete_record('record_0bc10593-1fb0-40ba-9067-d6e0907f9ec8','wallet_4acf9f9f-215a-4fd6-af5c-01705ce4a50e',1000);
         var user_status;
         var selected_wallet;
         var response = {};

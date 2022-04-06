@@ -6,7 +6,7 @@ const app = express();
 var connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: '1234567',
+    password: '620109roy',
     port: 3306,
     database: 'GDSC_wallet'
 });
@@ -164,19 +164,9 @@ const update_record = async (record_id, wallet_record_tag_id, record_ordinary, r
     })
 };
 
-const delete_record = async (record_id, record_wallet_id) => {
-    // 獲得record_amount
-    var sql = "SELECT record_amount FROM wallet_record WHERE record_id = ?";
-    var record_amount = 0;
-    await connection.query(sql, record_id, (err, results, fields) => {
-        if(err)
-            console.log("db: record get amount error: " + err.message);
-        else {
-            console.log("db: record get amount successfully.");
-            record_amount = results[0];
-        }
-    })
+const delete_record = async (record_id, record_wallet_id, record_amount) => {
     // 刪減wallet中的record_num和wallet_total
+    console.log(record_amount);
     var sql2 = "UPDATE wallet SET record_num = record_num - 1, wallet_total = wallet_total - ? WHERE wallet_id = ?";
     await connection.query(sql2, [record_amount, record_wallet_id], (err, results, fields) => {
         if(err)
