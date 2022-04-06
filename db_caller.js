@@ -29,10 +29,11 @@ const user_data = () => {
         //await db_dealer.delete_wallet('3','wallet_0754c072-ebe3-407d-9eb9-0f19429a3559');
         //await db_dealer.insert_record('wallet_dacbbdb7-4e2b-47ed-ad42-da878ab81890','tag_402d95e2-2441-441b-95a1-7f98fa74ccc0',1,'test_record1','no description',1500,'income','2022-04-06 23:00:00');
         //await db_dealer.insert_tag('wallet_4acf9f9f-215a-4fd6-af5c-01705ce4a50e',1,'tag_1','income');
+        //await db_dealer.delete_record('record_74c24855-1a63-47e7-979e-a9859d81b3c4','wallet_dacbbdb7-4e2b-47ed-ad42-da878ab81890');
         var user_status;
         var selected_wallet;
         var response = {};
-        await db_dealer.get_user('user_7552f100-eba2-44e1-bc7f-7a1690fd4913')    // 之後parse req得到要求的user id,暫定1
+        await db_dealer.get_user('user_7552f100-eba2-44e1-bc7f-7a1690fd4913')    // 之後parse req得到要求的user id,just for testing
             .then(results => {
                 if(results.length > 0)
                     user_status = "true";
@@ -61,45 +62,39 @@ const user_data = () => {
                 };
 
                 // 填寫wallets陣列和wallets陣列中的records陣列
-                var idx = 0;    // the results' index
-                for(let i = 0; i < results[0].wallet_num; ++i) {
-                    // 避免報錯, 如果idx >= results.length則表示已經沒有資料
-                    if(idx >= results.length){ 
-                        break;
-                    }
+                for(let i = 0; i < results.length;) {
                     // construct a wallet object
                     var wallet_obj = {
-                        wallet_id: results[idx].wallet_id,
-                        wallet_name: results[idx].wallet_name,
-                        wallet_total: results[idx].wallet_total,
-                        selected: results[idx].selected,   // only true for now testing
+                        wallet_id: results[i].wallet_id,
+                        wallet_name: results[i].wallet_name,
+                        wallet_total: results[i].wallet_total,
+                        selected: results[i].selected,   // only true for now testing
                         records:[]
                     };
                     // construct a record array
                     var record_arr = [];
-
-                    for(let j = 0; j < results[idx].record_num; ++j) {
-                        // 若已是不同wallet,則提早break
-                        if(results[idx+j].wallet_id != results[idx].wallet_id)
+                    var j;
+                    for(j = 0; j < results[i].record_num; ++j) {
+                        // 若已經沒有資料或已是不同wallet,則提早break
+                        if(i + j >= results.length || results[i+j].wallet_id != results[i].wallet_id)
                             break;
                         var record_obj = {
-                            record_id: results[idx+j].record_id,
-                            wallet_record_tag_id: results[idx+j].wallet_record_tag_id,
-                            record_ordinary: results[idx+j].record_ordinary,
-                            record_name: results[idx+j].record_name,
-                            record_description: results[idx+j].record_description,  //
-                            record_amount: results[idx+j].record_amount,    //
-                            record_type: results[idx+j].record_type,    //
-                            record_date: results[idx+j].record_date,    //
-                            record_created_time: results[idx+j].record_created_time,
-                            record_updated_time: results[idx+j].record_updated_time
+                            record_id: results[i+j].record_id,
+                            wallet_record_tag_id: results[i+j].wallet_record_tag_id,
+                            record_ordinary: results[i+j].record_ordinary,
+                            record_name: results[i+j].record_name,
+                            record_description: results[i+j].record_description,  //
+                            record_amount: results[i+j].record_amount,    //
+                            record_type: results[i+j].record_type,    //
+                            record_date: results[i+j].record_date,    //
+                            record_created_time: results[i+j].record_created_time,
+                            record_updated_time: results[i+j].record_updated_time
                         }
                         record_arr.push(record_obj);
                     }
-                    if(results[idx].record_num == 0)
-                        idx += 1;
+                    if(j == 0) i++;
                     else
-                        idx += results[idx].record_num;
+                        i += j;
                     // put record array into wallet object and put wallet object into response.data.wallets
                     wallet_obj.records = record_arr;
                     console.log(wallet_obj);

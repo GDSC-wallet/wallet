@@ -21,11 +21,13 @@ connection.connect(function(err){
 // request dealer
 const get_user = (id) => {
     return new Promise((resolve, reject) => {
-        var sql = "SELECT id,username,nickname,wallet_id,wallet_total,wallet_name,selected,record_id,wallet_record_tag_id,record_ordinary,record_name,record_description,record_amount,record_type,record_date,record_created_time,record_updated_time,wallet_num,record_num FROM user JOIN wallet ON wallet.user_id=user.id LEFT JOIN wallet_record ON wallet_record.record_wallet_id=wallet.wallet_id WHERE user.id = ? AND record_date BETWEEN date_sub(NOW(),interval 6 MONTH) AND date_add(NOW(),interval 6 MONTH) ORDER BY CAST(wallet_record.record_wallet_id AS UNSIGNED)";
+        // 時間選取有效但影響left join的功能
+        // AND record_date BETWEEN date_sub(NOW(),interval 6 MONTH) AND date_add(NOW(),interval 6 MONTH)
+        var sql = "SELECT id,username,nickname,wallet_id,wallet_total,wallet_name,selected,record_id,wallet_record_tag_id,record_ordinary,record_name,record_description,record_amount,record_type,record_date,record_created_time,record_updated_time,wallet_num,record_num FROM user JOIN wallet ON wallet.user_id=user.id LEFT JOIN wallet_record ON wallet_record.record_wallet_id=wallet.wallet_id WHERE user.id = ? ORDER BY CAST(wallet_record.record_wallet_id AS UNSIGNED)";
         connection.query(sql, id, (err, results, fields) => {
             if(err) reject(err);
             else {
-                console.log(results);
+                //console.log(results);
                 resolve(results);
             }
         });
@@ -64,7 +66,7 @@ const insert_user = async (channel, channel_id, email, username, nickname) => {
 
 // id判斷用,channel,channel_id不給改
 const update_user = async (id, email, username, nickname, created_time) => {
-    var sql = "UPDATE user SET email = ? username = ? nickname = ? created_time = ? updated_time = NOW() WHERE id = ?";
+    var sql = "UPDATE user SET email = ?, username = ?, nickname = ?, created_time = ?, updated_time = NOW() WHERE id = ?";
     connection.query(sql, [email, username, nickname, created_time], id, (err, results, fields) => {
         if(err)
             console.log("db: user update error: " + err.message);
@@ -105,7 +107,7 @@ const insert_wallet = async (user_id, selected, wallet_name, wallet_total, walle
 
 // wallet_id, user_id不給改, wallet_id判斷用
 const update_wallet = async (wallet_id, selected, wallet_name, wallet_total, wallet_title, wallet_description) => {
-    var sql = "UPDATE wallet SET selected = ? wallet_name = ? wallet_total = ? wallet_title = ? wallet_description = ? updated_time = NOW() WHERE wallet_id = ?";
+    var sql = "UPDATE wallet SET selected = ?, wallet_name = ?, wallet_total = ?, wallet_title = ?, wallet_description = ?, updated_time = NOW() WHERE wallet_id = ?";
     connection.query(sql, [selected, wallet_name, wallet_total, wallet_title, wallet_description, wallet_id], (err, results, fields) => {
         if(err)
             console.log("db: wallet update error: " + err.message);
@@ -141,27 +143,19 @@ const insert_record = async (record_wallet_id, wallet_record_tag_id, record_ordi
         else
             console.log("db: record insert successfully.");
     })
-    // update wallet's record_num
-    var sql2 = "UPDATE wallet SET record_num = record_num + 1 WHERE wallet_id = ?";
-    await connection.query(sql2, record_wallet_id, (err, results, fields) => {
+    // update wallet's record_num and wallet_total
+    var sql2 = "UPDATE wallet SET record_num = record_num + 1, wallet_total = wallet_total + ? WHERE wallet_id = ?";
+    await connection.query(sql2, [record_amount, record_wallet_id], (err, results, fields) => {
         if(err)
             console.log("db: record wallet update error: " + err.message);
         else
             console.log("db: record wallet update successfully.");
     })
-    // add amount to wallet_total
-    var sql3 = "UPDATE wallet SET wallet_total = wallet_total + ? WHERE wallet_id = ?";
-    connection.query(sql3, [record_amount, record_wallet_id], (err, results, fields) => {
-        if(err)
-            console.log("db: record add amount to wallet error: " + err.message);
-        else
-            console.log("db: record add amount to wallet successfully.");
-    })
 };
 
 // record_id, wallet_id不給改
 const update_record = async (record_id, wallet_record_tag_id, record_ordinary, record_name, record_description, record_amount, record_type, record_date) => {
-    var sql = "UPDATE wallet_record SET wallet_record_tag_id = ? record_ordinary = ? record_name = ? record_description = ? record_amount = ? record_type = ? record_date = ? record_updated_time = NOW() WHERE record_id = ?";
+    var sql = "UPDATE wallet_record SET wallet_record_tag_id = ?, record_ordinary = ?, record_name = ?, record_description = ?, record_amount = ?, record_type = ?, record_date = ?, record_updated_time = NOW() WHERE record_id = ?";
     connection.query(sql, [wallet_record_tag_id, record_ordinary, record_name, record_description, record_amount, record_type, record_date, record_id], (err, results, fields) => {
         if(err)
             console.log("db: record update error: " + err.message);
@@ -183,7 +177,7 @@ const delete_record = async (record_id, record_wallet_id) => {
         }
     })
     // 刪減wallet中的record_num和wallet_total
-    var sql2 = "UPDATE wallet SET record_num = record_num - 1 wallet_total = wallet_total - ? WHERE wallet_id = ?";
+    var sql2 = "UPDATE wallet SET record_num = record_num - 1, wallet_total = wallet_total - ? WHERE wallet_id = ?";
     await connection.query(sql2, [record_amount, record_wallet_id], (err, results, fields) => {
         if(err)
             console.log("db: record wallet update error: " + err.message);
@@ -213,7 +207,7 @@ const insert_tag = async (wallet_id, tag_ordinary, tag_name, tag_type) => {
 
 // tag_id, wallet_id不給改
 const update_tag = async (tag_ordinary, tag_name, tag_type) => {
-    var sql = "UPDATE wallet_record_tag_id SET tag_ordinary = ? tag_name = ? tag_type = ?";
+    var sql = "UPDATE wallet_record_tag_id SET tag_ordinary = ?, tag_name = ?, tag_type = ?";
     connection.query(sql, [tag_ordinary, tag_name, tag_type], (err, results, fields) => {
         if(err)
             console.log("db: tag update error: " + err.message);

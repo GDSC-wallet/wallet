@@ -36,10 +36,10 @@ sql	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^    var sql = "INSERT INT
 sql	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^    var sql = "INSERT INTO wallet_record_tag_id VALUE(?,?,?,?,?,NOW(),NOW())";$/;"	v	language:JavaScript
 sql	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^    var sql = "SELECT * FROM user WHERE id = ?";$/;"	v	language:JavaScript
 sql	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^    var sql = "SELECT record_amount FROM wallet_record WHERE record_id = ?";$/;"	v	language:JavaScript
-sql	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^    var sql = "UPDATE user SET email = ? username = ? nickname = ? created_time = ? updated_time/;"	v	language:JavaScript
-sql	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^    var sql = "UPDATE wallet SET selected = ? wallet_name = ? wallet_total = ? wallet_title = ? /;"	v	language:JavaScript
-sql	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^    var sql = "UPDATE wallet_record SET wallet_record_tag_id = ? record_ordinary = ? record_name/;"	v	language:JavaScript
-sql	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^    var sql = "UPDATE wallet_record_tag_id SET tag_ordinary = ? tag_name = ? tag_type = ?";$/;"	v	language:JavaScript
+sql	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^    var sql = "UPDATE user SET email = ?, username = ?, nickname = ?, created_time = ?, updated_/;"	v	language:JavaScript
+sql	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^    var sql = "UPDATE wallet SET selected = ?, wallet_name = ?, wallet_total = ?, wallet_title =/;"	v	language:JavaScript
+sql	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^    var sql = "UPDATE wallet_record SET wallet_record_tag_id = ?, record_ordinary = ?, record_na/;"	v	language:JavaScript
+sql	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^    var sql = "UPDATE wallet_record_tag_id SET tag_ordinary = ?, tag_name = ?, tag_type = ?";$/;"	v	language:JavaScript
 sql2	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^    var sql2 = "UPDATE user SET wallet_num = wallet_num + 1 WHERE id = ?";$/;"	v	language:JavaScript
 tag_id	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^    var tag_id = "tag_" + uuid.v4();$/;"	v	language:JavaScript
 update_record	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^const update_record = async (record_id, wallet_record_tag_id, record_ordinary, record_name, reco/;"	C	language:JavaScript
