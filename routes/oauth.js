@@ -35,7 +35,7 @@ passport.use(
           //使用email hash出 使用者id
           const user_id = sha256Hasher.update(user_email);
 
-          //const user_id="'user_7552f100-eba2-44e1-bc7f-7a1690fd4913"; //測試用
+          //const user_id="'user_7552f100-eba2-44e1-bc7f-7a1690fd4913"; //測試用假資料
 
           //確認此使用者是否已經存在WALLET的DB
           const user_exist = await db_caller.authenticate(user_id);          
@@ -44,7 +44,7 @@ passport.use(
               return done(null, 
                 {
                     test:"hello",
-                    profile
+                    profile:{...profile,user_id:user_id}
                 });
             }
             else{
@@ -83,18 +83,18 @@ router.get(
 router.get(
   "/google/callback",
   passport.authenticate("google", {
-    successRedirect: "/api/oauth/google/protected",
+    successRedirect: "/api/oauth/google/success",
     failureRedirect: "/api/oauth/google/failure",
   }
   )
 );
 
 //GOOGLE OAUTH SUCCESS CALLBACK
-router.get("/google/protected", isLoggedIn, (req, res) => {
+router.get("/google/success", isLoggedIn, (req, res) => {
 
   //製作jwt
-  const { email , id } = req.user.profile;
-  const token = jwt.sign( { id: id }, secret, { expiresIn: "1h" } );
+  const { email , user_id } = req.user.profile;
+  const token = jwt.sign( { user_id: user_id }, secret, { expiresIn: "1h" } );
 
   res.header('Authorization', token);
   res.redirect('http://localhost:3000')
