@@ -1,7 +1,7 @@
 //NODE MODULES
 import express from "express";
 import auth from "../middleware/auth.js";
-import { getUserProfile,signUp } from "../controllers/user.js";
+import { signUp,getUserProfile } from "../controllers/user.js";
 
 const router = express.Router();
 

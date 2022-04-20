@@ -4,12 +4,16 @@ import jwt from "jsonwebtoken";
 import passport from "passport";
 import dotenv from "dotenv";
 import GoogleStrategy from "passport-google-oauth20";
+import crypto from"crypto";
 
 //DB CALLER
 import db_caller from "../db_interact/db_caller.js";
 
 const router = express.Router();
 const secret = "GDSC_WALLET";
+
+// create a sha-256 hasher
+const sha256Hasher = crypto.createHmac("sha256", secret);
 
 dotenv.config();
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
@@ -26,9 +30,15 @@ passport.use(
     },
     async function (request, accessToken, refreshToken, profile, done) {
       try{
+          const user_email = profile.email;
+
+          //使用email hash出 使用者id
+          const user_id = sha256Hasher.update(user_email);
+
+          //const user_id="'user_7552f100-eba2-44e1-bc7f-7a1690fd4913"; //測試用
 
           //確認此使用者是否已經存在WALLET的DB
-          const user_exist = await db_caller.authenticate('user_7552f100-eba2-44e1-bc7f-7a1690fd4913')          
+          const user_exist = await db_caller.authenticate(user_id);          
           
           if(user_exist){
               return done(null, 
