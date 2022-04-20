@@ -19,4 +19,4 @@ To test this App:
 
     API CALL => ROUTES => MIDDLEWARES => CONTROLLERS => DB_INTERACT => 回傳response
 
-## 詳細ＡＰＩ文件請參考 api.md
+## 詳細ＡＰＩ使用方式請參考 api.md
