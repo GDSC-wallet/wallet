@@ -115,6 +115,8 @@
     "data": {
         "wallet_id": "wallet_2c36aaad-2d40-48cb-9e36-9d3a841ffb37",
         "wallet_name": "my-wallet",
+        "wallet_title": "wallet-title",
+        "wallet_total": "wallet-total",
         "wallet_description": "my-wallet-description",
         "records": [
             {
