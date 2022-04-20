@@ -18,7 +18,7 @@ dotenv.config();
 
 const app = express();
 
-//設定logger，將每個request寫到log.txt
+//設定logger，將每個request寫到access.log裡
 //若要deploy到server，請將下四行註解掉
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -80,9 +80,10 @@ connection.connect(function(err){
         return err;
     }
     else{
-        //若連上ＤＢ，則啟動server
+        //若測試連上ＤＢ成功，則啟動server
         console.log("Successfully connect to mysql : root@localhost ");
         app.listen(PORT, () =>console.log(`Server Running on Port: http://localhost:${PORT}`))
+        connection.end();
     }
 });
 
