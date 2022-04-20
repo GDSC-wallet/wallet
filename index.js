@@ -1,11 +1,14 @@
+//NODE MODULES
 import express from "express";
 import cors from "cors";
 import session from "express-session";
 import passport from "passport";
 import dotenv from "dotenv";
 
+//ROUTER
 import userRouter from "./routes/user.js";
 import oauthRouter from "./routes/oauth.js";
+dotenv.config();
 
 const app = express();
 
@@ -17,19 +20,21 @@ app.use(session({ secret: "cats", resave: false, saveUninitialized: true }));
 app.use(passport.initialize());
 app.use(passport.session());
 
-// app.use(bodyParser.urlencoded({extended: false}));
-// app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.json());
 
-// Add headers
-// app.use(function(req, res, next) {
-//   res.header("Access-Control-Allow-Origin", "https://nccucourseguide.herokuapp.com"); // update to match the domain you will make the request from
-//   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-//   next();
-// });
+//Add headers
+app.use(function(req, res, next) {
+  //res.header("Access-Control-Allow-Origin", "https://nccucourseguide.herokuapp.com"); // update to match the domain you will make the request from
+  //res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
 
+//ROUTES
 app.use("/api/oauth", oauthRouter);
 app.use("/api/user", userRouter);
 
+//測試SERVER在線
 app.get("/", (req, res) => {
   const result = {
     success: true,
@@ -39,10 +44,10 @@ app.get("/", (req, res) => {
   res.status(200).send(result);
 });
 
-dotenv.config();
 
 const PORT = process.env.PORT || 80;
 
+//若連上ＤＢ，則啟動server
 app.listen(PORT, () =>
   console.log(`Server Running on Port: http://localhost:${PORT}`)
 );

@@ -32,7 +32,7 @@ passport.use(
     },
     function (request, accessToken, refreshToken, profile, done) {
 
-      //在這裡處理db ()
+      // 在這裡處理db ()
       // User.findOrCreate({ googleId: profile.id }, function (err, user) {
       //   return cb(err, user);
       // });
