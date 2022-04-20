@@ -32,12 +32,23 @@ export const signUp = async (req, res) => {
   const { nickname } = req.body;
 
   //註冊使用者到資料庫
-  // const db_result = db_caller.sign_up({userId,nickname});
+  const db_result = db_caller.sign_up({userId,nickname});
 
-  const response = {
-    "success": true,
-    "message": "註冊使用者",
-    "data": db_result
+  let repsonse;
+
+  if(db_result.success){
+    response = {
+      "success": true,
+      "message": "註冊使用者成功",
+      "data": db_result.data
+    }
+  }
+  else{
+    response = {
+      "success": false,
+      "message": "註冊使用者失敗",
+      "data": undefined
+    }
   }
 
   //回傳結果
@@ -95,15 +106,26 @@ export const getUserProfile = async (req, res) => {
   
   //解碼jwt取得user_id
   const decodedData = jwt.verify(token, secret);
-  const userId = decodedData?.id;
+  const user_id = decodedData?.id;
 
   //從資料庫取得使用者資料
   const db_result = db_caller.call_user_data(user_id);
 
-  const response = {
-    "success": true,
-    "message": "取得使用者資料成功",
-    "data": db_result
+  let response;
+
+  if(db_result.success){
+    response = {
+      "success": true,
+      "message": "取得使用者資料成功",
+      "data": db_result.data
+    }
+  }
+  else{
+    response = {
+      "success": false,
+      "message": "取得使用者資料失敗",
+      "data": undefined
+    }
   }
 
   //回傳結果

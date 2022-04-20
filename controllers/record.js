@@ -1,6 +1,4 @@
-
 import db_caller from "../db_interact/db_caller.js";
-
 
 export const get_record = async (req, res) => {
     res.status(201).json({ result:"success" });
