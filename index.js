@@ -51,7 +51,7 @@ app.use(function(req, res, next) {
 */
 
 //ROUTES
-app.use("/api/oauth", oauthRouter);
+app.use("/oauth", oauthRouter);
 app.use("/api/user", userRouter);
 
 //API:測試SERVER在線

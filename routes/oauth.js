@@ -84,8 +84,8 @@ router.get(
 router.get(
   "/google/callback",
   passport.authenticate("google", {
-    successRedirect: "/api/oauth/google/success",
-    failureRedirect: "/api/oauth/google/failure",
+    successRedirect: "/oauth/google/success",
+    failureRedirect: "/oauth/google/failure",
   }
   )
 );
