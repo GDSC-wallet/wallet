@@ -15,17 +15,19 @@
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "dotenv": "^16.0.0",
+    "express": "^4.17.3",
     "express-session": "^1.17.2",
     "google-auth-library": "^7.10.3",
+    "helmet": "^5.0.2",
     "jsonwebtoken": "^8.5.1",
     "morgan": "^1.10.0",
-    "passport": "^0.5.2",
-    "passport-google-oauth20": "^2.0.0",
-    "passport-oauth2": "^1.6.1",
-    "express": "^4.17.3",
     "mysql": "^2.18.1",
     "node-datetime": "^2.1.2",
     "nodemon": "^2.0.15",
+    "passport": "^0.5.2",
+    "passport-google-oauth20": "^2.0.0",
+    "passport-oauth2": "^1.6.1",
+    "rate-limiter-flexible": "^2.3.6",
     "uuid": "^8.3.2"
   }
 }

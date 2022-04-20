@@ -11,7 +11,9 @@ To Start Server:
 
 To test this App:
 
-`http://localhost:5050`  
+`http://localhost:80`  
+
+`http://localhost:80/oauth/google/login`
 
 ### 檔案結構：
 

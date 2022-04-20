@@ -7,16 +7,29 @@ import morgan from "morgan";
 import passport from "passport";
 import dotenv from "dotenv";
 import mysql from 'mysql'
+import helmet from "helmet";
 import fs from 'fs';
 import path from 'path';
 import {fileURLToPath} from 'url';
 
 //ROUTER
-import userRouter from "./routes/user.js";
 import oauthRouter from "./routes/oauth.js";
+import userRouter from "./routes/user.js";
+import walletRouter from "./routes/wallet.js";
+import recordRouter from "./routes/record.js";
+import tagRouter from "./routes/tag.js";
 dotenv.config();
 
 const app = express();
+
+//資訊安全專區，因為仍在開發中，故先註解掉
+//出處：https://expressjs.com/en/advanced/best-practice-security.html
+// app.use(helmet())
+// app.set('trust proxy', 1) // trust first proxy
+// app.use(session({
+//   secret: 's3Cur3',
+//   name: 'sessionId'
+// }))
 
 //設定logger，將每個request寫到access.log裡
 //若要deploy到server，請將下四行註解掉
@@ -53,6 +66,9 @@ app.use(function(req, res, next) {
 //ROUTES
 app.use("/oauth", oauthRouter);
 app.use("/api/user", userRouter);
+app.use("/api/wallet", walletRouter);
+app.use("/api/record", recordRouter);
+app.use("/api/tag", tagRouter);
 
 //API:測試SERVER在線
 app.get("/", (req, res) => {
@@ -66,27 +82,36 @@ app.get("/", (req, res) => {
 
 const PORT = process.env.PORT || 80;
 
-//連線到MYSQL
-const connection = mysql.createConnection({
-    host: process.env.MYSQL_HOST,
-    user: process.env.MYSQL_USER,
-    password: process.env.MYSQL_PASSWORD,
-    port: process.env.MYSQL_PORT,
-    database: process.env.MYSQL_DATABASE,
-    multipleStatements: true
-});
-connection.connect(function(err){
-    if(err){
-        return err;
-    }
-    else{
-        //若測試連上ＤＢ成功，則啟動server
-        console.log("Successfully connect to mysql : root@localhost ");
-        app.listen(PORT, () =>console.log(`Server Running on Port: http://localhost:${PORT}`))
-        connection.end();
-    }
-});
 
+//***********04/21測試版********** */
+//若DB已設定，請手動將DB_IS_SET設成true
+const DB_IS_SET = false;
 
-//若未設定DB，直接啟動server
-//app.listen(PORT, () =>console.log(`Server Running on Port: http://localhost:${PORT}`))
+if(DB_IS_SET){
+
+    //連線到MYSQL
+    const connection = mysql.createConnection({
+        host: process.env.MYSQL_HOST,
+        user: process.env.MYSQL_USER,
+        password: process.env.MYSQL_PASSWORD,
+        port: process.env.MYSQL_PORT,
+        database: process.env.MYSQL_DATABASE,
+        multipleStatements: true
+    });
+    connection.connect(function(err){
+        if(err){
+            return err;
+        }
+        else{
+            //若測試連上ＤＢ成功，則啟動server
+            console.log("Successfully connect to mysql : root@localhost ");
+            app.listen(PORT, () =>console.log(`Server Running on Port: http://localhost:${PORT}`))
+            connection.end();
+        }
+    });
+}
+else{
+
+    //若未設定DB，直接啟動server
+    app.listen(PORT, () =>console.log(`Server Running on Port: http://localhost:${PORT}`))
+}

@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 import passport from "passport";
 import dotenv from "dotenv";
 import GoogleStrategy from "passport-google-oauth20";
-import crypto from"crypto";
+import crypto from "crypto";
 
 //DB CALLER
 import db_caller from "../db_interact/db_caller.js";
@@ -26,30 +26,36 @@ passport.use(
     {
       clientID: GOOGLE_CLIENT_ID,
       clientSecret: GOOGLE_CLIENT_SECRET,
-      callbackURL: "/api/oauth/google/callback",
+      callbackURL: "/oauth/google/callback",
       passReqToCallback: true,
     },
     async function (request, accessToken, refreshToken, profile, done) {
-      try{
-          const user_email = profile.email;
-
+        try{
+          console.log('profile :', profile);
+          const user_email = profile._json.email;
+          
+          
           //使用email hash出 使用者id
           const user_id = sha256Hasher.update(user_email);
 
           //const user_id="'user_7552f100-eba2-44e1-bc7f-7a1690fd4913"; //測試用假資料
 
           //確認此使用者是否已經存在WALLET的DB
-          const user_exist = await db_caller.authenticate(user_id);          
-          
+          const user_exist = await db_caller.authenticate(user_id);     
+     
           if(user_exist){
               return done(null, 
                 {
-                    test:"hello",
+                    result:"USER_EXIST_IN_DB",
                     profile:{...profile,user_id:user_id}
                 });
             }
-            else{
-                return done(null, "user not exist in db");
+            else{                
+                return done(null,
+                {
+                    result:"USER_NOT_EXIST_IN_DB",
+                    profile:{...profile,user_id:user_id}
+                });
             }
       }
       catch(err){
@@ -92,13 +98,20 @@ router.get(
 
 //GOOGLE OAUTH SUCCESS CALLBACK
 router.get("/google/success", isLoggedIn, (req, res) => {
+    
+    //製作jwt
+    const { email , user_id } = req.user.profile;
+    const token = jwt.sign( { user_id: user_id }, secret, { expiresIn: "1h" } );
 
-  //製作jwt
-  const { email , user_id } = req.user.profile;
-  const token = jwt.sign( { user_id: user_id }, secret, { expiresIn: "1h" } );
-
-  res.header('Authorization', token);
-  res.redirect("http://localhost:3000")
+    res.header('Authorization', token);
+    
+    //若尚未註冊，回到前端註冊頁
+    if(res.user==="USER_NOT_EXIST_IN_DB"){
+        res.redirect("http://localhost:3000/signup")
+    }
+    else{
+        res.redirect("http://localhost:3000")
+    }
 });
 
 //GOOGLE OAUTH FAILURE CALLBACK
