@@ -8,7 +8,8 @@ var connection = mysql.createConnection({
     user: 'root',
     password: '620109roy',
     port: 3306,
-    database: 'GDSC_wallet'
+    database: 'GDSC_wallet',
+    multipleStatements: true
 });
 connection.connect(function(err){
     if(err)
@@ -20,14 +21,23 @@ connection.connect(function(err){
 
 // request dealer
 const get_user = (id) => {
-    return new Promise((resolve, reject) => {
-        // 時間選取有效但影響left join的功能
-        // AND record_date BETWEEN date_sub(NOW(),interval 6 MONTH) AND date_add(NOW(),interval 6 MONTH)
-        var sql = "SELECT id,username,nickname,wallet_id,wallet_total,wallet_name,selected,record_id,wallet_record_tag_id,record_ordinary,record_name,record_description,record_amount,record_type,record_date,record_created_time,record_updated_time,wallet_num,record_num FROM user JOIN wallet ON wallet.user_id=user.id LEFT JOIN wallet_record ON wallet_record.record_wallet_id=wallet.wallet_id AND record_date BETWEEN date_sub(NOW(),interval 6 MONTH) AND date_add(NOW(),interval 6 MONTH) WHERE user.id = ? ORDER BY CAST(wallet_record.record_wallet_id AS UNSIGNED)";
-        connection.query(sql, id, (err, results, fields) => {
+    return new Promise( async (resolve, reject) => {
+        var sql = "SELECT id,username,nickname,wallet_id,wallet_total,wallet_name,selected,record_id,wallet_record_tag_id,record_ordinary,record_name,record_description,record_amount,record_type,record_date,record_created_time,record_updated_time,wallet_num,record_num FROM user JOIN wallet ON wallet.user_id=user.id LEFT JOIN wallet_record ON wallet_record.record_wallet_id=wallet.wallet_id AND record_date BETWEEN date_sub(NOW(),interval 6 MONTH) AND date_add(NOW(),interval 6 MONTH) AND wallet.selected = 1 WHERE user.id = ? ORDER BY CAST(wallet_record.record_wallet_id AS UNSIGNED)";
+        connection.query(sql, id, async (err, results, fields) => {
             if(err) reject(err);
             else {
-                //console.log(results);
+                resolve(results);
+            }
+        });
+    });
+}
+
+const get_wallet = (wallet_id) => {
+    return new Promise((resolve, reject) => {
+        var sql = "SELECT wallet_id,wallet_name,wallet_total,wallet_title,wallet_description,record_num,record_id,wallet_record_tag_id,record_ordinary,record_name,record_description,record_amount,record_type,record_date,record_created_time,record_updated_time FROM wallet LEFT JOIN wallet_record ON wallet_record.record_wallet_id=wallet.wallet_id AND record_date BETWEEN date_sub(NOW(),interval 6 MONTH) AND date_add(NOW(),interval 6 MONTH) WHERE wallet_id = ? ORDER BY CAST(wallet_record.record_wallet_id AS UNSIGNED)";
+        connection.query(sql, wallet_id, (err, results, fields) => {
+            if(err) reject(err);
+            else {
                 resolve(results);
             }
         });
@@ -44,11 +54,7 @@ const user_exist = (id) => {
     });
 };
 
-/***********************************************
- *                                             *
- * insert, update and delete database function *
- *                                             *
- ************************************************/
+/************** INSERT, UPDATE and DELETE database function *******************/
 
 const insert_user = async (channel, channel_id, email, username, nickname) => {
     // generate uuid for the user
@@ -233,5 +239,6 @@ exports.insert_tag = insert_tag;
 exports.update_tag = update_tag;
 exports.delete_tag = delete_tag;
 exports.get_user = get_user;
+exports.get_wallet = get_wallet;
 exports.user_exist = user_exist;
 exports.close_sql_connection = close_sql_connection;

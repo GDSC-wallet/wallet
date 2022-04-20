@@ -4,7 +4,6 @@ const app = express()
 const uuid = require('uuid')
 const port = 3000
 
-
 // 問資料庫user是否存在
 const authenticate = (id) => {
     return new Promise( async(resolve, reject) => {
@@ -21,7 +20,7 @@ const authenticate = (id) => {
             });
     });
 }
-const user_data = () => {
+const call_user_data = (user_id) => {
     return new Promise( async (resolve, reject) => {
         //await db_dealer.insert_user('google','1','roych.shao@gmail.com','Roy Shao','roy');
         //await db_dealer.delete_user('user_7417323a-a5f6-414a-b2e6-2c3d8d69f754');
@@ -46,11 +45,10 @@ const user_data = () => {
                         break;
                     }
                 }
-
                 // 將資料轉成需要的JSON格式
                 var Data = {
                     success: user_status,
-                    message:"info for user_id1",
+                    message:"Data of " + user_id + ".",
                     data:{
                         user_id: results[0].id,
                         username: results[0].username,
@@ -73,24 +71,26 @@ const user_data = () => {
                     };
                     // construct a record array
                     var record_arr = [];
-                    var j;
-                    for(j = 0; j < results[i].record_num; ++j) {
-                        // 若已經沒有資料或已是不同wallet,則提早break
-                        if(i + j >= results.length || results[i+j].wallet_id != results[i].wallet_id)
-                            break;
-                        var record_obj = {
-                            record_id: results[i+j].record_id,
-                            wallet_record_tag_id: results[i+j].wallet_record_tag_id,
-                            record_ordinary: results[i+j].record_ordinary,
-                            record_name: results[i+j].record_name,
-                            record_description: results[i+j].record_description,  //
-                            record_amount: results[i+j].record_amount,    //
-                            record_type: results[i+j].record_type,    //
-                            record_date: results[i+j].record_date,    //
-                            record_created_time: results[i+j].record_created_time,
-                            record_updated_time: results[i+j].record_updated_time
+                    var j = 0;
+                    if(results[i].selected == 1) {
+                        for(j = 0; j < results[i].record_num; ++j) {
+                            // 若已經沒有資料或已是不同wallet,則提早break
+                            if(i + j >= results.length || results[i+j].wallet_id != results[i].wallet_id)
+                                break;
+                            var record_obj = {
+                                record_id: results[i+j].record_id,
+                                wallet_record_tag_id: results[i+j].wallet_record_tag_id,
+                                record_ordinary: results[i+j].record_ordinary,
+                                record_name: results[i+j].record_name,
+                                record_description: results[i+j].record_description,  //
+                                record_amount: results[i+j].record_amount,    //
+                                record_type: results[i+j].record_type,    //
+                                record_date: results[i+j].record_date,    //
+                                record_created_time: results[i+j].record_created_time,
+                                record_updated_time: results[i+j].record_updated_time
+                            }
+                            record_arr.push(record_obj);
                         }
-                        record_arr.push(record_obj);
                     }
                     if(j == 0) i++;
                     else
@@ -103,6 +103,7 @@ const user_data = () => {
                 console.log("Data is: ");
                 console.log(Data);
                 response = Data;
+                resolve(response);
 
                 //console.log(results);
                 //resolve(results);
@@ -110,11 +111,54 @@ const user_data = () => {
                 console.log('ERROR: ' + err.message);
                 reject(err);
             });
-        resolve(response);
     });
 }
 
-// 暫時先不做關閉資料庫的動作
+const call_wallet = (wallet_id) => {
+    return new Promise( async (resolve, reject) => {
+        await db_dealer.get_wallet(wallet_id)
+            .then(results => {
+                var response = {
+                    "success": true,
+                    "message": "wallet data of " + wallet_id + ".",
+                    "data": {
+                        "wallet_id": results[0].wallet_id,
+                        "wallet_name": results[0].wallet_name,
+                        "wallet_title": results[0].wallet_title,
+                        "wallet_total": results[0].wallet_total,
+                        "wallet_description": results[0].wallet_description,
+                        "records": []
+                    }
+                };
+                for(var i = 0; i < results.length; ++i) {
+                    var record_data = {
+                        "record_id": results[i].record_id,
+                        "wallet_record_tag_id": results[i].wallet_record_tag_id,
+                        "record_ordinary": results[i].record_ordinary,
+                        "record_name": results[i].record_name,
+                        "record_description": results[i].record_description,
+                        "record_amount": results[i].record_amount,
+                        "record_type": results[i].record_type,
+                        "record_date": results[i].record_date,
+                        "record_created_time": results[i].record_created_time,
+                        "record_updated_time": results[i].record_updated_time
+                    }
+                    //console.log(record_data);
+                    response.data.records.push(record_data);
+                }
+                //console.log(results);
+                //resolve(results);
+                console.log(response);
+                resolve(response);
+            })
+            .catch(err => {
+                console.log('ERROR: ' + err.message);
+                reject(err);
+            });
+    })
+}
 
-exports.user_data = user_data;
+// 暫時先不做關閉資料庫的動作
+exports.call_wallet = call_wallet;
+exports.call_user_data = call_user_data;
 exports.authenticate = authenticate;
