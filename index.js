@@ -1,15 +1,11 @@
 import express from "express";
-import mongoose from "mongoose";
-import { pool,client,sequelize } from './postgres.js'
-
 import cors from "cors";
 import session from "express-session";
 import passport from "passport";
 import dotenv from "dotenv";
 
 import userRouter from "./routes/user.js";
-import courseRoutes from "./routes/course.js";
-import productRoutes from "./routes/product.js";
+import oauthRouter from "./routes/oauth.js";
 
 const app = express();
 
@@ -31,33 +27,22 @@ app.use(passport.session());
 //   next();
 // });
 
-app.use("/course", courseRoutes);
-app.use("/user", userRouter);
-app.use("/product", productRoutes);
+app.use("/api/oauth", oauthRouter);
+app.use("/api/user", userRouter);
+
+app.get("/", (req, res) => {
+  const result = {
+    success: true,
+    message: "",
+    data: {},
+  };
+  res.status(200).send(result);
+});
 
 dotenv.config();
 
-const CONNECTION_URL =
-  "mongodb+srv://william:reverse321@cluster0.mhbnf.mongodb.net/nccu-course-guide?retryWrites=true&w=majority";
-
 const PORT = process.env.PORT || 80;
 
-try {
-  await sequelize.authenticate();
-  console.log('sequelize postgres Connection has been established successfully.');
-  
-  // clients will also use environment variables
-  // for connection information
-  await client.connect()
-} catch (error) {
-  console.error('Unable to connect to the database:', error);
-}
-
-mongoose
-  .connect(CONNECTION_URL, { useNewUrlParser: true })
-  .then(() =>
-    app.listen(PORT, () =>
-      console.log(`Server Running on Port: http://localhost:${PORT}`)
-    )
-  )
-  .catch((error) => console.log(`${error} did not connect`));
+app.listen(PORT, () =>
+  console.log(`Server Running on Port: http://localhost:${PORT}`)
+);
