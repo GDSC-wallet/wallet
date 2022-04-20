@@ -1,5 +1,24 @@
 import mysql from 'mysql'
-import {v4 as uuid} from 'uuid'
+import dotenv from "dotenv";
+import { v4 as uuid } from 'uuid'
+
+dotenv.config();
+const connection = mysql.createConnection({
+    host: process.env.MYSQL_HOST,
+    user: process.env.MYSQL_USER,
+    password: process.env.MYSQL_PASSWORD,
+    port: process.env.MYSQL_PORT,
+    database: process.env.MYSQL_DATABASE,
+    multipleStatements: true
+});
+connection.connect(function(err){
+    if(err){
+        return err;
+    }
+    else{
+        console.log("Successfully connect to mysql : root@localhost ");
+    }
+});
 
 // request dealer
 const get_user = (id) => {

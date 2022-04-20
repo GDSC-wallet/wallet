@@ -70,7 +70,7 @@ const PORT = process.env.PORT || 80;
 const connection = mysql.createConnection({
     host: process.env.MYSQL_HOST,
     user: process.env.MYSQL_USER,
-    password: process.env.MYSQL_PGPASSWORD,
+    password: process.env.MYSQL_PASSWORD,
     port: process.env.MYSQL_PORT,
     database: process.env.MYSQL_DATABASE,
     multipleStatements: true

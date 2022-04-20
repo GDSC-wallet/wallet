@@ -18,6 +18,7 @@ const sha256Hasher = crypto.createHmac("sha256", secret);
 dotenv.config();
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
+const CLIENT_URL = process.env.CLIENT_URL;
 
 //設定passport
 passport.use(
@@ -97,7 +98,7 @@ router.get("/google/success", isLoggedIn, (req, res) => {
   const token = jwt.sign( { user_id: user_id }, secret, { expiresIn: "1h" } );
 
   res.header('Authorization', token);
-  res.redirect('http://localhost:3000')
+  res.redirect("http://localhost:3000")
 });
 
 //GOOGLE OAUTH FAILURE CALLBACK
@@ -105,7 +106,7 @@ router.get("/google/failure", (req, res) => {
     res.send("Failed to authenticate..");
 });
 
-//GOOGLE OAUTH CHECK LOGIN
+//GOOGLE OAUTH SUCCESS MIDDLEWARE
 function isLoggedIn(req, res, next) {
     req.user ? next() : res.sendStatus(401);
 }
