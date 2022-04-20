@@ -1,8 +1,5 @@
-const db_dealer = require('./db_dealer.js')
-const express = require('express')
-const app = express()
-const uuid = require('uuid')
-const port = 3000
+import db_dealer from './db_dealer.js'
+import {v4 as uuid} from 'uuid'
 
 // 問資料庫user是否存在
 const authenticate = (id) => {
@@ -158,7 +155,4 @@ const call_wallet = (wallet_id) => {
     })
 }
 
-// 暫時先不做關閉資料庫的動作
-exports.call_wallet = call_wallet;
-exports.call_user_data = call_user_data;
-exports.authenticate = authenticate;
+export default { call_wallet , call_user_data, authenticate};

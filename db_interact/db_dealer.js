@@ -1,23 +1,5 @@
-const express = require('express')
-const mysql = require('mysql')
-const uuid = require('uuid')
-const app = express();
-
-var connection = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '620109roy',
-    port: 3306,
-    database: 'GDSC_wallet',
-    multipleStatements: true
-});
-connection.connect(function(err){
-    if(err)
-        return err;
-    else
-        console.log("Successfully connect to mysql : root@localhost ");
-});
-
+import mysql from 'mysql'
+import {v4 as uuid} from 'uuid'
 
 // request dealer
 const get_user = (id) => {
@@ -226,19 +208,13 @@ function close_sql_connection () {
     connection.end();
 }
 
-exports.insert_user = insert_user;
-exports.update_user = update_user;
-exports.delete_user = delete_user;
-exports.insert_wallet = insert_wallet;
-exports.update_wallet = update_wallet;
-exports.delete_wallet = delete_wallet;
-exports.insert_record = insert_record;
-exports.update_record = update_record;
-exports.delete_record = delete_record;
-exports.insert_tag = insert_tag;
-exports.update_tag = update_tag;
-exports.delete_tag = delete_tag;
-exports.get_user = get_user;
-exports.get_wallet = get_wallet;
-exports.user_exist = user_exist;
-exports.close_sql_connection = close_sql_connection;
+const db_dealer = {
+    insert_user , update_user, delete_user,
+    insert_wallet , update_wallet , delete_wallet,
+    insert_record , update_record , delete_record,
+    insert_tag , update_tag , delete_tag,
+    get_user , get_wallet , user_exist,
+    close_sql_connection
+}
+
+export default db_dealer;
