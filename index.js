@@ -83,7 +83,7 @@ app.get("/", (req, res) => {
 const PORT = process.env.PORT || 80;
 
 
-//***********04/21測試版********** */
+//***********04/21測試用********** */
 //若DB已設定，請手動將DB_IS_SET設成true
 const DB_IS_SET = false;
 
