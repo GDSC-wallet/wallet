@@ -9,35 +9,22 @@ passport.use(
         clientID: process.env['GOOGLE_CLIENT_ID'],
         clientSecret: process.env['GOOGLE_CLIENT_SECRET'],
         callbackURL: '/oauth/google/redirect',
-        scope: [ 'profile' ]
     },
     function(issuer, profile, cb){
-        console.log(issuer)
         console.log(profile)
     })
 )
-
-passport.serializeUser(function(user, cb) {
-        process.nextTick(function() {
-        cb(null, { id: user.id, username: user.username, name: user.name });
-        });
-    });
-  
-passport.deserializeUser(function(user, cb) {
-    process.nextTick(function() {
-        return cb(null, user);
-    });
-  });
 
 router.get('/', (req, res) => {
     res.send("google");
 })
 
-router.get('/login/', passport.authenticate('google'));
-
-router.get('/redirect/', passport.authenticate('google', {
-    successRedirect: '/',
-    failureRedirect: '/'
+router.get('/login', passport.authenticate('google', {
+    scope: [ 'profile' ]
 }));
+
+router.get('/redirect', passport.authenticate('google'), (req, res) => {
+    res.send("hi")
+});
 
 module.exports = router;
