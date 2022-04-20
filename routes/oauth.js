@@ -2,8 +2,6 @@ import express from "express";
 import jwt from "jsonwebtoken";
 const router = express.Router();
 
-import { signin, signup, googleSignIn } from "../controllers/user.js";
-
 import passport from "passport";
 import dotenv from "dotenv";
 import GoogleStrategy from "passport-google-oauth20";
@@ -18,6 +16,8 @@ import GoogleStrategy from "passport-google-oauth20";
 //   next();
 // });
 
+const secret = "GDSC_WALLET";
+
 dotenv.config();
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
@@ -31,11 +31,6 @@ passport.use(
       passReqToCallback: true,
     },
     function (request, accessToken, refreshToken, profile, done) {
-      console.log('request :', request);
-      console.log('accessToken :', accessToken);
-      console.log('refreshToken :', refreshToken);
-      console.log('profile :', profile);
-      console.log('done :', done);
 
       //在這裡處理db ()
       // User.findOrCreate({ googleId: profile.id }, function (err, user) {
@@ -85,17 +80,20 @@ router.get(
 );
 
 router.get("/google/protected", isLoggedIn, (req, res) => {
+console.log('req :', req);
   console.log('req.sessionStore.sessions :', req.sessionStore.sessions);
   //做jwt放header
-  const token = jwt.sign( { email: result.email, id: result._id }, secret, { expiresIn: "1h" } );
+  const { email , id } = req.user.profile;
 
-  res.header('Authorization', auth)
+  const token = jwt.sign( { id: result._id }, secret, { expiresIn: "1h" } );
+
+  res.header('Authorization', token);
   res.redirect('http://localhost:3000')
 });
 
 router.get("/google/failure", (req, res) => {
     res.send("Failed to authenticate..");
-  });
+});
 
 //test
 function isLoggedIn(req, res, next) {
@@ -107,9 +105,5 @@ router.get("/logout", (req, res) => {
   req.session.destroy();
   res.send("Goodbye!");
 });
-
-router.post("/google/login", signin);
-router.post("/google/redirect", signup);
-router.post("/googlesignin", googleSignIn);
 
 export default router;

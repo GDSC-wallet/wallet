@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 
-const secret = 'test';
+const secret = 'GDSC_WALLET';
 
 const auth = async (req, res, next) => {
 // console.log('req :', req);
