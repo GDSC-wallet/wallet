@@ -1,0 +1,6 @@
+!_TAG_FILE_SORTED	2	/0=unsorted, 1=sorted, 2=foldcase/
+auth	/home/roy/codes/GDSC_wallet/backend/middleware/auth.js	/^const auth = async (req, res, next) => {$/;"	C	language:JavaScript
+decodedData	/home/roy/codes/GDSC_wallet/backend/middleware/auth.js	/^    let decodedData;$/;"	v	language:JavaScript
+isCustomAuth	/home/roy/codes/GDSC_wallet/backend/middleware/auth.js	/^    const isCustomAuth = token.length < 500;$/;"	C	language:JavaScript
+secret	/home/roy/codes/GDSC_wallet/backend/middleware/auth.js	/^const secret = 'GDSC_WALLET';$/;"	C	language:JavaScript
+token	/home/roy/codes/GDSC_wallet/backend/middleware/auth.js	/^    const token = req.headers.authorization.split(" ")[1];$/;"	C	language:JavaScript

@@ -92,10 +92,10 @@ const delete_user = async (id) => {
     // user有的wallet以foreign key on delete cascade一併刪除
 };
 
-const insert_wallet = async (user_id, selected, wallet_name, wallet_total, wallet_title, wallet_description) => {
+const insert_wallet = async (user_id, wallet_name, wallet_title, wallet_description) => {
     var wallet_id = 'wallet_' + uuid.v4();
     var sql = "INSERT INTO wallet VALUE(?,?,?,?,?,?,?,NOW(),NOW(),0)";
-    await connection.query(sql, [wallet_id, user_id, selected, wallet_name, wallet_total, wallet_title, wallet_description], (err, results, fields) => {
+    await connection.query(sql, [wallet_id, user_id, 0, wallet_name, 0, wallet_title, wallet_description], (err, results, fields) => {
         if(err)
             console.log("db: wallet insertion error: " + err.message);
         else

@@ -47,7 +47,7 @@ app.get('/api/wallet' , async (req, res) => {
 
     // Parse request
 
-    await db_caller.call_wallet('wallet_dacbbdb7-4e2b-47ed-ad42-da878ab81890')
+    await db_caller.call_wallet('wallet_4acf9f9f-215a-4fd6-af5c-01705ce4a50e')  // pass wallet_id
     .then(response => {
         res.send(response);
     })
