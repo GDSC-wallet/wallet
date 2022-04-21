@@ -22,7 +22,7 @@ connection.connect(function(err){
 // request dealer
 const get_user = (id) => {
     return new Promise( async (resolve, reject) => {
-        var sql = "SELECT id,username,nickname,wallet_id,wallet_total,wallet_name,selected,record_id,wallet_record_tag_id,record_ordinary,record_name,record_description,record_amount,record_type,record_date,record_created_time,record_updated_time,wallet_num,record_num FROM user JOIN wallet ON wallet.user_id=user.id LEFT JOIN wallet_record ON wallet_record.record_wallet_id=wallet.wallet_id AND record_date BETWEEN date_sub(NOW(),interval 6 MONTH) AND date_add(NOW(),interval 6 MONTH) AND wallet.selected = 1 WHERE user.id = ? ORDER BY CAST(wallet_record.record_wallet_id AS UNSIGNED)";
+    var sql = "SELECT id,username,nickname,wallet_id,wallet_total,wallet_name,selected,record_id,wallet_record_tag_id,record_ordinary,record_name,record_description,record_amount,record_type,record_date,record_created_time,record_updated_time,wallet_num,record_num FROM user JOIN wallet ON wallet.user_id=user.id LEFT JOIN wallet_record ON wallet_record.record_wallet_id=wallet.wallet_id AND record_date BETWEEN date_sub(NOW(),interval 6 MONTH) AND date_add(NOW(),interval 6 MONTH) AND wallet.selected = 1 WHERE user.id = ? ORDER BY CAST(wallet_record.record_wallet_id AS UNSIGNED)";
         connection.query(sql, id, async (err, results, fields) => {
             if(err) reject(err);
             else {
@@ -190,10 +190,10 @@ const delete_record = async (record_id, record_wallet_id, record_amount) => {
     })
 };
 
-const insert_tag = async (wallet_id, tag_ordinary, tag_name, tag_type) => {
+const insert_tag = async (tag_wallet_id, tag_ordinary, tag_name, tag_type) => {
     var tag_id = "tag_" + uuid.v4();
     var sql = "INSERT INTO wallet_record_tag_id VALUE(?,?,?,?,?,NOW(),NOW())";
-    connection.query(sql, [tag_id, wallet_id, tag_ordinary, tag_name, tag_type], (err, results, fields) => {
+    connection.query(sql, [tag_id, tag_wallet_id, tag_ordinary, tag_name, tag_type], (err, results, fields) => {
         if(err)
             console.log("db: tag insertion error: " + err.message);
         else
