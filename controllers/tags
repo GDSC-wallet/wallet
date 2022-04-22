@@ -1,0 +1,16 @@
+!_TAG_FILE_SORTED	2	/0=unsorted, 1=sorted, 2=foldcase/
+data	/home/roy/codes/GDSC_wallet/backend/controllers/user.js	/^      "data": db_result.data$/;"	p	language:JavaScript	class:response
+data	/home/roy/codes/GDSC_wallet/backend/controllers/user.js	/^      "data": undefined$/;"	p	language:JavaScript	class:response
+db_result	/home/roy/codes/GDSC_wallet/backend/controllers/user.js	/^  const db_result = db_caller.sign_up({user_id,nickname});$/;"	C	language:JavaScript
+decodedData	/home/roy/codes/GDSC_wallet/backend/controllers/user.js	/^  const decodedData = jwt.verify(token, secret);$/;"	C	language:JavaScript
+getUserProfile	/home/roy/codes/GDSC_wallet/backend/controllers/user.js	/^export const getUserProfile = async (req, res) => {$/;"	C	language:JavaScript
+message	/home/roy/codes/GDSC_wallet/backend/controllers/user.js	/^      "message": "註冊使用者失敗",$/;"	p	language:JavaScript	class:response
+message	/home/roy/codes/GDSC_wallet/backend/controllers/user.js	/^      "message": "註冊使用者成功",$/;"	p	language:JavaScript	class:response
+repsonse	/home/roy/codes/GDSC_wallet/backend/controllers/user.js	/^  let repsonse;$/;"	v	language:JavaScript
+response	/home/roy/codes/GDSC_wallet/backend/controllers/user.js	/^    response = {$/;"	c	language:JavaScript
+response	/home/roy/codes/GDSC_wallet/backend/controllers/user.js	/^    response = {$/;"	c	language:JavaScript
+signUp	/home/roy/codes/GDSC_wallet/backend/controllers/user.js	/^export const signUp = async (req, res) => {$/;"	C	language:JavaScript
+success	/home/roy/codes/GDSC_wallet/backend/controllers/user.js	/^      "success": false,$/;"	p	language:JavaScript	class:response
+success	/home/roy/codes/GDSC_wallet/backend/controllers/user.js	/^      "success": true,$/;"	p	language:JavaScript	class:response
+token	/home/roy/codes/GDSC_wallet/backend/controllers/user.js	/^  const token = req.headers.authorization.split(" ")[1];$/;"	C	language:JavaScript
+user_id	/home/roy/codes/GDSC_wallet/backend/controllers/user.js	/^  const user_id = decodedData?.id;$/;"	C	language:JavaScript
