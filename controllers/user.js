@@ -101,15 +101,22 @@ export const signUp = async (req, res) => {
 // }
 export const getUserProfile = async (req, res) => {
   //從request header取得jwt
-  const token = req.headers.authorization.split(" ")[1];
+  //const token = req.headers.authorization.split(" ")[1];
   
   //解碼jwt取得user_id
-  const decodedData = jwt.verify(token, secret);
-  const user_id = decodedData?.id;
+  //const decodedData = jwt.verify(token, secret);
+  //const user_id = decodedData?.id;
 
   //從資料庫取得使用者資料
-  const db_result = db_caller.call_user_data(user_id);
+  await db_caller.call_user_data("user_7552f100-eba2-44e1-bc7f-7a1690fd4913")
+  .then(resonse => {
+      res.status(200).json(response);
+  })
+  .catch(response => {
+      res.status(200).json(response);
+  })
 
+/*
   let response;
 
   if(db_result.success){
@@ -129,4 +136,5 @@ export const getUserProfile = async (req, res) => {
 
   //回傳結果
   res.status(200).json(response);
+*/
 };
