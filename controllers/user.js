@@ -100,7 +100,6 @@ export const signUp = async (req, res) => {
 //     "data": {}
 // }
 export const getUserProfile = async (req, res) => {
-
   //從request header取得jwt
   const token = req.headers.authorization.split(" ")[1];
   

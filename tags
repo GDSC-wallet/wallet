@@ -1,6 +1,0 @@
-!_TAG_FILE_SORTED	2	/0=unsorted, 1=sorted, 2=foldcase/
-accessLogStream	/home/roy/codes/GDSC_wallet/backend/index.js	/^var accessLogStream = fs.createWriteStream(path.join(__dirname, 'access.log'), { flags: 'a' })$/;"	v	language:JavaScript
-app	/home/roy/codes/GDSC_wallet/backend/index.js	/^const app = express();$/;"	C	language:JavaScript
-PORT	/home/roy/codes/GDSC_wallet/backend/index.js	/^const PORT = process.env.PORT || 80;$/;"	C	language:JavaScript
-__dirname	/home/roy/codes/GDSC_wallet/backend/index.js	/^const __dirname = path.dirname(__filename);$/;"	C	language:JavaScript
-__filename	/home/roy/codes/GDSC_wallet/backend/index.js	/^const __filename = fileURLToPath(import.meta.url);$/;"	C	language:JavaScript
