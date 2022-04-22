@@ -6,6 +6,6 @@ import { signUp,getUserProfile } from "../controllers/user.js";
 const router = express.Router();
 
 router.post("/signup", auth, signUp);
-router.get("/profile", /*auth,*/ getUserProfile);
+router.get("/profile", auth, getUserProfile);
 
 export default router;
