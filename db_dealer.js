@@ -1,8 +1,3 @@
-//const express = require('express')
-//const mysql = require('mysql')
-//const uuid = require('uuid')
-//const app = express();
-
 import mysql from 'mysql'
 import { v4 as uuid } from 'uuid'
 import dotenv from 'dotenv'
@@ -240,22 +235,3 @@ const db_dealer = {
 }
 
 export default db_dealer;
-
-/*
-exports.insert_user = insert_user;
-exports.update_user = update_user;
-exports.delete_user = delete_user;
-exports.insert_wallet = insert_wallet;
-exports.update_wallet = update_wallet;
-exports.delete_wallet = delete_wallet;
-exports.insert_record = insert_record;
-exports.update_record = update_record;
-exports.delete_record = delete_record;
-exports.insert_tag = insert_tag;
-exports.update_tag = update_tag;
-exports.delete_tag = delete_tag;
-exports.get_user = get_user;
-exports.get_wallet = get_wallet;
-exports.user_exist = user_exist;
-exports.close_sql_connection = close_sql_connection;
-*/

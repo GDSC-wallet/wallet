@@ -1,7 +1,3 @@
-//const db_dealer = require('./db_dealer.js')
-//const express = require('express')
-//const app = express()
-//const uuid = require('uuid')
 import db_dealer from './db_dealer.js'
 const port = 3000
 
@@ -144,11 +140,8 @@ const call_wallet = (wallet_id) => {
                         "record_created_time": results[i].record_created_time,
                         "record_updated_time": results[i].record_updated_time
                     }
-                    //console.log(record_data);
                     response.data.records.push(record_data);
                 }
-                //console.log(results);
-                //resolve(results);
                 console.log(response);
                 resolve(response);
             })
@@ -162,6 +155,3 @@ const call_wallet = (wallet_id) => {
 export default { call_wallet, call_user_data, authenticate };
 
 // 暫時先不做關閉資料庫的動作
-//exports.call_wallet = call_wallet;
-//exports.call_user_data = call_user_data;
-//exports.authenticate = authenticate;
