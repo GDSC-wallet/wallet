@@ -1,7 +1,8 @@
-const db_dealer = require('./db_dealer.js')
-const express = require('express')
-const app = express()
-const uuid = require('uuid')
+//const db_dealer = require('./db_dealer.js')
+//const express = require('express')
+//const app = express()
+//const uuid = require('uuid')
+import db_dealer from './db_dealer.js'
 const port = 3000
 
 // 問資料庫user是否存在
@@ -26,7 +27,7 @@ const call_user_data = (user_id) => {
         //await db_dealer.delete_user('user_7417323a-a5f6-414a-b2e6-2c3d8d69f754');
         //await db_dealer.insert_wallet('user_7552f100-eba2-44e1-bc7f-7a1690fd4913', 'wallet_2', 'my second wallet','my own wallet');
         //await db_dealer.delete_wallet('3','wallet_0754c072-ebe3-407d-9eb9-0f19429a3559');
-        await db_dealer.insert_record('wallet_4acf9f9f-215a-4fd6-af5c-01705ce4a50e','tag_402d95e2-2441-441b-95a1-7f98fa74ccc0',2,'test_record5','no description',1000,'income','2022-04-21 19:00:00');
+        //await db_dealer.insert_record('wallet_4acf9f9f-215a-4fd6-af5c-01705ce4a50e','tag_402d95e2-2441-441b-95a1-7f98fa74ccc0',2,'test_record5','no description',1000,'income','2022-04-21 19:00:00');
         //await db_dealer.insert_tag('wallet_4acf9f9f-215a-4fd6-af5c-01705ce4a50e',1,'tag_1','income');
         //await db_dealer.delete_record('record_0bc10593-1fb0-40ba-9067-d6e0907f9ec8','wallet_4acf9f9f-215a-4fd6-af5c-01705ce4a50e',1000);
         var user_status;
@@ -158,7 +159,9 @@ const call_wallet = (wallet_id) => {
     })
 }
 
+export default { call_wallet, call_user_data, authenticate };
+
 // 暫時先不做關閉資料庫的動作
-exports.call_wallet = call_wallet;
-exports.call_user_data = call_user_data;
-exports.authenticate = authenticate;
+//exports.call_wallet = call_wallet;
+//exports.call_user_data = call_user_data;
+//exports.authenticate = authenticate;

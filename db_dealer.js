@@ -1,14 +1,19 @@
-const express = require('express')
-const mysql = require('mysql')
-const uuid = require('uuid')
-const app = express();
+//const express = require('express')
+//const mysql = require('mysql')
+//const uuid = require('uuid')
+//const app = express();
 
+import mysql from 'mysql'
+import { v4 as uuid } from 'uuid'
+import dotenv from 'dotenv'
+
+dotenv.config();
 var connection = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '620109roy',
-    port: 3306,
-    database: 'GDSC_wallet',
+    host: process.env.MYSQL_HOST,
+    user: process.env.MYSQL_USER,
+    password: process.env.MYSQL_PASSWORD,
+    port: process.env.MYSQL_PORT,
+    database: process.env.MYSQL_DATABASE,
     multipleStatements: true
 });
 connection.connect(function(err){
@@ -222,10 +227,21 @@ const delete_tag = async (tag_id) => {
     })
 };
 
-function close_sql_connection () {
+const close_sql_connection = ()=> {
     connection.end();
 }
 
+const db_dealer = {
+    insert_user, update_user, delete_user,
+    insert_wallet, update_wallet, delete_wallet,
+    insert_tag, update_tag, delete_tag,
+    get_user, get_wallet, user_exist,
+    close_sql_connection
+}
+
+export default db_dealer;
+
+/*
 exports.insert_user = insert_user;
 exports.update_user = update_user;
 exports.delete_user = delete_user;
@@ -242,3 +258,4 @@ exports.get_user = get_user;
 exports.get_wallet = get_wallet;
 exports.user_exist = user_exist;
 exports.close_sql_connection = close_sql_connection;
+*/

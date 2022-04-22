@@ -1,6 +1,10 @@
-const db_caller = require('./db_caller.js')
-const express = require('express')
-const bodyParser = require('body-parser')
+//const db_caller = require('./db_caller.js')
+//const express = require('express')
+//const bodyParser = require('body-parser')
+//const app = express()
+import db_caller from './db_caller.js'
+import express from 'express'
+import bodyParser from 'body-parser'
 const app = express()
 const port = 3000
 
