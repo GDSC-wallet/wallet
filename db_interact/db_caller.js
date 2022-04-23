@@ -32,9 +32,9 @@ const call_user_data = (user_id) => {
         await db_dealer.get_user('user_7552f100-eba2-44e1-bc7f-7a1690fd4913')    // 之後parse req得到要求的user id,just for testing
             .then(results => {
                 if(results.length > 0)
-                    user_status = "true";
+                    user_status = true;
                 else
-                    user_status = "false";
+                    user_status = false;
                 // 確認被選擇的wallet, 而被選擇的wallet必須只有一個
                 for(let i = 0; i < results.length; ++i) {
                     if(results[i].selected == 1) {
@@ -45,7 +45,7 @@ const call_user_data = (user_id) => {
                 // 將資料轉成需要的JSON格式
                 var Data = {
                     success: user_status,
-                    message:"Data of " + user_id + ".",
+                    message:"取得使用者資料成功",
                     data:{
                         user_id: results[0].id,
                         username: results[0].username,

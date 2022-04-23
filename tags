@@ -1,66 +1,36 @@
 !_TAG_FILE_SORTED	2	/0=unsorted, 1=sorted, 2=foldcase/
-AnonymousFunctionefc7d51e0100	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^connection.connect(function(err){$/;"	f	language:JavaScript
-app	/home/roy/codes/GDSC_wallet/backend/index.js	/^const app = express()$/;"	C	language:JavaScript
-authenticate	/home/roy/codes/GDSC_wallet/backend/db_caller.js	/^const authenticate = (id) => {$/;"	C	language:JavaScript
-author	/home/roy/codes/GDSC_wallet/backend/package.json	/^  "author": "",$/;"	s	language:JSON
-bugs	/home/roy/codes/GDSC_wallet/backend/package.json	/^  "bugs": {$/;"	o	language:JSON
-call_user_data	/home/roy/codes/GDSC_wallet/backend/db_caller.js	/^const call_user_data = (user_id) => {$/;"	C	language:JavaScript
-call_wallet	/home/roy/codes/GDSC_wallet/backend/db_caller.js	/^const call_wallet = (wallet_id) => {$/;"	C	language:JavaScript
-close_sql_connection	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^const close_sql_connection = ()=> {$/;"	C	language:JavaScript
-connection	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^var connection = mysql.createConnection({$/;"	v	language:JavaScript
-db_dealer	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^const db_dealer = {$/;"	C	language:JavaScript
-delete_record	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^const delete_record = async (record_id, record_wallet_id, record_amount) => {$/;"	C	language:JavaScript
-delete_tag	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^const delete_tag = async (tag_id) => {$/;"	C	language:JavaScript
-delete_user	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^const delete_user = async (id) => {$/;"	C	language:JavaScript
-delete_wallet	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^const delete_wallet = async (user_id, wallet_id) => {$/;"	C	language:JavaScript
+@aws-sdk/client-s3	/home/roy/codes/GDSC_wallet/backend/package.json	/^    "@aws-sdk\/client-s3": "^3.32.0",$/;"	s	language:JSON	object:dependencies
+@aws-sdk/node-http-handler	/home/roy/codes/GDSC_wallet/backend/package.json	/^    "@aws-sdk\/node-http-handler": "^3.32.0",$/;"	s	language:JSON	object:dependencies
+accessLogStream	/home/roy/codes/GDSC_wallet/backend/index.js	/^var accessLogStream = fs.createWriteStream(path.join(__dirname, 'access.log'), { flags: 'a' })$/;"	v	language:JavaScript
+app	/home/roy/codes/GDSC_wallet/backend/index.js	/^const app = express();$/;"	C	language:JavaScript
+aws-sdk	/home/roy/codes/GDSC_wallet/backend/package.json	/^    "aws-sdk": "^2.1066.0",$/;"	s	language:JSON	object:dependencies
+bcryptjs	/home/roy/codes/GDSC_wallet/backend/package.json	/^    "bcryptjs": "^2.4.3",$/;"	s	language:JSON	object:dependencies
+body-parser	/home/roy/codes/GDSC_wallet/backend/package.json	/^    "body-parser": "^1.19.0",$/;"	s	language:JSON	object:dependencies
+cors	/home/roy/codes/GDSC_wallet/backend/package.json	/^    "cors": "^2.8.5",$/;"	s	language:JSON	object:dependencies
 dependencies	/home/roy/codes/GDSC_wallet/backend/package.json	/^  "dependencies": {$/;"	o	language:JSON
-description	/home/roy/codes/GDSC_wallet/backend/package.json	/^  "description": "GDSC_wallet project's backend",$/;"	s	language:JSON
+description	/home/roy/codes/GDSC_wallet/backend/package.json	/^  "description": "",$/;"	s	language:JSON
+dotenv	/home/roy/codes/GDSC_wallet/backend/package.json	/^    "dotenv": "^16.0.0",$/;"	s	language:JSON	object:dependencies
 express	/home/roy/codes/GDSC_wallet/backend/package.json	/^    "express": "^4.17.3",$/;"	s	language:JSON	object:dependencies
-get_user	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^const get_user = (id) => {$/;"	C	language:JavaScript
-get_wallet	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^const get_wallet = (wallet_id) => {$/;"	C	language:JavaScript
-homepage	/home/roy/codes/GDSC_wallet/backend/package.json	/^  "homepage": "https:\/\/github.com\/williiam\/GDSC_wallet_backend#readme",$/;"	s	language:JSON
-id	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^    var id = 'user_' + uuid.v4();$/;"	v	language:JavaScript
-insert_record	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^const insert_record = async (record_wallet_id, wallet_record_tag_id, record_ordinary, record_nam/;"	C	language:JavaScript
-insert_tag	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^const insert_tag = async (tag_wallet_id, tag_ordinary, tag_name, tag_type) => {$/;"	C	language:JavaScript
-insert_user	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^    insert_user, update_user, delete_user,$/;"	M	language:JavaScript	class:db_dealer
-insert_user	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^const insert_user = async (channel, channel_id, email, username, nickname) => {$/;"	C	language:JavaScript
-insert_wallet	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^const insert_wallet = async (user_id, wallet_name, wallet_title, wallet_description) => {$/;"	C	language:JavaScript
-license	/home/roy/codes/GDSC_wallet/backend/package.json	/^  "license": "ISC",$/;"	s	language:JSON
+express-session	/home/roy/codes/GDSC_wallet/backend/package.json	/^    "express-session": "^1.17.2",$/;"	s	language:JSON	object:dependencies
+google-auth-library	/home/roy/codes/GDSC_wallet/backend/package.json	/^    "google-auth-library": "^7.10.3",$/;"	s	language:JSON	object:dependencies
+helmet	/home/roy/codes/GDSC_wallet/backend/package.json	/^    "helmet": "^5.0.2",$/;"	s	language:JSON	object:dependencies
+jsonwebtoken	/home/roy/codes/GDSC_wallet/backend/package.json	/^    "jsonwebtoken": "^8.5.1",$/;"	s	language:JSON	object:dependencies
 main	/home/roy/codes/GDSC_wallet/backend/package.json	/^  "main": "index.js",$/;"	s	language:JSON
+morgan	/home/roy/codes/GDSC_wallet/backend/package.json	/^    "morgan": "^1.10.0",$/;"	s	language:JSON	object:dependencies
 mysql	/home/roy/codes/GDSC_wallet/backend/package.json	/^    "mysql": "^2.18.1",$/;"	s	language:JSON	object:dependencies
+mysql2	/home/roy/codes/GDSC_wallet/backend/package.json	/^    "mysql2": "^2.3.3",$/;"	s	language:JSON	object:dependencies
 name	/home/roy/codes/GDSC_wallet/backend/package.json	/^  "name": "gdsc_wallet_backend",$/;"	s	language:JSON
 node-datetime	/home/roy/codes/GDSC_wallet/backend/package.json	/^    "node-datetime": "^2.1.2",$/;"	s	language:JSON	object:dependencies
-port	/home/roy/codes/GDSC_wallet/backend/db_caller.js	/^const port = 3000$/;"	C	language:JavaScript
-port	/home/roy/codes/GDSC_wallet/backend/index.js	/^const port = 3000$/;"	C	language:JavaScript
-record_id	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^    var record_id = "record_" + uuid.v4();$/;"	v	language:JavaScript
-repository	/home/roy/codes/GDSC_wallet/backend/package.json	/^  "repository": {$/;"	o	language:JSON
+nodemon	/home/roy/codes/GDSC_wallet/backend/package.json	/^    "nodemon": "^2.0.15",$/;"	s	language:JSON	object:dependencies
+passport	/home/roy/codes/GDSC_wallet/backend/package.json	/^    "passport": "^0.5.2",$/;"	s	language:JSON	object:dependencies
+passport-google-oauth20	/home/roy/codes/GDSC_wallet/backend/package.json	/^    "passport-google-oauth20": "^2.0.0",$/;"	s	language:JSON	object:dependencies
+passport-oauth2	/home/roy/codes/GDSC_wallet/backend/package.json	/^    "passport-oauth2": "^1.6.1",$/;"	s	language:JSON	object:dependencies
+PORT	/home/roy/codes/GDSC_wallet/backend/index.js	/^const PORT = process.env.PORT || 80;$/;"	C	language:JavaScript
+rate-limiter-flexible	/home/roy/codes/GDSC_wallet/backend/package.json	/^    "rate-limiter-flexible": "^2.3.6",$/;"	s	language:JSON	object:dependencies
 scripts	/home/roy/codes/GDSC_wallet/backend/package.json	/^  "scripts": {$/;"	o	language:JSON
-serve	/home/roy/codes/GDSC_wallet/backend/package.json	/^    "serve": "node index.js",$/;"	s	language:JSON	object:scripts
-sql	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^    var sql = "DELETE FROM user WHERE id = ?";$/;"	v	language:JavaScript
-sql	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^    var sql = "DELETE FROM wallet WHERE wallet_id = ?";$/;"	v	language:JavaScript
-sql	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^    var sql = "DELETE FROM wallet_record_tag_id WHERE tag_id = ?";$/;"	v	language:JavaScript
-sql	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^    var sql = "INSERT INTO user VALUE(?,?,?,?,?,?,NOW(),NOW(),0)";$/;"	v	language:JavaScript
-sql	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^    var sql = "INSERT INTO wallet VALUE(?,?,?,?,?,?,?,NOW(),NOW(),0)";$/;"	v	language:JavaScript
-sql	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^    var sql = "INSERT INTO wallet_record VALUE(?,?,?,?,?,?,?,?,?,NOW(),NOW())";$/;"	v	language:JavaScript
-sql	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^    var sql = "INSERT INTO wallet_record_tag_id VALUE(?,?,?,?,?,NOW(),NOW())";$/;"	v	language:JavaScript
-sql	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^    var sql = "SELECT * FROM user WHERE id = ?";$/;"	v	language:JavaScript
-sql	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^    var sql = "UPDATE user SET email = ?, username = ?, nickname = ?, created_time = ?, updated_/;"	v	language:JavaScript
-sql	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^    var sql = "UPDATE wallet SET selected = ?, wallet_name = ?, wallet_total = ?, wallet_title =/;"	v	language:JavaScript
-sql	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^    var sql = "UPDATE wallet_record SET wallet_record_tag_id = ?, record_ordinary = ?, record_na/;"	v	language:JavaScript
-sql	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^    var sql = "UPDATE wallet_record_tag_id SET tag_ordinary = ?, tag_name = ?, tag_type = ?";$/;"	v	language:JavaScript
-sql2	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^    var sql2 = "UPDATE user SET wallet_num = wallet_num + 1 WHERE id = ?";$/;"	v	language:JavaScript
-sql2	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^    var sql2 = "UPDATE wallet SET record_num = record_num - 1, wallet_total = wallet_total - ? W/;"	v	language:JavaScript
-tag_id	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^    var tag_id = "tag_" + uuid.v4();$/;"	v	language:JavaScript
-test	/home/roy/codes/GDSC_wallet/backend/package.json	/^    "test": "echo \\"Error: no test specified\\" && exit 1"$/;"	s	language:JSON	object:scripts
-type	/home/roy/codes/GDSC_wallet/backend/package.json	/^    "type": "git",$/;"	s	language:JSON	object:repository
+start	/home/roy/codes/GDSC_wallet/backend/package.json	/^    "start": "nodemon index.js"$/;"	s	language:JSON	object:scripts
 type	/home/roy/codes/GDSC_wallet/backend/package.json	/^  "type": "module",$/;"	s	language:JSON
-update_record	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^const update_record = async (record_id, wallet_record_tag_id, record_ordinary, record_name, reco/;"	C	language:JavaScript
-update_tag	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^const update_tag = async (tag_ordinary, tag_name, tag_type) => {$/;"	C	language:JavaScript
-update_user	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^const update_user = async (id, email, username, nickname, created_time) => {$/;"	C	language:JavaScript
-update_wallet	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^const update_wallet = async (wallet_id, selected, wallet_name, wallet_total, wallet_title, walle/;"	C	language:JavaScript
-url	/home/roy/codes/GDSC_wallet/backend/package.json	/^    "url": "git+https:\/\/github.com\/williiam\/GDSC_wallet_backend.git"$/;"	s	language:JSON	object:repository
-url	/home/roy/codes/GDSC_wallet/backend/package.json	/^    "url": "https:\/\/github.com\/williiam\/GDSC_wallet_backend\/issues"$/;"	s	language:JSON	object:bugs
-user_exist	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^const user_exist = (id) => {$/;"	C	language:JavaScript
 uuid	/home/roy/codes/GDSC_wallet/backend/package.json	/^    "uuid": "^8.3.2"$/;"	s	language:JSON	object:dependencies
-version	/home/roy/codes/GDSC_wallet/backend/package.json	/^  "version": "0.0.1",$/;"	s	language:JSON
-wallet_id	/home/roy/codes/GDSC_wallet/backend/db_dealer.js	/^    var wallet_id = 'wallet_' + uuid.v4();$/;"	v	language:JavaScript
+version	/home/roy/codes/GDSC_wallet/backend/package.json	/^  "version": "1.0.0",$/;"	s	language:JSON
+__dirname	/home/roy/codes/GDSC_wallet/backend/index.js	/^const __dirname = path.dirname(__filename);$/;"	C	language:JavaScript
+__filename	/home/roy/codes/GDSC_wallet/backend/index.js	/^const __filename = fileURLToPath(import.meta.url);$/;"	C	language:JavaScript
