@@ -34,7 +34,8 @@ passport.use(
           const user_email = profile._json.email;
           
           //使用email hash出 使用者id
-          const user_id = sha256Hasher.update(user_email);
+          const user_id = sha256Hasher.update(user_email).digest('base64');
+          console.log('user_id :', user_id);
 
           //確認此使用者是否已經存在WALLET的DB
           const user_exist = await db_caller.authenticate(user_id); 
@@ -53,15 +54,15 @@ passport.use(
                     profile:{...profile,user_id:user_id}
                 });
             }
-      }
-      catch(err){
+        }
+        catch(err){
 
-        //寫到紀錄檔，尚未實作
-        console.log('err :', err);
+          //寫到紀錄檔，尚未實作
+          console.log('err :', err);
 
-        //把error throw出來，express預設會接住err並自動回傳400,
-        throw err
-      }
+          //把error throw出來，express預設會接住err並自動回傳400,
+          throw err
+        }
     }
   )
 );

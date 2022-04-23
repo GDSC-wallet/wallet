@@ -44,7 +44,7 @@ const get_wallet = (wallet_id) => {
     });
 }
 
-const user_exist = (id) => {
+const user_exist = async (id) => {
     var sql = "SELECT * FROM user WHERE id = ?";
     return new Promise((resolve, reject) => {
         connection.query(sql, id, (err, results, fields) => {

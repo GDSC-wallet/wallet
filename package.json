@@ -22,6 +22,7 @@
     "jsonwebtoken": "^8.5.1",
     "morgan": "^1.10.0",
     "mysql": "^2.18.1",
+    "mysql2": "^2.3.3",
     "node-datetime": "^2.1.2",
     "nodemon": "^2.0.15",
     "passport": "^0.5.2",
