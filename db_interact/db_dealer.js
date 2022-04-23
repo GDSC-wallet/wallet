@@ -1,9 +1,9 @@
 import mysql from 'mysql'
-import dotenv from "dotenv";
 import { v4 as uuid } from 'uuid'
+import dotenv from 'dotenv'
 
 dotenv.config();
-const connection = mysql.createConnection({
+var connection = mysql.createConnection({
     host: process.env.MYSQL_HOST,
     user: process.env.MYSQL_USER,
     password: process.env.MYSQL_PASSWORD,
@@ -12,18 +12,17 @@ const connection = mysql.createConnection({
     multipleStatements: true
 });
 connection.connect(function(err){
-    if(err){
+    if(err)
         return err;
-    }
-    else{
+    else
         console.log("Successfully connect to mysql : root@localhost ");
-    }
 });
+
 
 // request dealer
 const get_user = (id) => {
     return new Promise( async (resolve, reject) => {
-        var sql = "SELECT id,username,nickname,wallet_id,wallet_total,wallet_name,selected,record_id,wallet_record_tag_id,record_ordinary,record_name,record_description,record_amount,record_type,record_date,record_created_time,record_updated_time,wallet_num,record_num FROM user JOIN wallet ON wallet.user_id=user.id LEFT JOIN wallet_record ON wallet_record.record_wallet_id=wallet.wallet_id AND record_date BETWEEN date_sub(NOW(),interval 6 MONTH) AND date_add(NOW(),interval 6 MONTH) AND wallet.selected = 1 WHERE user.id = ? ORDER BY CAST(wallet_record.record_wallet_id AS UNSIGNED)";
+    var sql = "SELECT id,username,nickname,wallet_id,wallet_total,wallet_name,selected,record_id,wallet_record_tag_id,record_ordinary,record_name,record_description,record_amount,record_type,record_date,record_created_time,record_updated_time,wallet_num,record_num FROM user JOIN wallet ON wallet.user_id=user.id LEFT JOIN wallet_record ON wallet_record.record_wallet_id=wallet.wallet_id AND record_date BETWEEN date_sub(NOW(),interval 6 MONTH) AND date_add(NOW(),interval 6 MONTH) AND wallet.selected = 1 WHERE user.id = ? ORDER BY CAST(wallet_record.record_wallet_id AS UNSIGNED)";
         connection.query(sql, id, async (err, results, fields) => {
             if(err) reject(err);
             else {
@@ -93,10 +92,10 @@ const delete_user = async (id) => {
     // user有的wallet以foreign key on delete cascade一併刪除
 };
 
-const insert_wallet = async (user_id, selected, wallet_name, wallet_total, wallet_title, wallet_description) => {
+const insert_wallet = async (user_id, wallet_name, wallet_title, wallet_description) => {
     var wallet_id = 'wallet_' + uuid.v4();
     var sql = "INSERT INTO wallet VALUE(?,?,?,?,?,?,?,NOW(),NOW(),0)";
-    await connection.query(sql, [wallet_id, user_id, selected, wallet_name, wallet_total, wallet_title, wallet_description], (err, results, fields) => {
+    await connection.query(sql, [wallet_id, user_id, 0, wallet_name, 0, wallet_title, wallet_description], (err, results, fields) => {
         if(err)
             console.log("db: wallet insertion error: " + err.message);
         else
@@ -191,10 +190,10 @@ const delete_record = async (record_id, record_wallet_id, record_amount) => {
     })
 };
 
-const insert_tag = async (wallet_id, tag_ordinary, tag_name, tag_type) => {
+const insert_tag = async (tag_wallet_id, tag_ordinary, tag_name, tag_type) => {
     var tag_id = "tag_" + uuid.v4();
     var sql = "INSERT INTO wallet_record_tag_id VALUE(?,?,?,?,?,NOW(),NOW())";
-    connection.query(sql, [tag_id, wallet_id, tag_ordinary, tag_name, tag_type], (err, results, fields) => {
+    connection.query(sql, [tag_id, tag_wallet_id, tag_ordinary, tag_name, tag_type], (err, results, fields) => {
         if(err)
             console.log("db: tag insertion error: " + err.message);
         else
@@ -223,16 +222,15 @@ const delete_tag = async (tag_id) => {
     })
 };
 
-function close_sql_connection () {
+const close_sql_connection = ()=> {
     connection.end();
 }
 
 const db_dealer = {
-    insert_user , update_user, delete_user,
-    insert_wallet , update_wallet , delete_wallet,
-    insert_record , update_record , delete_record,
-    insert_tag , update_tag , delete_tag,
-    get_user , get_wallet , user_exist,
+    insert_user, update_user, delete_user,
+    insert_wallet, update_wallet, delete_wallet,
+    insert_tag, update_tag, delete_tag,
+    get_user, get_wallet, user_exist,
     close_sql_connection
 }
 

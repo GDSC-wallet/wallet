@@ -1,5 +1,5 @@
 import db_dealer from './db_dealer.js'
-import {v4 as uuid} from 'uuid'
+const port = 3000
 
 // 問資料庫user是否存在
 const authenticate = (id) => {
@@ -21,9 +21,9 @@ const call_user_data = (user_id) => {
     return new Promise( async (resolve, reject) => {
         //await db_dealer.insert_user('google','1','roych.shao@gmail.com','Roy Shao','roy');
         //await db_dealer.delete_user('user_7417323a-a5f6-414a-b2e6-2c3d8d69f754');
-        //await db_dealer.insert_wallet('user_7552f100-eba2-44e1-bc7f-7a1690fd4913', 0, 'wallet_1', 1000, 'my wallet','my own wallet');
+        //await db_dealer.insert_wallet('user_7552f100-eba2-44e1-bc7f-7a1690fd4913', 'wallet_2', 'my second wallet','my own wallet');
         //await db_dealer.delete_wallet('3','wallet_0754c072-ebe3-407d-9eb9-0f19429a3559');
-        //await db_dealer.insert_record('wallet_dacbbdb7-4e2b-47ed-ad42-da878ab81890','tag_402d95e2-2441-441b-95a1-7f98fa74ccc0',2,'test_record2','no description',300,'income','2022-04-06 23:00:00');
+        //await db_dealer.insert_record('wallet_4acf9f9f-215a-4fd6-af5c-01705ce4a50e','tag_402d95e2-2441-441b-95a1-7f98fa74ccc0',2,'test_record5','no description',1000,'income','2022-04-21 19:00:00');
         //await db_dealer.insert_tag('wallet_4acf9f9f-215a-4fd6-af5c-01705ce4a50e',1,'tag_1','income');
         //await db_dealer.delete_record('record_0bc10593-1fb0-40ba-9067-d6e0907f9ec8','wallet_4acf9f9f-215a-4fd6-af5c-01705ce4a50e',1000);
         var user_status;
@@ -32,9 +32,9 @@ const call_user_data = (user_id) => {
         await db_dealer.get_user('user_7552f100-eba2-44e1-bc7f-7a1690fd4913')    // 之後parse req得到要求的user id,just for testing
             .then(results => {
                 if(results.length > 0)
-                    user_status = "true";
+                    user_status = true;
                 else
-                    user_status = "false";
+                    user_status = false;
                 // 確認被選擇的wallet, 而被選擇的wallet必須只有一個
                 for(let i = 0; i < results.length; ++i) {
                     if(results[i].selected == 1) {
@@ -45,7 +45,7 @@ const call_user_data = (user_id) => {
                 // 將資料轉成需要的JSON格式
                 var Data = {
                     success: user_status,
-                    message:"Data of " + user_id + ".",
+                    message:"取得使用者資料成功",
                     data:{
                         user_id: results[0].id,
                         username: results[0].username,
@@ -140,11 +140,8 @@ const call_wallet = (wallet_id) => {
                         "record_created_time": results[i].record_created_time,
                         "record_updated_time": results[i].record_updated_time
                     }
-                    //console.log(record_data);
                     response.data.records.push(record_data);
                 }
-                //console.log(results);
-                //resolve(results);
                 console.log(response);
                 resolve(response);
             })
@@ -155,4 +152,6 @@ const call_wallet = (wallet_id) => {
     })
 }
 
-export default { call_wallet , call_user_data, authenticate};
+export default { call_wallet, call_user_data, authenticate };
+
+// 暫時先不做關閉資料庫的動作

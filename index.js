@@ -6,7 +6,6 @@ import session from "express-session";
 import morgan from "morgan";
 import passport from "passport";
 import dotenv from "dotenv";
-import mysql from 'mysql'
 import helmet from "helmet";
 import fs from 'fs';
 import path from 'path';
@@ -41,6 +40,10 @@ app.use(morgan('combined', { stream: accessLogStream }))
 //設定express
 app.use(express.json({ limit: "30mb", extended: true }));
 app.use(express.urlencoded({ limit: "30mb", extended: true }));
+
+//設定localhost port
+const PORT = process.env.PORT || 80;
+app.listen(PORT, () =>console.log(`Server Running on Port: http://localhost:${PORT}`))
 
 //設定跨域
 app.use(cors());
@@ -80,10 +83,11 @@ app.get("/", (req, res) => {
   res.status(200).send(result);
 });
 
-const PORT = process.env.PORT || 80;
+//const PORT = process.env.PORT || 80;
 
 
 //***********04/21測試用********** */
+/*
 //若DB已設定，請手動將DB_IS_SET設成true
 const DB_IS_SET = false;
 
@@ -111,7 +115,7 @@ if(DB_IS_SET){
     });
 }
 else{
-
+*/
     //若未設定DB，直接啟動server
-    app.listen(PORT, () =>console.log(`Server Running on Port: http://localhost:${PORT}`))
-}
+    //app.listen(PORT, () =>console.log(`Server Running on Port: http://localhost:${PORT}`))
+//}
