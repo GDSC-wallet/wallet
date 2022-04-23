@@ -34,7 +34,6 @@ passport.use(
           console.log('profile :', profile);
           const user_email = profile._json.email;
           
-          
           //使用email hash出 使用者id
           const user_id = sha256Hasher.update(user_email);
 
