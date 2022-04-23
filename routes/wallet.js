@@ -1,4 +1,3 @@
-//NODE MODULES
 import express from "express";
 import auth from "../middleware/auth.js";
 import { get_wallet,insert_wallet,update_wallet,delete_wallet } from "../controllers/wallet.js";

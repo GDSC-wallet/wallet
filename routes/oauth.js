@@ -1,4 +1,3 @@
-//NODE MODULES
 import express from "express";
 import jwt from "jsonwebtoken";
 import passport from "passport";
@@ -19,6 +18,7 @@ dotenv.config();
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
 const CLIENT_URL = process.env.CLIENT_URL;
+const SERVER_URL = process.env.SERVER_URL;
 
 //設定passport
 passport.use(
@@ -26,21 +26,18 @@ passport.use(
     {
       clientID: GOOGLE_CLIENT_ID,
       clientSecret: GOOGLE_CLIENT_SECRET,
-      callbackURL: "/oauth/google/callback",
+      callbackURL: SERVER_URL+"/oauth/google/callback",
       passReqToCallback: true,
     },
     async function (request, accessToken, refreshToken, profile, done) {
         try{
-          console.log('profile :', profile);
           const user_email = profile._json.email;
           
           //使用email hash出 使用者id
           const user_id = sha256Hasher.update(user_email);
 
-          //const user_id="'user_7552f100-eba2-44e1-bc7f-7a1690fd4913"; //測試用假資料
-
           //確認此使用者是否已經存在WALLET的DB
-          const user_exist = await db_caller.authenticate(user_id);     
+          const user_exist = await db_caller.authenticate(user_id); 
      
           if(user_exist){
               return done(null, 

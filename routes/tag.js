@@ -1,4 +1,3 @@
-//NODE MODULES
 import express from "express";
 import auth from "../middleware/auth.js";
 import { get_tag,insert_tag,update_tag,delete_tag } from "../controllers/tag.js";

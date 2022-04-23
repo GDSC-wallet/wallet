@@ -1,4 +1,3 @@
-//NODE MODULES
 import express from "express";
 import auth from "../middleware/auth.js";
 import { get_record,insert_record,update_record,delete_record } from "../controllers/record.js";

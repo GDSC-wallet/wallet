@@ -1,4 +1,3 @@
-//NODE MODULES
 import express from "express";
 import auth from "../middleware/auth.js";
 import { signUp,getUserProfile } from "../controllers/user.js";

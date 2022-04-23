@@ -28,11 +28,11 @@ export const signUp = async (req, res) => {
   
   //解碼jwt取得user_id
   const decodedData = jwt.verify(token, secret);
-  const user_id = decodedData?.id;
+  const user_id = decodedData?.user_id;
   const { nickname } = req.body;
 
   //註冊使用者到資料庫
-  const db_result = db_caller.sign_up({user_id,nickname});
+  const db_result = await db_caller.sign_up({user_id,nickname});
 
   let repsonse;
 
@@ -105,7 +105,7 @@ export const getUserProfile = async (req, res) => {
   
   //解碼jwt取得user_id
   const decodedData = jwt.verify(token, secret);
-  const user_id = decodedData?.id;
+  const user_id = decodedData?.user_id;
 
   //從資料庫取得使用者資料
   await db_caller.call_user_data("user_7552f100-eba2-44e1-bc7f-7a1690fd4913")

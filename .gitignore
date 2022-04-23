@@ -3,6 +3,7 @@
 .vscode
 .aws
 node_modules
+access.log
 
 # dependencies
 /node_modules
