@@ -146,7 +146,7 @@ const call_wallet = (wallet_id) => {
 }
 
 const call_record = (record_id) => {
-    return new Promise((resolve, reject) => {
+    return new Promise( async (resolve, reject) => {
         await db_dealer.get_record(record_id)
             .then(results => {
                 var response = {
