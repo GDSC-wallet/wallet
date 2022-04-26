@@ -235,7 +235,7 @@
 - Param:
 ```json
 {
-    "record_id": "wallet_2c36aaad-2d40-48cb-9e36-9d3a841ffb37"
+    "record_id": "record_2c36aaad-2d40-48cb-9e36-9d3a841ffb37"
 }
 ```
 - Success Response: 
@@ -244,7 +244,7 @@
     "success": true,
     "message": "",
     "data": {
-        "wallet_id": "wallet_2c36aaad-2d40-48cb-9e36-9d3a841ffb37",
+        "record_wallet_id": "wallet_2c36aaad-2d40-48cb-9e36-9d3a841ffb37",
         "record_id":"record_0e0d10d0-531b-4f0d-abc2-f157b9f27dfd",
         "wallet_record_tag_id":"tag_80d4a691-14bd-494c-98e1-8187a669e0d2",
         "record_ordinary": "",

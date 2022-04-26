@@ -1,5 +1,9 @@
 !_TAG_FILE_SORTED	2	/0=unsorted, 1=sorted, 2=foldcase/
+delete_record	/home/roy/codes/GDSC_wallet/backend/controllers/record.js	/^export const delete_record = async (req, res) => {$/;"	C	language:JavaScript
 delete_wallet	/home/roy/codes/GDSC_wallet/backend/controllers/wallet.js	/^export const delete_wallet = async (req, res) => {$/;"	C	language:JavaScript
+get_record	/home/roy/codes/GDSC_wallet/backend/controllers/record.js	/^export const get_record = async (req, res) => {$/;"	C	language:JavaScript
 get_wallet	/home/roy/codes/GDSC_wallet/backend/controllers/wallet.js	/^export const get_wallet = async (req, res) => {$/;"	C	language:JavaScript
+insert_record	/home/roy/codes/GDSC_wallet/backend/controllers/record.js	/^export const insert_record = async (req, res) => {$/;"	C	language:JavaScript
 insert_wallet	/home/roy/codes/GDSC_wallet/backend/controllers/wallet.js	/^export const insert_wallet = async (req, res) => {$/;"	C	language:JavaScript
+update_record	/home/roy/codes/GDSC_wallet/backend/controllers/record.js	/^export const update_record = async (req, res) => {$/;"	C	language:JavaScript
 update_wallet	/home/roy/codes/GDSC_wallet/backend/controllers/wallet.js	/^export const update_wallet = async (req, res) => {$/;"	C	language:JavaScript

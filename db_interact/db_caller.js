@@ -110,7 +110,7 @@ const call_wallet = (wallet_id) => {
             .then(results => {
                 var response = {
                     "success": true,
-                    "message": "wallet data of " + wallet_id + ".",
+                    "message": "取得wallet資料成功",
                     "data": {
                         "wallet_id": results[0].wallet_id,
                         "wallet_name": results[0].wallet_name,
@@ -145,45 +145,64 @@ const call_wallet = (wallet_id) => {
     })
 }
 
+const call_record = (record_id) => {
+    return new Promise((resolve, reject) => {
+        await db_dealer.get_record(record_id)
+            .then(results => {
+                var response = {
+                    "success": true,
+                    "message": "取得record資料成功",
+                    "data": results
+                }
+                console.log(response);
+                resolve(response);
+            })
+            .catch(err => {
+                console.log('ERROR: ' + err.message);
+                reject(err);
+            });
+    })
+}
+
 const Insert_wallet = (user_id, wallet_name, wallet_title, wallet_description) => {
     return new Promise( async (resolve, reject) => {
         await db_dealer.insert_wallet(user_id, wallet_name, wallet_title, wallet_description)
-        .then(response => {
-            console.log("wallet inserted successfully.");
-            resolve();
-        })
-        .catch(err => {
-            console.log("wallet inserted failed.");
-            reject(err);
-        })
+            .then(response => {
+                console.log("wallet inserted successfully.");
+                resolve();
+            })
+            .catch(err => {
+                console.log("wallet inserted failed.");
+                reject(err);
+            })
     });
 }
 
 const Update_wallet = (wallet_id, wallet_name, wallet_title, wallet_description) => {
     return new Promise( async (resolve, reject) => {
         await db_dealer.update_wallet(wallet_id, wallet_name, wallet_title, wallet_description)
-        .then(response => {
-            console.log("wallet updated successfully.");
-            resolve();
-        })
-        .catch(err => {
-            console.log("wallet updated failed.");
-            reject(err);
-        })
+            .then(response => {
+                console.log("wallet updated successfully.");
+                resolve();
+            })
+            .catch(err => {
+                console.log("wallet updated failed.");
+                reject(err);
+            })
     });
 }
 
 const Delete_wallet = (user_id, wallet_id) => {
     return new Promise( async (resolve, reject) => {
         await db_dealer.delete_wallet(user_id, wallet_id)
-        .then(response => {
-            console.log("wallet deleted successfully.");
-            resolve();
-        })
-        .catch(err => {
-            console.log("wallet deleted failed.");
-            reject(err);
-        })
+            .then(response => {
+                console.log("wallet deleted successfully.");
+                resolve();
+            })
+            .catch(err => {
+                console.log("wallet deleted failed.");
+                reject(err);
+            })
     });
 }
 

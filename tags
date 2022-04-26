@@ -1,1 +1,15 @@
 !_TAG_FILE_SORTED	2	/0=unsorted, 1=sorted, 2=foldcase/
+/api/	/home/roy/codes/GDSC_wallet/backend/api.md	/^## \/api\/$/;"	s	language:Markdown	chapter:wallet api document
+/api/profile	/home/roy/codes/GDSC_wallet/backend/api.md	/^## \/api\/profile$/;"	s	language:Markdown	chapter:wallet api document
+/api/record	/home/roy/codes/GDSC_wallet/backend/api.md	/^## \/api\/record$/;"	s	language:Markdown	chapter:wallet api document
+/api/record/create	/home/roy/codes/GDSC_wallet/backend/api.md	/^## \/api\/record\/create$/;"	s	language:Markdown	chapter:wallet api document
+/api/record/delete	/home/roy/codes/GDSC_wallet/backend/api.md	/^## \/api\/record\/delete$/;"	s	language:Markdown	chapter:wallet api document
+/api/record/edit	/home/roy/codes/GDSC_wallet/backend/api.md	/^## \/api\/record\/edit$/;"	s	language:Markdown	chapter:wallet api document
+/api/signup	/home/roy/codes/GDSC_wallet/backend/api.md	/^## \/api\/signup$/;"	s	language:Markdown	chapter:wallet api document
+/api/wallet	/home/roy/codes/GDSC_wallet/backend/api.md	/^## \/api\/wallet$/;"	s	language:Markdown	chapter:wallet api document
+/api/wallet/create	/home/roy/codes/GDSC_wallet/backend/api.md	/^## \/api\/wallet\/create$/;"	s	language:Markdown	chapter:wallet api document
+/api/wallet/delete	/home/roy/codes/GDSC_wallet/backend/api.md	/^## \/api\/wallet\/delete$/;"	s	language:Markdown	chapter:wallet api document
+/api/wallet/edit	/home/roy/codes/GDSC_wallet/backend/api.md	/^## \/api\/wallet\/edit$/;"	s	language:Markdown	chapter:wallet api document
+/oauth/google/login	/home/roy/codes/GDSC_wallet/backend/api.md	/^## \/oauth\/google\/login$/;"	s	language:Markdown	chapter:wallet api document
+/oauth/google/redirect	/home/roy/codes/GDSC_wallet/backend/api.md	/^## \/oauth\/google\/redirect$/;"	s	language:Markdown	chapter:wallet api document
+wallet api document	/home/roy/codes/GDSC_wallet/backend/api.md	/^# wallet api document$/;"	c	language:Markdown

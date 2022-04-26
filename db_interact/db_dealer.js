@@ -44,6 +44,18 @@ const get_wallet = (wallet_id) => {
     });
 }
 
+
+const get_record = (record_id) => {
+    return new Promise((resolve, reject) => {
+        var sql = "SELECT * from wallet_record WHERE record_id = ?";
+        connection.query(sql, record_id, (err, results, fields) => {
+            if(err) reject(err);
+            else
+                resolve(results);
+        });
+    });
+};
+
 const user_exist = async (id) => {
     var sql = "SELECT * FROM user WHERE id = ?";
     return new Promise((resolve, reject) => {
@@ -211,7 +223,7 @@ const db_dealer = {
     insert_user, update_user, delete_user,
     insert_wallet, update_wallet, delete_wallet,
     insert_tag, update_tag, delete_tag,
-    get_user, get_wallet, user_exist,
+    get_user, get_wallet, user_exist, get_record,
     close_sql_connection
 }
 

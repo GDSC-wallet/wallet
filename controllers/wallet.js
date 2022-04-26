@@ -8,7 +8,7 @@ export const get_wallet = async (req, res) => {
         .catch(result => {
             var response = {
                 "success": false,
-                "message": "取得使用者資料失敗",
+                "message": "取得wallet資料失敗",
                 "data": {}
             }
             res.status(200).json(response);
