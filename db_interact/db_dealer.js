@@ -99,33 +99,41 @@ const insert_wallet = async (user_id, wallet_name, wallet_title, wallet_descript
         await connection.query(sql, [wallet_id, user_id, 0, wallet_name, 0, wallet_title, wallet_description, user_id, wallet_id], (err, results, fields) => {
             if(err) {
                 console.log("error: " + err.message);
-                reject("創建wallet失敗");
+                reject(err);
             } else { 
-                resolve("創建wallet成功");
+                resolve();
             }
         });
     });
 };
 
-// wallet_id, user_id不給改, wallet_id判斷用
-const update_wallet = async (wallet_id, selected, wallet_name, wallet_total, wallet_title, wallet_description) => {
-    var sql = "UPDATE wallet SET selected = ?, wallet_name = ?, wallet_total = ?, wallet_title = ?, wallet_description = ?, updated_time = NOW() WHERE wallet_id = ?";
-    connection.query(sql, [selected, wallet_name, wallet_total, wallet_title, wallet_description, wallet_id], (err, results, fields) => {
-        if(err)
-            console.log("db: wallet update error: " + err.message);
-        else
-            console.log("db: wallet update successfully.");
-    })
+// wallet_id判斷用
+const update_wallet = async (wallet_id, wallet_name, wallet_title, wallet_description) => {
+    return new Promise( async (resolve, reject) => {
+        var sql = "UPDATE wallet SET wallet_name = ?, wallet_title = ?, wallet_description = ?, updated_time = NOW() WHERE wallet_id = ?";
+        await connection.query(sql, [wallet_name, wallet_title, wallet_description, wallet_id], (err, results, fields) => {
+            if(err) {
+                console.log("error: " + err.message);
+                reject(err);
+            } else { 
+                resolve();
+            }
+        });
+    });
 };
 
 const delete_wallet = async (user_id, wallet_id) => {
-    var sql = "DELETE FROM wallet WHERE wallet_id = ?; UPDATE user SET wallet_num = wallet_num - 1 WHERE id = ?";
-    await connection.query(sql, [wallet_id, user_id], (err, results, fields) => {
-        if(err)
-            console.log("db: wallet deletion error: " + err.message);
-        else
-            console.log("db: wallet delete successfully.");
-    })
+    return new Promise( async (resolve, reject) => {
+        var sql = "DELETE FROM wallet WHERE wallet_id = ?; UPDATE user SET wallet_num = wallet_num - 1 WHERE id = ?";
+        await connection.query(sql, [wallet_id, user_id], (err, results, fields) => {
+            if(err) {
+                console.log("error: " + err.message);
+                reject(err);
+            } else {
+                resolve();
+            }
+        });
+    });
     // 被刪除的wallet的record與tag都以foreign key on delete cascade一併刪除
 };
 

@@ -150,15 +150,43 @@ const Insert_wallet = (user_id, wallet_name, wallet_title, wallet_description) =
         await db_dealer.insert_wallet(user_id, wallet_name, wallet_title, wallet_description)
         .then(response => {
             console.log("wallet inserted successfully.");
-            resolve(response);
+            resolve();
         })
-        .catch(response => {
+        .catch(err => {
             console.log("wallet inserted failed.");
-            reject(response);
+            reject(err);
         })
     });
 }
 
-export default { call_wallet, call_user_data, authenticate, Insert_wallet };
+const Update_wallet = (wallet_id, wallet_name, wallet_title, wallet_description) => {
+    return new Promise( async (resolve, reject) => {
+        await db_dealer.update_wallet(wallet_id, wallet_name, wallet_title, wallet_description)
+        .then(response => {
+            console.log("wallet updated successfully.");
+            resolve();
+        })
+        .catch(err => {
+            console.log("wallet updated failed.");
+            reject(err);
+        })
+    });
+}
+
+const Delete_wallet = (user_id, wallet_id) => {
+    return new Promise( async (resolve, reject) => {
+        await db_dealer.delete_wallet(user_id, wallet_id)
+        .then(response => {
+            console.log("wallet deleted successfully.");
+            resolve();
+        })
+        .catch(err => {
+            console.log("wallet deleted failed.");
+            reject(err);
+        })
+    });
+}
+
+export default { call_wallet, call_user_data, authenticate, Insert_wallet, Update_wallet, Delete_wallet };
 
 // 暫時先不做關閉資料庫的動作
