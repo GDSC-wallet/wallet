@@ -113,7 +113,7 @@ export const getUserProfile = async (req, res) => {
   const user_id = decodedData?.user_id;
 
   //從資料庫取得使用者資料
-  await db_caller.call_user_data("user_7552f100-eba2-44e1-bc7f-7a1690fd4913")
+  await db_caller.call_user_data("user_7552f100-eba2-44e1-bc7f-7a1690fd4913")   // 測試用,之後改為user_id
   .then(response => {
       res.status(200).json(response);
   })
