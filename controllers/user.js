@@ -106,11 +106,11 @@ export const signUp = async (req, res) => {
 // }
 export const getUserProfile = async (req, res) => {
   //從request header取得jwt
-  const token = req.headers.authorization.split(" ")[1];
+  //const token = req.headers.authorization.split(" ")[1];
   
   //解碼jwt取得user_id
-  const decodedData = jwt.verify(token, secret);
-  const user_id = decodedData?.user_id;
+  //const decodedData = jwt.verify(token, secret);
+  //const user_id = decodedData?.user_id;
 
   //從資料庫取得使用者資料
   await db_caller.call_user_data("user_7552f100-eba2-44e1-bc7f-7a1690fd4913")   // 測試用,之後改為user_id

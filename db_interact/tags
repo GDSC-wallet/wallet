@@ -1,0 +1,42 @@
+!_TAG_FILE_SORTED	2	/0=unsorted, 1=sorted, 2=foldcase/
+AnonymousFunctiond2550b2c0100	/home/roy/codes/GDSC_wallet/backend/db_interact/db_dealer.js	/^connection.connect(function(err){$/;"	f	language:JavaScript
+authenticate	/home/roy/codes/GDSC_wallet/backend/db_interact/db_caller.js	/^const authenticate = (id) => {$/;"	C	language:JavaScript
+call_record	/home/roy/codes/GDSC_wallet/backend/db_interact/db_caller.js	/^const call_record = (record_id) => {$/;"	C	language:JavaScript
+call_user_data	/home/roy/codes/GDSC_wallet/backend/db_interact/db_caller.js	/^const call_user_data = (user_id) => {$/;"	C	language:JavaScript
+call_wallet	/home/roy/codes/GDSC_wallet/backend/db_interact/db_caller.js	/^const call_wallet = (wallet_id) => {$/;"	C	language:JavaScript
+close_sql_connection	/home/roy/codes/GDSC_wallet/backend/db_interact/db_dealer.js	/^const close_sql_connection = ()=> {$/;"	C	language:JavaScript
+connection	/home/roy/codes/GDSC_wallet/backend/db_interact/db_dealer.js	/^var connection = mysql.createConnection({$/;"	v	language:JavaScript
+db_dealer	/home/roy/codes/GDSC_wallet/backend/db_interact/db_dealer.js	/^const db_dealer = {$/;"	C	language:JavaScript
+Delete_record	/home/roy/codes/GDSC_wallet/backend/db_interact/db_caller.js	/^const Delete_record = (record_id, record_wallet_id, record_amount) => {$/;"	C	language:JavaScript
+delete_record	/home/roy/codes/GDSC_wallet/backend/db_interact/db_dealer.js	/^const delete_record = async (record_id, record_wallet_id, record_amount) => {$/;"	C	language:JavaScript
+delete_tag	/home/roy/codes/GDSC_wallet/backend/db_interact/db_dealer.js	/^const delete_tag = async (tag_id) => {$/;"	C	language:JavaScript
+delete_user	/home/roy/codes/GDSC_wallet/backend/db_interact/db_dealer.js	/^const delete_user = async (id) => {$/;"	C	language:JavaScript
+Delete_wallet	/home/roy/codes/GDSC_wallet/backend/db_interact/db_caller.js	/^const Delete_wallet = (user_id, wallet_id) => {$/;"	C	language:JavaScript
+delete_wallet	/home/roy/codes/GDSC_wallet/backend/db_interact/db_dealer.js	/^const delete_wallet = async (user_id, wallet_id) => {$/;"	C	language:JavaScript
+get_record	/home/roy/codes/GDSC_wallet/backend/db_interact/db_dealer.js	/^const get_record = (record_id) => {$/;"	C	language:JavaScript
+get_user	/home/roy/codes/GDSC_wallet/backend/db_interact/db_dealer.js	/^const get_user = (id) => {$/;"	C	language:JavaScript
+get_wallet	/home/roy/codes/GDSC_wallet/backend/db_interact/db_dealer.js	/^const get_wallet = (wallet_id) => {$/;"	C	language:JavaScript
+id	/home/roy/codes/GDSC_wallet/backend/db_interact/db_dealer.js	/^    var id = 'user_' + uuid.v4();$/;"	v	language:JavaScript
+Insert_record	/home/roy/codes/GDSC_wallet/backend/db_interact/db_caller.js	/^const Insert_record = (record_wallet_id, wallet_record_tag_id, record_ordinary, record_name, rec/;"	C	language:JavaScript
+insert_record	/home/roy/codes/GDSC_wallet/backend/db_interact/db_dealer.js	/^const insert_record = async (record_wallet_id, wallet_record_tag_id, record_ordinary, record_nam/;"	C	language:JavaScript
+insert_tag	/home/roy/codes/GDSC_wallet/backend/db_interact/db_dealer.js	/^const insert_tag = async (tag_wallet_id, tag_ordinary, tag_name, tag_type) => {$/;"	C	language:JavaScript
+insert_user	/home/roy/codes/GDSC_wallet/backend/db_interact/db_dealer.js	/^    insert_user, update_user, delete_user,$/;"	M	language:JavaScript	class:db_dealer
+insert_user	/home/roy/codes/GDSC_wallet/backend/db_interact/db_dealer.js	/^const insert_user = async (channel, channel_id, email, username, nickname) => {$/;"	C	language:JavaScript
+Insert_wallet	/home/roy/codes/GDSC_wallet/backend/db_interact/db_caller.js	/^const Insert_wallet = (user_id, wallet_name, wallet_title, wallet_description) => {$/;"	C	language:JavaScript
+insert_wallet	/home/roy/codes/GDSC_wallet/backend/db_interact/db_dealer.js	/^const insert_wallet = async (user_id, wallet_name, wallet_title, wallet_description) => {$/;"	C	language:JavaScript
+port	/home/roy/codes/GDSC_wallet/backend/db_interact/db_caller.js	/^const port = 3000$/;"	C	language:JavaScript
+sql	/home/roy/codes/GDSC_wallet/backend/db_interact/db_dealer.js	/^    var sql = "DELETE FROM user WHERE id = ?";$/;"	v	language:JavaScript
+sql	/home/roy/codes/GDSC_wallet/backend/db_interact/db_dealer.js	/^    var sql = "DELETE FROM wallet_record_tag_id WHERE tag_id = ?";$/;"	v	language:JavaScript
+sql	/home/roy/codes/GDSC_wallet/backend/db_interact/db_dealer.js	/^    var sql = "INSERT INTO user VALUE(?,?,?,?,?,?,NOW(),NOW(),0)";$/;"	v	language:JavaScript
+sql	/home/roy/codes/GDSC_wallet/backend/db_interact/db_dealer.js	/^    var sql = "INSERT INTO wallet_record_tag_id VALUE(?,?,?,?,?,NOW(),NOW())";$/;"	v	language:JavaScript
+sql	/home/roy/codes/GDSC_wallet/backend/db_interact/db_dealer.js	/^    var sql = "SELECT * FROM user WHERE id = ?";$/;"	v	language:JavaScript
+sql	/home/roy/codes/GDSC_wallet/backend/db_interact/db_dealer.js	/^    var sql = "UPDATE user SET email = ?, username = ?, nickname = ?, created_time = ?, updated_/;"	v	language:JavaScript
+sql	/home/roy/codes/GDSC_wallet/backend/db_interact/db_dealer.js	/^    var sql = "UPDATE wallet_record_tag_id SET tag_ordinary = ?, tag_name = ?, tag_type = ?";$/;"	v	language:JavaScript
+tag_id	/home/roy/codes/GDSC_wallet/backend/db_interact/db_dealer.js	/^    var tag_id = "tag_" + uuid.v4();$/;"	v	language:JavaScript
+Update_record	/home/roy/codes/GDSC_wallet/backend/db_interact/db_caller.js	/^const Update_record = (record_id, wallet_record_tag_id, record_ordinary, record_name, record_des/;"	C	language:JavaScript
+update_record	/home/roy/codes/GDSC_wallet/backend/db_interact/db_dealer.js	/^const update_record = async (record_id, wallet_record_tag_id, record_ordinary, record_name, reco/;"	C	language:JavaScript
+update_tag	/home/roy/codes/GDSC_wallet/backend/db_interact/db_dealer.js	/^const update_tag = async (tag_ordinary, tag_name, tag_type) => {$/;"	C	language:JavaScript
+update_user	/home/roy/codes/GDSC_wallet/backend/db_interact/db_dealer.js	/^const update_user = async (id, email, username, nickname, created_time) => {$/;"	C	language:JavaScript
+Update_wallet	/home/roy/codes/GDSC_wallet/backend/db_interact/db_caller.js	/^const Update_wallet = (wallet_id, wallet_name, wallet_title, wallet_description) => {$/;"	C	language:JavaScript
+update_wallet	/home/roy/codes/GDSC_wallet/backend/db_interact/db_dealer.js	/^const update_wallet = async (wallet_id, wallet_name, wallet_title, wallet_description) => {$/;"	C	language:JavaScript
+user_exist	/home/roy/codes/GDSC_wallet/backend/db_interact/db_dealer.js	/^const user_exist = async (id) => {$/;"	C	language:JavaScript

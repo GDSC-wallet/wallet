@@ -5,6 +5,6 @@ import { signUp,getUserProfile } from "../controllers/user.js";
 const router = express.Router();
 
 router.post("/signup", auth, signUp);
-router.get("/profile", auth, getUserProfile); // 除了parse request以外 完成
+router.get("/profile", /*auth,*/getUserProfile);
 
 export default router;
