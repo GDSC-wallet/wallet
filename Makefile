@@ -1,5 +1,5 @@
-SUBDIRS = $(shell find . * -type d | grep -v "\.")
-
 clean:
 	rm tags
 	rm ./controllers/tags
+	rm ./db_interact/tags
+	rm ./routes/tags
