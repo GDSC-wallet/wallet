@@ -18,6 +18,9 @@ connection.connect(function(err){
         console.log("Successfully connect to mysql : root@localhost ");
 });
 
+function print_error(err) {
+    console.log("error: " + err.message);
+}
 
 // request dealer
 const get_user = (id) => {
@@ -106,16 +109,46 @@ const delete_user = async (id) => {
 
 const insert_wallet = async (user_id, wallet_name, wallet_title, wallet_description) => {
     return new Promise( async (resolve, reject) => {
+        await connection.query("START TRANSACTION", (err, results, fields) => {
+            if(err) console.log("error: " + err.message);
+        });
         var wallet_id = 'wallet_' + uuid();
-        var sql = "INSERT INTO wallet VALUE(?,?,?,?,?,?,?,NOW(),NOW(),0); UPDATE user SET wallet_num = wallet_num + 1 WHERE id = ?; UPDATE wallet SET selected = 0 WHERE selected = 1; UPDATE wallet SET selected = 1 WHERE wallet_id = ?";
-        await connection.query(sql, [wallet_id, user_id, 0, wallet_name, 0, wallet_title, wallet_description, user_id, wallet_id], (err, results, fields) => {
+        var sql1 = "INSERT INTO wallet VALUE(?,?,?,?,?,?,?,NOW(),NOW(),0)";
+        var sql2 = "UPDATE user SET wallet_num = wallet_num + 1 WHERE id = ?";
+        var sql3 = "UPDATE wallet SET selected = 0 WHERE selected = 1";
+        var sql4 = "UPDATE wallet SET selected = 1 WHERE wallet_id = ?";
+        await connection.query(sql1, [wallet_id, user_id, 0, wallet_name, 0, wallet_title, wallet_description], (err, results, fields) => {
             if(err) {
-                console.log("error: " + err.message);
+                print_error(err);
                 reject(err);
-            } else { 
-                resolve();
             }
         });
+        await connection.query(sql2, user_id, (err, results, fields) => {
+            if(err) {
+                print_error(err);
+                reject(err);
+            }
+        });
+        await connection.query(sql3, (err, results, fields) => {
+            if(err) {
+                print_error(err);
+                reject(err);
+            }
+        });
+        await connection.query(sql4, wallet_id, (err, results, fields) => {
+            if(err) {
+                print_error(err);
+                reject(err);
+            }
+        });
+        await connection.query("COMMIT", (err, results, fields) => {
+            if(err) {
+                print_err(err);
+                reject(err);
+            } else {
+                resolve();
+            }
+        })
     });
 };
 
