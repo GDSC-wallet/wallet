@@ -17,7 +17,7 @@ export const get_wallet = async (req, res) => {
 
 export const insert_wallet = async (req, res) => {
     // debug用 "user_7552f100-eba2-44e1-bc7f-7a1690fd4913", "test wallet", "test", "test"
-    await db_caller.Insert_wallet(/*"user_7552f100-eba2-44e1-bc7f-7a1690fd4913","test_wallet","test","test"*/req.body.user_id, req.body.wallet_name, req.body.wallet_title, req.body.wallet_description)
+    await db_caller.Insert_wallet(/*user_7552f100-eba2-44e1-bc7f-7a1690fd4913","test_wallet","test","test"*/req.body.user_id, req.body.wallet_name, req.body.wallet_title, req.body.wallet_description)
         .then(result => {
             var response = {
                 "success": true,
