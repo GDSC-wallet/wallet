@@ -19,17 +19,10 @@ const authenticate = (id) => {
 }
 const call_user_data = (user_id) => {
     return new Promise( async (resolve, reject) => {
-        //await db_dealer.insert_user('google','1','roych.shao@gmail.com','Roy Shao','roy');
-        //await db_dealer.delete_user('user_7417323a-a5f6-414a-b2e6-2c3d8d69f754');
-        //await db_dealer.insert_wallet('user_7552f100-eba2-44e1-bc7f-7a1690fd4913', 'wallet_2', 'my second wallet','my own wallet');
-        //await db_dealer.delete_wallet('3','wallet_0754c072-ebe3-407d-9eb9-0f19429a3559');
-        //await db_dealer.insert_record('wallet_4acf9f9f-215a-4fd6-af5c-01705ce4a50e','tag_402d95e2-2441-441b-95a1-7f98fa74ccc0',2,'test_record5','no description',1000,'income','2022-04-21 19:00:00');
-        //await db_dealer.insert_tag('wallet_4acf9f9f-215a-4fd6-af5c-01705ce4a50e',1,'tag_1','income');
-        //await db_dealer.delete_record('record_0bc10593-1fb0-40ba-9067-d6e0907f9ec8','wallet_4acf9f9f-215a-4fd6-af5c-01705ce4a50e',1000);
         var user_status;
         var selected_wallet;
         var response = {};
-        await db_dealer.get_user('user_7552f100-eba2-44e1-bc7f-7a1690fd4913')    // 之後parse req得到要求的user id,just for testing
+        await db_dealer.get_user(user_id)    // 之後parse req得到要求的user id,just for testing
             .then(results => {
                 if(results.length > 0)
                     user_status = true;
@@ -117,7 +110,7 @@ const call_wallet = (wallet_id) => {
             .then(results => {
                 var response = {
                     "success": true,
-                    "message": "wallet data of " + wallet_id + ".",
+                    "message": "取得wallet資料成功",
                     "data": {
                         "wallet_id": results[0].wallet_id,
                         "wallet_name": results[0].wallet_name,
@@ -152,6 +145,67 @@ const call_wallet = (wallet_id) => {
     })
 }
 
-export default { call_wallet, call_user_data, authenticate };
+const call_record = (record_id) => {
+    return new Promise( async (resolve, reject) => {
+        await db_dealer.get_record(record_id)
+            .then(results => {
+                var response = {
+                    "success": true,
+                    "message": "取得record資料成功",
+                    "data": results
+                }
+                console.log(response);
+                resolve(response);
+            })
+            .catch(err => {
+                console.log('ERROR: ' + err.message);
+                reject(err);
+            });
+    })
+}
+
+const Insert_wallet = (user_id, wallet_name, wallet_title, wallet_description) => {
+    return new Promise( async (resolve, reject) => {
+        await db_dealer.insert_wallet(user_id, wallet_name, wallet_title, wallet_description)
+            .then(response => {
+                console.log("wallet inserted successfully.");
+                resolve();
+            })
+            .catch(err => {
+                console.log("wallet inserted failed.");
+                reject(err);
+            })
+    });
+}
+
+const Update_wallet = (wallet_id, wallet_name, wallet_title, wallet_description) => {
+    return new Promise( async (resolve, reject) => {
+        await db_dealer.update_wallet(wallet_id, wallet_name, wallet_title, wallet_description)
+            .then(response => {
+                console.log("wallet updated successfully.");
+                resolve();
+            })
+            .catch(err => {
+                console.log("wallet updated failed.");
+                reject(err);
+            })
+    });
+}
+
+const Delete_wallet = (user_id, wallet_id) => {
+    return new Promise( async (resolve, reject) => {
+        await db_dealer.delete_wallet(user_id, wallet_id)
+            .then(response => {
+                console.log("wallet deleted successfully.");
+                resolve();
+            })
+            .catch(err => {
+                console.log("wallet deleted failed.");
+                reject(err);
+            })
+    });
+}
+
+export default { call_wallet, call_user_data, authenticate, Insert_wallet, Update_wallet, Delete_wallet };
 
 // 暫時先不做關閉資料庫的動作
