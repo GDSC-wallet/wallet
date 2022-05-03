@@ -12,7 +12,7 @@ const router = express.Router();
 const secret = "GDSC_WALLET";
 
 // create a sha-256 hasher
-const sha256Hasher = crypto.createHmac("sha256", secret);
+
 
 dotenv.config();
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
@@ -34,8 +34,8 @@ passport.use(
           const user_email = profile._json.email;
           
           //使用email hash出 使用者id
+          const sha256Hasher = crypto.createHmac("sha256", secret);
           const user_id = sha256Hasher.update(user_email).digest('base64');
-          console.log('user_id :', user_id);
 
           //確認此使用者是否已經存在WALLET的DB
           const user_exist = await db_caller.authenticate(user_id); 
