@@ -97,8 +97,11 @@ router.get(
 router.get("/google/success", isLoggedIn, (req, res) => {
     
     //製作jwt
+    console.log('req.user.profile :', req.user.profile);
     const { email , user_id } = req.user.profile;
-    const token = jwt.sign( { user_id: user_id }, secret, { expiresIn: "24h" } );
+    const channel='GOOGLE';
+    const channel_id='';
+    // const token = jwt.sign( { channel, channel_id, email, username, user_id }, secret, { expiresIn: "24h" } );
     console.log('token :', token);
 
     res.header('Authorization', token);
