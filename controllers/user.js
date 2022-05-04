@@ -29,6 +29,7 @@ export const signUp = async (req, res) => {
     
     //解碼jwt取得user_id
     const decodedData = jwt.verify(token, secret);
+    console.log('decodedData :', decodedData);
     const user_id = decodedData?.user_id;
     const { nickname } = req.body;
 
