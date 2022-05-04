@@ -1,4 +1,5 @@
 import db_caller from "../db_interact/db_caller.js";
+import jwt from "jsonwebtoken";
 
 //****************************註冊使用者*****************************
 // URL: "/api/signup"
@@ -38,7 +39,7 @@ export const signUp = async (req, res) => {
     channel_id="1",
     email="test@gmail.com",
     username="william",
-    
+
     //註冊使用者到資料庫
     // const db_result = await db_caller.sign_up({user_id,nickname});
 
