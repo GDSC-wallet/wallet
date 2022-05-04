@@ -74,7 +74,7 @@ const user_exist = async (id) => {
 
 const insert_user = async (channel, channel_id, email, username, nickname) => {
     // generate uuid for the user
-    var id = 'user_' + uuid.v4();
+    var id = 'user_' + uuid();
     var sql = "INSERT INTO user VALUE(?,?,?,?,?,?,NOW(),NOW(),0)";
     connection.query(sql, [id, channel, channel_id, email, username, nickname], (err, results, fields) => {
         if(err)
