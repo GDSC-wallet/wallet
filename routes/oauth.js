@@ -97,12 +97,15 @@ router.get(
 router.get("/google/success", isLoggedIn, (req, res) => {
     
     //製作jwt
-    console.log('req.user.profile :', req.user.profile);
+    console.log('req.user.profile :', req.user.profile._json);
     // const { email , user_id } = req.user;
     console.log('req.user :', req.user);
+    const { channel_id:sub , name } = req.user.profile._json;
     const { email , user_id } = req.user.profile;
-    const channel='GOOGLE';
-    const channel_id='';
+    console.log('channel_id :', channel_id);
+    console.log('name :', name);
+    console.log('email  :', email );
+    console.log('user_id :', user_id);
     // const token = jwt.sign( { channel, channel_id, email, username, user_id }, secret, { expiresIn: "24h" } );
     console.log('token :', token);
 
