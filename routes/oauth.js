@@ -102,12 +102,10 @@ router.get("/google/success", isLoggedIn, (req, res) => {
     console.log('req.user :', req.user);
     const { sub , name,email } = req.user.profile._json;
     const {  user_id } = req.user.profile;
-    console.log('sub :', sub);
-    console.log('name :', name);
-    console.log('email  :', email );
-    console.log('user_id :', user_id);
-    // const token = jwt.sign( { channel, channel_id, email, username, user_id }, secret, { expiresIn: "24h" } );
-    console.log('token :', token);
+    const channel="GOOGLE";
+    const channel_id=sub;
+    const username=name;
+    const token = jwt.sign( { channel, channel_id, email, username, user_id }, secret, { expiresIn: "24h" } );
 
     res.header('Authorization', token);
     
