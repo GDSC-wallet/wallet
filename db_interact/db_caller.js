@@ -265,6 +265,18 @@ const Delete_record = (record_id, record_wallet_id, record_amount) => {
     });
 }
 
-export default { call_wallet, call_user_data, call_record, authenticate, sign_up,  Insert_wallet, Update_wallet, Delete_wallet, Insert_record, Update_record };
+const Insert_tag = () => {
+    
+}
+
+const Update_tag = () => {
+
+}
+
+const Delete_tag = () => {
+
+}
+
+export default { call_wallet, call_user_data, call_record, authenticate, sign_up,  Insert_wallet, Update_wallet, Delete_wallet, Insert_record, Update_record, Delete_record, Insert_tag, Update_tag, Delete_tag };
 
 // 暫時先不做關閉資料庫的動作

@@ -83,7 +83,7 @@ const insert_user = async (channel, channel_id, email, username, nickname) => {
             console.log("db: user insert successfully.");
     });
     // 預設給user一個wallet
-    await insert_wallet(id, 1, 'preset_wallet',0,'preset_wallet','This is a preset_wallet for user');
+    await insert_wallet(id, 'preset_wallet', 'preset_wallet', 'This is a preset_wallet for user');
 };
 
 // id判斷用,channel,channel_id不給改
@@ -200,35 +200,41 @@ const delete_record = async (record_id, record_wallet_id, record_amount) => {
 };
 
 const insert_tag = async (tag_wallet_id, tag_ordinary, tag_name, tag_type) => {
-    var tag_id = "tag_" + uuid.v4();
-    var sql = "INSERT INTO wallet_record_tag_id VALUE(?,?,?,?,?,NOW(),NOW())";
-    await connection.query(sql, [tag_id, tag_wallet_id, tag_ordinary, tag_name, tag_type], (err, results, fields) => {
-        if(err)
-            console.log("db: tag insertion error: " + err.message);
-        else
-            console.log("db: tag inserted successfully.");
-    })
+    return new Promise( async (resolve, reject) => {
+        var tag_id = "tag_" + uuid.v4();
+        var sql = "INSERT INTO wallet_record_tag_id VALUE(?,?,?,?,?,NOW(),NOW())";
+        await connection.query(sql, [tag_id, tag_wallet_id, tag_ordinary, tag_name, tag_type], (err, results, fields) => {
+            if(err)
+                console.log("db: tag insertion error: " + err.message);
+            else
+                console.log("db: tag inserted successfully.");
+        })
+    });
 };
 
 // tag_id, wallet_id不給改
 const update_tag = async (tag_ordinary, tag_name, tag_type) => {
-    var sql = "UPDATE wallet_record_tag_id SET tag_ordinary = ?, tag_name = ?, tag_type = ?";
-    await connection.query(sql, [tag_ordinary, tag_name, tag_type], (err, results, fields) => {
-        if(err)
-            console.log("db: tag update error: " + err.message);
-        else
-            console.log("db: tag update successfully.");
-    })
+    return new Promise( async (resolve, reject) => {
+        var sql = "UPDATE wallet_record_tag_id SET tag_ordinary = ?, tag_name = ?, tag_type = ?";
+        await connection.query(sql, [tag_ordinary, tag_name, tag_type], (err, results, fields) => {
+            if(err)
+                console.log("db: tag update error: " + err.message);
+            else
+                console.log("db: tag update successfully.");
+        })
+    });
 };
 
 const delete_tag = async (tag_id) => {
-    var sql = "DELETE FROM wallet_record_tag_id WHERE tag_id = ?";
-    await connection.query(sql, tag_id, (err, results, fields) => {
-        if(err)
-            console.log("db: tag deletion error: " + err.message);
-        else
-            console.log("db: tag deleted successfully.");
-    })
+    return new Promise( async (resolve, reject) => {
+        var sql = "DELETE FROM wallet_record_tag_id WHERE tag_id = ?";
+        await connection.query(sql, tag_id, (err, results, fields) => {
+            if(err)
+                console.log("db: tag deletion error: " + err.message);
+            else
+                console.log("db: tag deleted successfully.");
+        })
+    });
 };
 
 const close_sql_connection = ()=> {
