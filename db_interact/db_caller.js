@@ -154,10 +154,10 @@ const sign_up = (channel, channel_id, email, username, nickname) => {
                 console.log("user inserted successfully.");
                 resolve();
             })
-            .catch(err => [
+            .catch(err => {
                 console.log("user inserted failed.");
                 reject(err);
-            ])
+            })
     });
 }
 
