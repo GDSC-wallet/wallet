@@ -30,7 +30,7 @@ export const signUp = async (req, res) => {
   console.log('req.headers :', req.headers);
   try{
     //從request header取得jwt
-    const token = req.headers.authorization.split(" ")[1];
+    const token = req.headers.authorization;
     console.log('token :', token);
     
     //解碼jwt取得user_id
