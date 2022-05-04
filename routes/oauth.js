@@ -98,6 +98,8 @@ router.get("/google/success", isLoggedIn, (req, res) => {
     
     //製作jwt
     console.log('req.user.profile :', req.user.profile);
+    // const { email , user_id } = req.user;
+    console.log('req.user :', req.user);
     const { email , user_id } = req.user.profile;
     const channel='GOOGLE';
     const channel_id='';
