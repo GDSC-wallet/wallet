@@ -1,5 +1,4 @@
 import db_dealer from './db_dealer.js'
-const port = 3000
 
 // 問資料庫user是否存在
 const authenticate = (id) => {
@@ -148,6 +147,20 @@ const call_wallet = (wallet_id) => {
     })
 }
 
+const sign_up = (channel, channel_id, email, username, nickname) => {
+    return new Promise( async (resolve, reject) => {
+        await db_dealer.insert_user(channel, channel_id, email, username, nickname)
+            .then(response => {
+                console.log("user inserted successfully.");
+                resolve();
+            })
+            .catch(err => [
+                console.log("user inserted failed.");
+                reject(err);
+            ])
+    });
+}
+
 const Insert_wallet = (user_id, wallet_name, wallet_title, wallet_description) => {
     return new Promise( async (resolve, reject) => {
         await db_dealer.insert_wallet(user_id, wallet_name, wallet_title, wallet_description)
@@ -252,6 +265,6 @@ const Delete_record = (record_id, record_wallet_id, record_amount) => {
     });
 }
 
-export default { call_wallet, call_user_data, call_record, authenticate, Insert_wallet, Update_wallet, Delete_wallet, Insert_record, Update_record };
+export default { call_wallet, call_user_data, call_record, authenticate, sign_up,  Insert_wallet, Update_wallet, Delete_wallet, Insert_record, Update_record };
 
 // 暫時先不做關閉資料庫的動作

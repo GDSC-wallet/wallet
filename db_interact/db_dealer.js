@@ -11,6 +11,7 @@ var connection = mysql.createConnection({
     database: process.env.MYSQL_DATABASE,
     multipleStatements: true
 });
+
 connection.connect(function(err){
     if(err)
         return err;
