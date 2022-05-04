@@ -100,9 +100,9 @@ router.get("/google/success", isLoggedIn, (req, res) => {
     console.log('req.user.profile :', req.user.profile._json);
     // const { email , user_id } = req.user;
     console.log('req.user :', req.user);
-    const { sub:channel_id , name } = req.user.profile._json;
-    const { email , user_id } = req.user.profile;
-    console.log('channel_id :', channel_id);
+    const { sub , name,email } = req.user.profile._json;
+    const {  user_id } = req.user.profile;
+    console.log('sub :', sub);
     console.log('name :', name);
     console.log('email  :', email );
     console.log('user_id :', user_id);
