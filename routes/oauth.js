@@ -104,6 +104,7 @@ router.get("/google/success", isLoggedIn, (req, res) => {
     const channel_id=sub;
     const username=name;
     const token = jwt.sign( { channel, channel_id, email, username, user_id }, secret, { expiresIn: "24h" } );
+    console.log('token :', token);
 
     res.header('Authorization', token);
     
