@@ -22,7 +22,8 @@ import db_caller from "../db_interact/db_caller.js";
 //     "data": {}
 // }
 export const signUp = async (req, res) => {
-  
+  // console.log('req :', req);
+  console.log("req.user",req.user)
   try{
     //從request header取得jwt
     const token = req.headers.authorization.split(" ")[1];
@@ -35,6 +36,12 @@ export const signUp = async (req, res) => {
 
     //註冊使用者到資料庫
     const db_result = await db_caller.sign_up({user_id,nickname});
+
+    user_id,
+    user_name,
+    channel,
+    channel_user_id,
+    email
 
     let repsonse;
 
@@ -127,5 +134,3 @@ export const getUserProfile = async (req, res) => {
       res.status(200).json(response);
   })
 };
-
-export const 
