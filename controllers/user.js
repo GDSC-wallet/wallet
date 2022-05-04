@@ -34,16 +34,17 @@ export const signUp = async (req, res) => {
     const user_id = decodedData?.user_id;
     const { nickname } = req.body;
 
+    channel="GOOGLE"
+    channel_id="1",
+    email="test@gmail.com",
+    username="william",
+    
     //註冊使用者到資料庫
-    const db_result = await db_caller.sign_up({user_id,nickname});
+    // const db_result = await db_caller.sign_up({user_id,nickname});
 
-    user_id,
-    user_name,
-    channel,
-    channel_user_id,
-    email
-
-    let repsonse;
+    db_result={
+      success:true
+    }
 
     if(db_result.success){
       response = {
