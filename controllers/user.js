@@ -1,6 +1,8 @@
 import db_caller from "../db_interact/db_caller.js";
 import jwt from "jsonwebtoken";
 
+const secret = 'GDSC_WALLET';
+
 //****************************註冊使用者*****************************
 // URL: "/api/signup"
 // Method: POST
