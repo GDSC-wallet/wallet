@@ -36,16 +36,11 @@ export const signUp = async (req, res) => {
     //解碼jwt取得user_id
     const decodedData = jwt.verify(token, secret);
     console.log('decodedData :', decodedData);
-    const user_id = decodedData?.user_id;
+    const {channel,channel_id,email,username,user_id} = decodedData;
     const { nickname } = req.body;
 
-    channel="GOOGLE"
-    channel_id="1",
-    email="test@gmail.com",
-    username="william",
-
     //註冊使用者到資料庫
-    // const db_result = await db_caller.sign_up({user_id,nickname});
+    const db_result = await db_caller.sign_up({channel, channel_id, email, username, nickname});
 
     db_result={
       success:true
