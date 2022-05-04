@@ -1,5 +1,4 @@
 import db_dealer from './db_dealer.js'
-const port = 3000
 
 // 問資料庫user是否存在
 const authenticate = (id) => {
@@ -17,6 +16,8 @@ const authenticate = (id) => {
             });
     });
 }
+
+// about user
 const call_user_data = (user_id) => {
     return new Promise( async (resolve, reject) => {
         var user_status;
@@ -53,10 +54,13 @@ const call_user_data = (user_id) => {
                 for(let i = 0; i < results.length;) {
                     // construct a wallet object
                     var wallet_obj = {
-                        wallet_id: results[i].wallet_id,
-                        wallet_name: results[i].wallet_name,
-                        wallet_total: results[i].wallet_total,
-                        selected: results[i].selected,   // only true for now testing
+                        "wallet_id": results[i].wallet_id,
+                        "wallet_name": results[i].wallet_name,
+                        "wallet_title": results[i].wallet_title,
+                        "wallet_total": results[i].wallet_total,
+                        "wallet_description": results[i].wallet_description,
+                        "selected": results[i].selected,
+                        "record_num": results[i].record_num,
                         records:[]
                     };
                     // construct a record array
@@ -90,13 +94,9 @@ const call_user_data = (user_id) => {
                     console.log(wallet_obj);
                     Data.data.wallets.push(wallet_obj);
                 }
-                console.log("Data is: ");
                 console.log(Data);
                 response = Data;
                 resolve(response);
-
-                //console.log(results);
-                //resolve(results);
             }).catch(err => {
                 console.log('ERROR: ' + err.message);
                 reject(err);
@@ -104,6 +104,7 @@ const call_user_data = (user_id) => {
     });
 }
 
+// about wallet
 const call_wallet = (wallet_id) => {
     return new Promise( async (resolve, reject) => {
         await db_dealer.get_wallet(wallet_id)
@@ -117,6 +118,7 @@ const call_wallet = (wallet_id) => {
                         "wallet_title": results[0].wallet_title,
                         "wallet_total": results[0].wallet_total,
                         "wallet_description": results[0].wallet_description,
+                        "record_num": results[0].record_num,
                         "records": []
                     }
                 };
@@ -145,23 +147,18 @@ const call_wallet = (wallet_id) => {
     })
 }
 
-const call_record = (record_id) => {
+const sign_up = (channel, channel_id, email, username, nickname) => {
     return new Promise( async (resolve, reject) => {
-        await db_dealer.get_record(record_id)
-            .then(results => {
-                var response = {
-                    "success": true,
-                    "message": "取得record資料成功",
-                    "data": results
-                }
-                console.log(response);
-                resolve(response);
+        await db_dealer.insert_user(channel, channel_id, email, username, nickname)
+            .then(response => {
+                console.log("user inserted successfully.");
+                resolve();
             })
-            .catch(err => {
-                console.log('ERROR: ' + err.message);
+            .catch(err => [
+                console.log("user inserted failed.");
                 reject(err);
-            });
-    })
+            ])
+    });
 }
 
 const Insert_wallet = (user_id, wallet_name, wallet_title, wallet_description) => {
@@ -206,6 +203,68 @@ const Delete_wallet = (user_id, wallet_id) => {
     });
 }
 
-export default { call_wallet, call_user_data, authenticate, Insert_wallet, Update_wallet, Delete_wallet };
+// about record
+const call_record = (record_id) => {
+    return new Promise( async (resolve, reject) => {
+        await db_dealer.get_record(record_id)
+            .then(results => {
+                var response = {
+                    "success": true,
+                    "message": "取得record資料成功",
+                    "data": results
+                }
+                console.log(response);
+                resolve(response);
+            })
+            .catch(err => {
+                console.log('ERROR: ' + err.message);
+                reject(err);
+            });
+    })
+}
+
+const Insert_record = (record_wallet_id, wallet_record_tag_id, record_ordinary, record_name, record_description, record_amount, record_type, record_date) => {
+    return new Promise( async (resolve, reject) => {
+        await db_dealer.insert_record(record_wallet_id, wallet_record_tag_id, record_ordinary, record_name, record_description, record_amount, record_type, record_date)
+            .then(response => {
+                console.log("record inserted successfully.");
+                resolve();
+            })
+            .catch(err => {
+                console.log("record inserted failed.");
+                reject(err);
+            })
+    });
+}
+
+const Update_record = (record_id, wallet_record_tag_id, record_ordinary, record_name, record_description, record_amount, record_type, record_date) => {
+    return new Promise( async (resolve, reject) => {
+        await db_dealer.update_wallet(record_id, wallet_record_tag_id, record_ordinary, record_name, record_description, record_amount, record_type, record_date)
+            .then(response => {
+                console.log("record updated successfully.");
+                resolve();
+            })
+            .catch(err => {
+                console.log("record updated failed.");
+                reject(err);
+            })
+    });
+}
+
+const Delete_record = (record_id, record_wallet_id, record_amount) => {
+    return new Promise( async (resolve, reject) => {
+        await db_dealer.delete_record(record_id, record_wallet_id, record_amount)
+            .then(response => {
+                console.log("record deleted successfully.");
+                resolve();
+            })
+            .catch(err => {
+                console.log("record deleted failed.");
+                reject(err);
+            })
+    });
+}
+
+export default { call_wallet, call_user_data, call_record, authenticate, sign_up,  Insert_wallet, Update_wallet, Delete_wallet, Insert_record, Update_record };
 
 // 暫時先不做關閉資料庫的動作

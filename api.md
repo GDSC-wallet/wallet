@@ -41,7 +41,10 @@
             {
                 "wallet_id": "wallet_2c36aaad-2d40-48cb-9e36-9d3a841ffb37",
                 "wallet_name": "my-wallet",
+                "wallet_title": "some title",
+                "wallet_total": "wallet total",
                 "selected": true,
+                "record_num": "quantity of records",
                 "records": [
                     {
                         "record_id":"record_0e0d10d0-531b-4f0d-abc2-f157b9f27dfd",
@@ -118,6 +121,7 @@
         "wallet_title": "wallet-title",
         "wallet_total": "wallet-total",
         "wallet_description": "my-wallet-description",
+        "record_num": "quantity of records",
         "records": [
             {
                 "record_id":"record_0e0d10d0-531b-4f0d-abc2-f157b9f27dfd",
