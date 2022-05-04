@@ -27,9 +27,11 @@ const secret = 'GDSC_WALLET';
 export const signUp = async (req, res) => {
   // console.log('req :', req);
   console.log("req.user",req.user)
+  console.log('req.headers :', req.headers);
   try{
     //從request header取得jwt
     const token = req.headers.authorization.split(" ")[1];
+    console.log('token :', token);
     
     //解碼jwt取得user_id
     const decodedData = jwt.verify(token, secret);
