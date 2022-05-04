@@ -1,7 +1,7 @@
 import db_caller from "../db_interact/db_caller.js";
 
 export const get_wallet = async (req, res) => {
-    await db_caller.call_wallet(req.body.wallet_id) // debug用 "wallet_dacbbdb7-4e2b-47ed-ad42-da878ab81890"
+    await db_caller.call_wallet(/*req.body.wallet_id*/"wallet_dacbbdb7-4e2b-47ed-ad42-da878ab81890")
         .then(response => {
             res.status(200).json(response);
         })
@@ -17,7 +17,7 @@ export const get_wallet = async (req, res) => {
 
 export const insert_wallet = async (req, res) => {
     // debug用 "user_7552f100-eba2-44e1-bc7f-7a1690fd4913", "test wallet", "test", "test"
-    await db_caller.Insert_wallet(req.body.user_id, req.body.wallet_name, req.body.wallet_title, req.body.wallet_description)
+    await db_caller.Insert_wallet(/*user_7552f100-eba2-44e1-bc7f-7a1690fd4913","test_wallet","test","test"*/req.body.user_id, req.body.wallet_name, req.body.wallet_title, req.body.wallet_description)
         .then(result => {
             var response = {
                 "success": true,

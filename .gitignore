@@ -1,4 +1,5 @@
 /.env
+# /.env
 .env
 .vscode
 .aws
@@ -24,3 +25,8 @@ access.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+#vim plugin's file
+tags
+./controllers/tags
+./db_interact/tags
