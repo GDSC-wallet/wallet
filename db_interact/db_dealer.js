@@ -73,37 +73,55 @@ const user_exist = async (id) => {
 /************** INSERT, UPDATE and DELETE database function *******************/
 
 const insert_user = async (channel, channel_id, email, username, nickname) => {
-    // generate uuid for the user
-    var id = 'user_' + uuid.v4();
-    var sql = "INSERT INTO user VALUE(?,?,?,?,?,?,NOW(),NOW(),0)";
-    connection.query(sql, [id, channel, channel_id, email, username, nickname], (err, results, fields) => {
-        if(err)
-            console.log("db: user insertion error: " + err.message);
-        else
-            console.log("db: user insert successfully.");
+    return new Promise( async (resolve, reject) => {
+        // generate uuid for the user
+        var id = 'user_' + uuid();
+        var sql = "INSERT INTO user VALUE(?,?,?,?,?,?,NOW(),NOW(),0)";
+        await connection.query(sql, [id, channel, channel_id, email, username, nickname], (err, results, fields) => {
+            if(err) {
+                console.log("db: user insertion error: " + err.message);
+                reject(err);
+            }
+            else
+                console.log("db: user insert successfully.");
+        });
+        // 預設給user一個wallet
+        await insert_wallet(id, 'preset_wallet', 'preset_wallet', 'This is a preset_wallet for user')
+            .then(result => {
+                resolve();
+            })
+            .catch(err => {
+                reject(err);
+            })
     });
-    // 預設給user一個wallet
-    await insert_wallet(id, 'preset_wallet', 'preset_wallet', 'This is a preset_wallet for user');
 };
 
 // id判斷用,channel,channel_id不給改
 const update_user = async (id, email, username, nickname, created_time) => {
-    var sql = "UPDATE user SET email = ?, username = ?, nickname = ?, created_time = ?, updated_time = NOW() WHERE id = ?";
-    connection.query(sql, [email, username, nickname, created_time], id, (err, results, fields) => {
-        if(err)
-            console.log("db: user update error: " + err.message);
-        else
-            console.log("db: user update successfully.");
+    return new Promise( async(resolve, reject) => {
+        var sql = "UPDATE user SET email = ?, username = ?, nickname = ?, created_time = ?, updated_time = NOW() WHERE id = ?";
+        await connection.query(sql, [email, username, nickname, created_time], id, (err, results, fields) => {
+            if(err) {
+                print_error(err);
+                reject(err);
+            }
+            else 
+                resolve();
+        });
     });
 };
 
 const delete_user = async (id) => {
-    var sql = "DELETE FROM user WHERE id = ?";
-    connection.query(sql, id, (err, results, fields) => {
-        if(err)
-            console.log("db: user deletion error: " + err.message);
-        else
-            console.log("db: user deleted successfully.");
+    return new Promise( async(resolve, reject) => {
+        var sql = "DELETE FROM user WHERE id = ?";
+        await connection.query(sql, id, (err, results, fields) => {
+            if(err) {
+                print_error(err);
+                reject(err);
+            }
+            else
+                resolve();
+        });
     });
     // user有的wallet以foreign key on delete cascade一併刪除
 };

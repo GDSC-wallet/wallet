@@ -97,18 +97,22 @@ router.get(
 router.get("/google/success", isLoggedIn, (req, res) => {
     
     //製作jwt
-    const { email , user_id } = req.user.profile;
-    const token = jwt.sign( { user_id: user_id }, secret, { expiresIn: "24h" } );
-    console.log('token :', token);
+    // console.log('req.user :', req.user);
+    const { sub , name,email } = req.user.profile._json;
+    const {  user_id } = req.user.profile;
+    const channel="GOOGLE";
+    const channel_id=sub;
+    const username=name;
+    const token = jwt.sign( { channel, channel_id, email, username, user_id }, secret, { expiresIn: "24h" } );
 
     res.header('Authorization', token);
     
     //若尚未註冊，回到前端註冊頁
     if(req.user==="USER_NOT_EXIST_IN_DB"){
-        res.redirect("http://localhost:3000/signup")
+        res.redirect("http://localhost:3000/signup"+`?token=${token}`);
     }
     else{
-        res.redirect("http://localhost:3000")
+        res.redirect("http://localhost:3000"+`?token=${token}`);
     }
 });
 

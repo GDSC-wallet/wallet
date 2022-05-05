@@ -1,4 +1,7 @@
 import db_caller from "../db_interact/db_caller.js";
+import jwt from "jsonwebtoken";
+
+const secret = 'GDSC_WALLET';
 
 //****************************註冊使用者*****************************
 // URL: "/api/signup"
@@ -22,43 +25,43 @@ import db_caller from "../db_interact/db_caller.js";
 //     "data": {}
 // }
 export const signUp = async (req, res) => {
-  
-  try{
-    //從request header取得jwt
-    const token = req.headers.authorization.split(" ")[1];
-    
-    //解碼jwt取得user_id
-    const decodedData = jwt.verify(token, secret);
-    console.log('decodedData :', decodedData);
-    const user_id = decodedData?.user_id;
-    const { nickname } = req.body;
 
-    //註冊使用者到資料庫
-    const db_result = await db_caller.sign_up({user_id,nickname});
+    // console.log('req :', req);
+    console.log("req.user",req.user)
+    console.log('req.headers :', req.headers);
 
-    let repsonse;
+    try{
+        //從request header取得jwt
+        const token = req.headers.authorization;
+        console.log('token :', token);
 
-    if(db_result.success){
-      response = {
-        "success": true,
-        "message": "註冊使用者成功",
-        "data": db_result.data
-      }
+        //解碼jwt取得user_id
+        const decodedData = jwt.verify(token, secret);
+        const {channel,channel_id,email,username,user_id} = decodedData;
+        const { nickname } = req.body;
+
+        //註冊使用者到資料庫
+        await db_caller.sign_up({channel, channel_id, email, username, nickname})
+            .then(result => {
+                var response = {
+                    "success": true,
+                    "message": "註冊使用者成功",
+                    "data": db_result.data
+                }
+                res.status(201).json(response);
+            })
+            .catch(err => {
+                var response = {
+                    "success": false,
+                    "message": "註冊使用者失敗",
+                    "data": undefined
+                }
+                res.status(201).json(response);
+            })
     }
-    else{
-      response = {
-        "success": false,
-        "message": "註冊使用者失敗",
-        "data": undefined
-      }
+    catch(err) {
+        throw err;
     }
-
-    //回傳結果
-    res.status(201).json(response);
-  }
-  catch(err){
-    throw err;
-  }
 };
 
 //****************************取得使用者資料*****************************
@@ -106,26 +109,24 @@ export const signUp = async (req, res) => {
 //     "data": {}
 // }
 export const getUserProfile = async (req, res) => {
-  //從request header取得jwt
-  //const token = req.headers.authorization.split(" ")[1];
-  
-  //解碼jwt取得user_id
-  //const decodedData = jwt.verify(token, secret);
-  //const user_id = decodedData?.user_id;
+    //從request header取得jwt
+    //const token = req.headers.authorization.split(" ")[1];
 
-  //從資料庫取得使用者資料
-  await db_caller.call_user_data("user_7552f100-eba2-44e1-bc7f-7a1690fd4913")   // 測試用,之後改為req.body.user_id
-  .then(response => {
-      res.status(200).json(response);
-  })
-  .catch(result => {
-      var response = {
-          "success": false,
-          "message": "取得使用者資料失敗",
-          "data":{}
-      }
-      res.status(200).json(response);
-  })
+    //解碼jwt取得user_id
+    //const decodedData = jwt.verify(token, secret);
+    //const user_id = decodedData?.user_id;
+
+    //從資料庫取得使用者資料
+    await db_caller.call_user_data("user_7552f100-eba2-44e1-bc7f-7a1690fd4913")   // 測試用,之後改為req.body.user_id
+        .then(response => {
+            res.status(200).json(response);
+        })
+        .catch(result => {
+            var response = {
+                "success": false,
+                "message": "取得使用者資料失敗",
+                "data":{}
+            }
+            res.status(200).json(response);
+        })
 };
-
-export const 
