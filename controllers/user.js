@@ -37,11 +37,11 @@ export const signUp = async (req, res) => {
 
         //解碼jwt取得user_id
         const decodedData = jwt.verify(token, secret);
-        const {channel,channel_id,email,username,user_id} = decodedData;
+        const {email,username,user_id} = decodedData;
         const { nickname } = req.body;
 
         //註冊使用者到資料庫
-        await db_caller.sign_up({channel, channel_id, email, username, nickname})
+        await db_caller.sign_up({email, username, nickname})
             .then(result => {
                 var response = {
                     "success": true,

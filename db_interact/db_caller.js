@@ -147,9 +147,9 @@ const call_wallet = (wallet_id) => {
     })
 }
 
-const sign_up = (channel, channel_id, email, username, nickname) => {
+const sign_up = (email, username, nickname) => {
     return new Promise( async (resolve, reject) => {
-        await db_dealer.insert_user(channel, channel_id, email, username, nickname)
+        await db_dealer.insert_user(email, username, nickname)
             .then(response => {
                 console.log("user inserted successfully.");
                 resolve();
@@ -265,18 +265,69 @@ const Delete_record = (record_id, record_wallet_id, record_amount) => {
     });
 }
 
-const Insert_tag = () => {
-    
+// tag
+
+const call_tag = (tag_id) => {
+    return new Promise( async (resolve, reject) => {
+        await db_dealer.get_tag(tag_id)
+            .then(results => {
+                var response = {
+                    "success": true,
+                    "message": "取得tag資料成功",
+                    "data": results
+                }
+                console.log(response);
+                resolve(response);
+            })
+            .catch(err => {
+                console.log("ERROR: " + err.message);
+                reject(err);
+            });
+    })
 }
 
-const Update_tag = () => {
-
+const Insert_tag = (tag_wallet_id, tag_ordinary, tag_name, tag_type, tag_color) => {
+    return new Promise( async (resolve, reject) => {
+        await db_dealer.insert_tag(tag_wallet_id, tag_ordinary, tag_name, tag_type, tag_color)
+            .then(response => {
+                console.log("tag inserted successfully.");
+                resolve();
+            })
+            .catch(err => {
+                console.log("tag inserted failed.");
+                reject(err);
+            })
+    });
 }
 
-const Delete_tag = () => {
-
+const Update_tag = (tag_ordinary, tag_name, tag_type, tag_color) => {
+    return new Promise( async (resolve, reject) => {
+        await db_dealer.update_tag(tag_ordinary, tag_name, tag_type, tag_color)
+            .then(response => {
+                console.log("tag updated successfully.");
+                resolve();
+            })
+            .catch(err => {
+                console.log("tag updated failed.");
+                reject(err);
+            })
+    })
 }
 
-export default { call_wallet, call_user_data, call_record, authenticate, sign_up,  Insert_wallet, Update_wallet, Delete_wallet, Insert_record, Update_record, Delete_record, Insert_tag, Update_tag, Delete_tag };
+const Delete_tag = (tag_id) => {
+    return new Promise( async (resolve, reject) => {
+        await db_dealer.delete_tag(tag_id)
+            .then(response => {
+                console.log("tag deleted successfully.");
+                resolve();
+            })
+            .catch(err => {
+                console.log("tag deleted failed.");
+                reject(err);
+            })
+    })
+}
+
+export default { call_wallet, call_user_data, call_record, authenticate, sign_up,  Insert_wallet, Update_wallet, Delete_wallet, Insert_record, Update_record, Delete_record, Insert_tag, Update_tag, Delete_tag, call_tag };
 
 // 暫時先不做關閉資料庫的動作
