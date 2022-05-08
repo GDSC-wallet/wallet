@@ -83,27 +83,28 @@ const user_exist = async (id) => {
 
 /************** INSERT, UPDATE and DELETE database function *******************/
 
-const insert_user = async (email, username, nickname) => {
+const insert_user = async (channel, channel_id, email, username, nickname) => {
     return new Promise( async (resolve, reject) => {
         // generate uuid for the user
         var id = 'user_' + uuid();
-        var sql = "INSERT INTO user VALUE(?,?,?,?,NOW(),NOW(),0)";
-        await connection.query(sql, [id, email, username, nickname], (err, results, fields) => {
+        var sql = "INSERT INTO user VALUE(?,?,?,?,?,?,NOW(),NOW(),0)";
+        await connection.query(sql, [id, channel, channel_id, email, username, nickname], async (err, results, fields) => {
             if(err) {
-                console.log("db: user insertion error: " + err.message);
+                print_error(err);
                 reject(err);
             }
-            else
-                console.log("db: user insert successfully.");
+            else {
+                // 預設給user一個wallet
+                await insert_wallet(id, 'preset_wallet', 'preset_wallet', 'This is a preset_wallet for user')
+                    .then(results => {
+                        resolve();
+                    })
+                    .catch(err => {
+                        reject(err);
+                    })
+                console.log("user and default wallet inserted successfully.");
+            }
         });
-        // 預設給user一個wallet
-        await insert_wallet(id, 'preset_wallet', 'preset_wallet', 'This is a preset_wallet for user')
-            .then(result => {
-                resolve();
-            })
-            .catch(err => {
-                reject(err);
-            })
     });
 };
 
