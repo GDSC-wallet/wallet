@@ -39,13 +39,17 @@ export const signUp = async (req, res) => {
         const {channel,channel_id,email,username,user_id} = decodedData;
         const { nickname } = req.body;
 
+        if(nickname===undefined||nickname===nullnickname==="") {
+            res.status(400).json({success:false,message:"nickname is required.",data:{}});
+        }
+
         //註冊使用者到資料庫
         await db_caller.sign_up(channel, channel_id, email, username, nickname)
             .then(result => {
                 var response = {
                     "success": true,
                     "message": "註冊使用者成功",
-                    "data": db_result.data
+                    "data": result
                 }
                 res.status(201).json(response);
             })
