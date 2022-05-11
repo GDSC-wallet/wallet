@@ -51,6 +51,7 @@ export const signUp = async (req, res) => {
                 res.status(201).json(response);
             })
             .catch(err => {
+            console.log('err :', err);
                 var response = {
                     "success": false,
                     "message": "註冊使用者失敗",
