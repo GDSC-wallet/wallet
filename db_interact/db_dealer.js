@@ -99,7 +99,7 @@ const insert_user = async (id, channel, channel_id, email, username, nickname) =
                 const wallet_title = "預設錢包";
                 const wallet_description = "這是預設錢包";
                 var sql2 = "START TRANSACTION; INSERT INTO wallet VALUE(?,?,?,?,?,?,?,NOW(),NOW(),0); UPDATE user SET wallet_num = wallet_num + 1 WHERE id = ?; UPDATE wallet SET selected = 0 WHERE selected = 1; UPDATE wallet SET selected = 1 WHERE wallet_id = ?; COMMIT";
-                await connection.query(sql, [wallet_id, id, 0, wallet_name, 0, wallet_title, wallet_description, id, wallet_id], (err, results, fields) => {
+                await connection.query(sql2, [wallet_id, id, 0, wallet_name, 0, wallet_title, wallet_description, id, wallet_id], (err, results, fields) => {
                     if(err) {
                         print_error(err);
                         reject(err);
