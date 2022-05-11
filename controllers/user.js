@@ -110,7 +110,7 @@ export const signUp = async (req, res) => {
 // }
 export const getUserProfile = async (req, res) => {
     //從request header取得jwt
-    const token = req.headers.authorization.split(" ")[1];
+    const token = req.headers.authorization;
 
     //解碼jwt取得user_id
     const decodedData = jwt.verify(token, secret);
