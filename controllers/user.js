@@ -39,7 +39,7 @@ export const signUp = async (req, res) => {
         const {channel,channel_id,email,username,user_id} = decodedData;
         const { nickname } = req.body;
 
-        if(nickname===undefined||nickname===nullnickname==="") {
+        if(nickname===undefined||nickname===null||nickname==="") {
             res.status(400).json({success:false,message:"nickname is required.",data:{}});
         }
 
