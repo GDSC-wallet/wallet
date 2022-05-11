@@ -34,6 +34,7 @@ export const signUp = async (req, res) => {
         const decodedData = jwt.verify(token, secret);
         const {email,username,user_id} = decodedData;
         const { nickname } = req.body;
+        const channel="GOOGLE";
 
         if(nickname===undefined||nickname===null||nickname==="") {
             res.status(400).json({success:false,message:"nickname is required.",data:{}});
