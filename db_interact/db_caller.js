@@ -149,7 +149,7 @@ const call_wallet = (wallet_id) => {
 
 const sign_up = (id, channel, channel_id, email, username, nickname) => {
     return new Promise( async (resolve, reject) => {
-        await db_dealer.insert_user(id, email, channel, channel_id, username, nickname)
+        await db_dealer.insert_user(id, channel, channel_id, email, username, nickname)
             .then(response => {
                 console.log("user inserted successfully.");
                 resolve();
