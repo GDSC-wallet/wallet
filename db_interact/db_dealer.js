@@ -109,6 +109,7 @@ const insert_user = async (id, channel, channel_id, email, username, nickname) =
                     }
                 })
                 console.log("user and default wallet inserted successfully.");
+                resolve();
             }
         });
     });
