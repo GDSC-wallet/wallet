@@ -83,11 +83,10 @@ const user_exist = async (id) => {
 
 /************** INSERT, UPDATE and DELETE database function *******************/
 
-const insert_user = async (channel, channel_id, email, username, nickname) => {
+const insert_user = async (id, channel, channel_id, email, username, nickname) => {
     return new Promise( async (resolve, reject) => {
         // generate uuid for the user
-        var id = 'user_' + uuid();
-        var sql = "INSERT INTO user VALUE(?,?,?,?,?,?,NOW(),NOW(),0)";
+        var sql = "START TRANSACTION; INSERT INTO user VALUE(?,?,?,?,?,?,NOW(),NOW(),0)";
         await connection.query(sql, [id, channel, channel_id, email, username, nickname], async (err, results, fields) => {
             if(err) {
                 print_error(err);
@@ -95,13 +94,17 @@ const insert_user = async (channel, channel_id, email, username, nickname) => {
             }
             else {
                 // 預設給user一個wallet
-                await insert_wallet(id, 'preset_wallet', 'preset_wallet', 'This is a preset_wallet for user')
-                    .then(results => {
-                        resolve();
-                    })
-                    .catch(err => {
+                var wallet_id = "wallet_" + uuid();
+                var sql2 = "START TRANSACTION; INSERT INTO wallet VALUE(?,?,?,?,?,?,?,NOW(),NOW(),0); UPDATE user SET wallet_num = wallet_num + 1 WHERE id = ?; UPDATE wallet SET selected = 0 WHERE selected = 1; UPDATE wallet SET selected = 1 WHERE wallet_id = ?; COMMIT";
+                await connection.query(sql, [wallet_id, id, 0, wallet_name, 0, wallet_title, wallet_description, id, wallet_id], (err, results, fields) => {
+                    if(err) {
+                        print_error(err);
                         reject(err);
-                    })
+                    }
+                    else {
+                         
+                    }
+                })
                 console.log("user and default wallet inserted successfully.");
             }
         });
@@ -147,6 +150,14 @@ const insert_wallet = async (user_id, wallet_name, wallet_title, wallet_descript
                 print_error(err);
                 reject(err);
             } else {
+                // 也許要預設給某些tag?
+                // await insert_tag()
+                // .then(result => {
+                //      resolve();
+                // })
+                // .catch(err => {
+                //      reject(err);
+                // })
                 resolve();
             }
         });
@@ -186,7 +197,7 @@ const delete_wallet = async (user_id, wallet_id) => {
 // sql error
 const insert_record = async (record_wallet_id, wallet_record_tag_id, record_ordinary, record_name, record_description, record_amount, record_type, record_date) => {
     return new Promise( async (resolve, reject) => {
-        var record_id = "record_" + uuid.v4();
+        var record_id = "record_" + uuid();
         var sql = "START TRANSACTION; INSERT INTO wallet_record VALUE(?,?,?,?,?,?,?,?,?,NOW(),NOW()); UPDATE wallet SET record_num = record_num + 1, wallet_total = wallet_total + ? WHERE wallet_id = ?; COMMIT";
         await connection.query(sql, [record_id, record_wallet_id, wallet_record_tag_id, record_ordinary, record_name, record_description, record_amount, record_type, record_date, record_amount, record_wallet_id], (err, results, fields) => {
             if(err) {
@@ -231,7 +242,7 @@ const delete_record = async (record_id, record_wallet_id, record_amount) => {
 
 const insert_tag = async (tag_wallet_id, tag_ordinary, tag_name, tag_type, tag_color) => {
     return new Promise( async (resolve, reject) => {
-        var tag_id = "tag_" + uuid.v4();
+        var tag_id = "tag_" + uuid();
         var sql = "INSERT INTO wallet_record_tag_id VALUE(?,?,?,?,?,NOW(),NOW(),?)";
         await connection.query(sql, [tag_id, tag_wallet_id, tag_ordinary, tag_name, tag_type, tag_color], (err, results, fields) => {
             if(err) {
@@ -280,7 +291,7 @@ const db_dealer = {
     insert_user, update_user, delete_user,
     insert_wallet, update_wallet, delete_wallet,
     insert_tag, update_tag, delete_tag,
-    get_user, get_wallet, user_exist, get_record,
+    get_user, get_wallet, user_exist, get_record, get_tag,
     close_sql_connection
 }
 

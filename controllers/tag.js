@@ -16,7 +16,7 @@ export const get_tag = async (req, res) => {
 };
 
 export const insert_tag = async (req, res) => {
-    await db_caller.Insert_tag(req.body.tag_id, req.body.tag_ordinary, req.body.tag_name, req.body.tag_type, req.body.tag_color)
+    await db_caller.Insert_tag(req.body.tag_wallet_id, req.body.tag_ordinary, req.body.tag_name, req.body.tag_type, req.body.tag_color)
         .then(result => {
             var response = {
                 "success": true,
