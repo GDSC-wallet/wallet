@@ -27,7 +27,6 @@ const secret = 'GDSC_WALLET';
 export const signUp = async (req, res) => {
 
     // console.log('req :', req);
-    console.log("req.user",req.user)
     console.log('req.headers :', req.headers);
 
     try{
@@ -41,7 +40,7 @@ export const signUp = async (req, res) => {
         const { nickname } = req.body;
 
         //註冊使用者到資料庫
-        await db_caller.sign_up({channel, channel_id, email, username, nickname})
+        await db_caller.sign_up(channel, channel_id, email, username, nickname)
             .then(result => {
                 var response = {
                     "success": true,

@@ -73,6 +73,7 @@ const user_exist = async (id) => {
 /************** INSERT, UPDATE and DELETE database function *******************/
 
 const insert_user = async (channel, channel_id, email, username, nickname) => {
+    console.log('channel, channel_id, email, username, nickname :', channel, channel_id, email, username, nickname);
     return new Promise( async (resolve, reject) => {
         // generate uuid for the user
         var id = 'user_' + uuid();
