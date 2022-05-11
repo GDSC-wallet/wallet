@@ -1,10 +1,14 @@
 !_TAG_FILE_SORTED	2	/0=unsorted, 1=sorted, 2=foldcase/
 decodedData	/home/roy/codes/GDSC_wallet/backend/controllers/user.js	/^        const decodedData = jwt.verify(token, secret);$/;"	C	language:JavaScript
+delete_tag	/home/roy/codes/GDSC_wallet/backend/controllers/tag.js	/^export const delete_tag = async (req, res) => {$/;"	C	language:JavaScript
 delete_wallet	/home/roy/codes/GDSC_wallet/backend/controllers/wallet.js	/^export const delete_wallet = async (req, res) => {$/;"	C	language:JavaScript
 getUserProfile	/home/roy/codes/GDSC_wallet/backend/controllers/user.js	/^export const getUserProfile = async (req, res) => {$/;"	C	language:JavaScript
+get_tag	/home/roy/codes/GDSC_wallet/backend/controllers/tag.js	/^export const get_tag = async (req, res) => {$/;"	C	language:JavaScript
 get_wallet	/home/roy/codes/GDSC_wallet/backend/controllers/wallet.js	/^export const get_wallet = async (req, res) => {$/;"	C	language:JavaScript
+insert_tag	/home/roy/codes/GDSC_wallet/backend/controllers/tag.js	/^export const insert_tag = async (req, res) => {$/;"	C	language:JavaScript
 insert_wallet	/home/roy/codes/GDSC_wallet/backend/controllers/wallet.js	/^export const insert_wallet = async (req, res) => {$/;"	C	language:JavaScript
 secret	/home/roy/codes/GDSC_wallet/backend/controllers/user.js	/^const secret = 'GDSC_WALLET';$/;"	C	language:JavaScript
 signUp	/home/roy/codes/GDSC_wallet/backend/controllers/user.js	/^export const signUp = async (req, res) => {$/;"	C	language:JavaScript
 token	/home/roy/codes/GDSC_wallet/backend/controllers/user.js	/^        const token = req.headers.authorization;$/;"	C	language:JavaScript
+update_tag	/home/roy/codes/GDSC_wallet/backend/controllers/tag.js	/^export const update_tag = async (req, res) => {$/;"	C	language:JavaScript
 update_wallet	/home/roy/codes/GDSC_wallet/backend/controllers/wallet.js	/^export const update_wallet = async (req, res) => {$/;"	C	language:JavaScript
