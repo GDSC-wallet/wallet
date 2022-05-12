@@ -80,6 +80,7 @@ const get_tag = (tag_id) => {
 };
 
 const user_exist = async (id) => {
+    console.log('id :', id);
     var sql = "SELECT * FROM user WHERE id = ?";
     return new Promise( async (resolve, reject) => {
         await connection.query(sql, id, (err, results, fields) => {
