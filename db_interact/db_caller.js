@@ -4,8 +4,8 @@ import db_dealer from './db_dealer.js'
 const authenticate = (id) => {
     return new Promise( async(resolve, reject) => {
         await db_dealer.user_exist(id)
-        console.log('results :', results);
-            .then(results => {
+        .then(results => {
+                console.log('results :', results);
                 if(results.length == 0) {
                     resolve(false);
                 } else {
