@@ -40,7 +40,7 @@ export const signUp = async (req, res) => {
         }
 
         //註冊使用者到資料庫
-        await db_caller.sign_up({id, channel, channel_id, email, username, nickname})
+        await db_caller.sign_up({user_id, channel, channel_id, email, username, nickname})
             .then(result => {
                 var response = {
                     "success": true,
@@ -60,7 +60,13 @@ export const signUp = async (req, res) => {
             })
     }
     catch(err) {
-        throw err;
+        console.log(err);
+        var response = {
+        "success": false,
+        "message": "註冊使用者失敗",
+        "data": undefined
+        }
+        res.status(400).json(response);
     }
 };
 

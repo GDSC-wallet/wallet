@@ -57,10 +57,13 @@ passport.use(
         catch(err){
 
           //寫到紀錄檔，尚未實作
-          console.log('err :', err);
-
-          //把error throw出來，express預設會接住err並自動回傳400,
-          throw err
+          console.log(err);
+          var response = {
+            "success": false,
+            "message": "註冊使用者失敗",
+            "data": undefined
+          }
+          res.status(400).json(response);
         }
     }
   )
