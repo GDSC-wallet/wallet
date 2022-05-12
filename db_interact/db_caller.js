@@ -239,7 +239,7 @@ const Insert_record = (record_wallet_id, wallet_record_tag_id, record_ordinary, 
 
 const Update_record = (record_id, wallet_record_tag_id, record_ordinary, record_name, record_description, record_amount, record_type, record_date) => {
     return new Promise( async (resolve, reject) => {
-        await db_dealer.update_wallet(record_id, wallet_record_tag_id, record_ordinary, record_name, record_description, record_amount, record_type, record_date)
+        await db_dealer.update_record(record_id, wallet_record_tag_id, record_ordinary, record_name, record_description, record_amount, record_type, record_date)
             .then(response => {
                 console.log("record updated successfully.");
                 resolve();
