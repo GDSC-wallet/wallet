@@ -6,7 +6,7 @@ const authenticate = (id) => {
         await db_dealer.user_exist(id)
         .then(results => {
                 console.log('results :', results);
-                if(results.length == 0) {
+                if(results.length === 0) {
                     resolve(false);
                 } else {
                     resolve(true);

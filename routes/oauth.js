@@ -38,6 +38,7 @@ passport.use(
 
           //確認此使用者是否已經存在WALLET的DB
           const user_exist = await db_caller.authenticate(user_id); 
+          console.log('user_exist :', user_exist);
      
           if(user_exist){
               return done(null, 
