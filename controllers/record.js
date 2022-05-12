@@ -11,7 +11,7 @@ export const get_record = async (req, res) => {
                 "message": "取得record資料失敗 error: " + err.message,
                 "data": {}
             }
-            res.status(201).json(response);
+            res.status(400).json(response);
         })
 };
 
@@ -31,7 +31,7 @@ export const insert_record = async (req, res) => {
                 "message": "創建record失敗 error: " + err.message,
                 "data": {}
             }
-            res.status(201).json(response);
+            res.status(400).json(response);
         })
 };
 export const update_record = async (req, res) => { 
@@ -50,7 +50,7 @@ export const update_record = async (req, res) => {
                 "message": "更新record失敗 error: " + err.message,
                 "data": {}
             }
-            res.status(201).json(response);
+            res.status(400).json(response);
         })
 };
 
@@ -70,6 +70,6 @@ export const delete_record = async (req, res) => {
                 "message": "刪除record失敗 error: " + err.message,
                 "data": {}
             }
-            res.status(201).json(response);
+            res.status(400).json(response);
         })
 };

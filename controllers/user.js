@@ -26,19 +26,18 @@ const secret = 'GDSC_WALLET';
 // }
 export const signUp = async (req, res) => {
 
-    // console.log('req :', req);
-    console.log("req.user",req.user)
-    console.log('req.headers :', req.headers);
-
     try{
         //從request header取得jwt
         const token = req.headers.authorization;
-        console.log('token :', token);
 
         //解碼jwt取得user_id
         const decodedData = jwt.verify(token, secret);
-        const {email,username,user_id} = decodedData;
+        const {channel,channel_id,email,username,user_id} = decodedData;
         const { nickname } = req.body;
+
+        if(nickname===undefined||nickname===null||nickname==="") {
+            res.status(400).json({success:false,message:"nickname is required.",data:{}});
+        }
 
         //註冊使用者到資料庫
         await db_caller.sign_up({id, channel, channel_id, email, username, nickname})
@@ -46,17 +45,18 @@ export const signUp = async (req, res) => {
                 var response = {
                     "success": true,
                     "message": "註冊使用者成功",
-                    "data": db_result.data
+                    "data": result
                 }
                 res.status(201).json(response);
             })
             .catch(err => {
+                console.log(err);
                 var response = {
                     "success": false,
                     "message": "註冊使用者失敗",
                     "data": undefined
                 }
-                res.status(201).json(response);
+                res.status(400).json(response);
             })
     }
     catch(err) {
@@ -110,14 +110,14 @@ export const signUp = async (req, res) => {
 // }
 export const getUserProfile = async (req, res) => {
     //從request header取得jwt
-    //const token = req.headers.authorization.split(" ")[1];
+    const token = req.headers.authorization;
 
     //解碼jwt取得user_id
-    //const decodedData = jwt.verify(token, secret);
-    //const user_id = decodedData?.user_id;
+    const decodedData = jwt.verify(token, secret);
+    const user_id = decodedData?.user_id;
 
     //從資料庫取得使用者資料
-    await db_caller.call_user_data("user_7552f100-eba2-44e1-bc7f-7a1690fd4913")   // 測試用,之後改為req.body.user_id
+    await db_caller.call_user_data(user_id)
         .then(response => {
             res.status(200).json(response);
         })
@@ -127,6 +127,6 @@ export const getUserProfile = async (req, res) => {
                 "message": "取得使用者資料失敗",
                 "data":{}
             }
-            res.status(200).json(response);
+            res.status(400).json(response);
         })
 };

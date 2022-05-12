@@ -11,7 +11,7 @@ export const get_tag = async (req, res) => {
                 "message": "取得tag資料失敗 error: " + err.message,
                 "data": {}
             }
-            res.status(201).json(response);
+            res.status(400).json(response);
         })
 };
 
@@ -31,7 +31,7 @@ export const insert_tag = async (req, res) => {
                 "message": "創建tag失敗",
                 "data": {}
             }
-            res.status(201).json(response);
+            res.status(400).json(response);
         })
 };
 
@@ -51,7 +51,7 @@ export const update_tag = async (req, res) => {
                 "message": "更新tag失敗",
                 "data": {}
             }
-            res.status(201).json(response);
+            res.status(400).json(response);
         })
 };
 
@@ -71,6 +71,6 @@ export const delete_tag = async (req, res) => {
                 "message": "刪除tag失敗",
                 "data": {}
             }
-            res.status(201).json(response);
+            res.status(400).json(response);
         })
 };

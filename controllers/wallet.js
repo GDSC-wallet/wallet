@@ -1,7 +1,8 @@
 import db_caller from "../db_interact/db_caller.js";
 
 export const get_wallet = async (req, res) => {
-    await db_caller.call_wallet(/*req.body.wallet_id*/"wallet_dacbbdb7-4e2b-47ed-ad42-da878ab81890")
+    const { wallet_id } = req.params; 
+    await db_caller.call_wallet(wallet_id)
         .then(response => {
             res.status(200).json(response);
         })
@@ -11,7 +12,7 @@ export const get_wallet = async (req, res) => {
                 "message": "取得wallet資料失敗",
                 "data": {}
             }
-            res.status(200).json(response);
+            res.status(400).json(response);
         })
 };
 
@@ -32,7 +33,7 @@ export const insert_wallet = async (req, res) => {
                 "message": "創建wallet失敗 error: " + err.message,
                 "data":{}
             }
-            res.status(201).json(response);
+            res.status(400).json(response);
         })
 };
 
@@ -52,7 +53,7 @@ export const update_wallet = async (req, res) => {
                 "message": "更新wallet失敗 error: " + err.message,
                 "data": {}
             }
-            res.status(201).json(response);
+            res.status(400).json(response);
         })
 };
 
@@ -72,6 +73,6 @@ export const delete_wallet = async (req, res) => {
                 "message": "刪除wallet失敗 error: " + err.message,
                 "data": {}
             }
-            res.status(201).json(response);
+            res.status(400).json(response);
         })
 };
