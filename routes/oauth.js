@@ -46,7 +46,7 @@ passport.use(
                     result:"USER_EXIST_IN_DB",
                     profile:{...profile,user_id:user_id}
                 });
-            }
+          }
             else{                
                 return done(null,
                 {
@@ -111,6 +111,7 @@ router.get("/google/success", isLoggedIn, (req, res) => {
     res.header('Authorization', token);
     
     //若尚未註冊，回到前端註冊頁
+    console.log('eq.user :', eq.user);
     if(req.user==="USER_NOT_EXIST_IN_DB"){
         res.redirect("http://localhost:3000/signup"+`?token=${token}`);
     }
