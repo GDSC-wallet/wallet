@@ -111,7 +111,7 @@ router.get("/google/success", isLoggedIn, (req, res) => {
     res.header('Authorization', token);
     
     //若尚未註冊，回到前端註冊頁
-    console.log('eq.user :', eq.user);
+    console.log('req.user :', req.user);
     if(req.user==="USER_NOT_EXIST_IN_DB"){
         res.redirect("http://localhost:3000/signup"+`?token=${token}`);
     }
