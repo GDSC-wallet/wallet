@@ -1,6 +1,8 @@
 !_TAG_FILE_SORTED	2	/0=unsorted, 1=sorted, 2=foldcase/
+data	/home/roy/codes/GDSC_wallet/backend/controllers/user.js	/^        "data": undefined$/;"	p	language:JavaScript	class:response
 decodedData	/home/roy/codes/GDSC_wallet/backend/controllers/user.js	/^        const decodedData = jwt.verify(token, secret);$/;"	C	language:JavaScript
 decodedData	/home/roy/codes/GDSC_wallet/backend/controllers/user.js	/^    const decodedData = jwt.verify(token, secret);$/;"	C	language:JavaScript
+decodedData	/home/roy/codes/GDSC_wallet/backend/controllers/wallet.js	/^    const decodedData = jwt.verify(token, secret);$/;"	C	language:JavaScript
 delete_record	/home/roy/codes/GDSC_wallet/backend/controllers/record.js	/^export const delete_record = async (req, res) => {$/;"	C	language:JavaScript
 delete_tag	/home/roy/codes/GDSC_wallet/backend/controllers/tag.js	/^export const delete_tag = async (req, res) => {$/;"	C	language:JavaScript
 delete_wallet	/home/roy/codes/GDSC_wallet/backend/controllers/wallet.js	/^export const delete_wallet = async (req, res) => {$/;"	C	language:JavaScript
@@ -11,11 +13,16 @@ get_wallet	/home/roy/codes/GDSC_wallet/backend/controllers/wallet.js	/^export co
 insert_record	/home/roy/codes/GDSC_wallet/backend/controllers/record.js	/^export const insert_record = async (req, res) => {$/;"	C	language:JavaScript
 insert_tag	/home/roy/codes/GDSC_wallet/backend/controllers/tag.js	/^export const insert_tag = async (req, res) => {$/;"	C	language:JavaScript
 insert_wallet	/home/roy/codes/GDSC_wallet/backend/controllers/wallet.js	/^export const insert_wallet = async (req, res) => {$/;"	C	language:JavaScript
+message	/home/roy/codes/GDSC_wallet/backend/controllers/user.js	/^        "message": "註冊使用者失敗",$/;"	p	language:JavaScript	class:response
+response	/home/roy/codes/GDSC_wallet/backend/controllers/user.js	/^        var response = {$/;"	c	language:JavaScript
 secret	/home/roy/codes/GDSC_wallet/backend/controllers/user.js	/^const secret = 'GDSC_WALLET';$/;"	C	language:JavaScript
 signUp	/home/roy/codes/GDSC_wallet/backend/controllers/user.js	/^export const signUp = async (req, res) => {$/;"	C	language:JavaScript
+success	/home/roy/codes/GDSC_wallet/backend/controllers/user.js	/^        "success": false,$/;"	p	language:JavaScript	class:response
 token	/home/roy/codes/GDSC_wallet/backend/controllers/user.js	/^        const token = req.headers.authorization;$/;"	C	language:JavaScript
 token	/home/roy/codes/GDSC_wallet/backend/controllers/user.js	/^    const token = req.headers.authorization;$/;"	C	language:JavaScript
+token	/home/roy/codes/GDSC_wallet/backend/controllers/wallet.js	/^    const token = req.headers.authorization;$/;"	C	language:JavaScript
 update_record	/home/roy/codes/GDSC_wallet/backend/controllers/record.js	/^export const update_record = async (req, res) => { $/;"	C	language:JavaScript
 update_tag	/home/roy/codes/GDSC_wallet/backend/controllers/tag.js	/^export const update_tag = async (req, res) => {$/;"	C	language:JavaScript
 update_wallet	/home/roy/codes/GDSC_wallet/backend/controllers/wallet.js	/^export const update_wallet = async (req, res) => {$/;"	C	language:JavaScript
 user_id	/home/roy/codes/GDSC_wallet/backend/controllers/user.js	/^    const user_id = decodedData?.user_id;$/;"	C	language:JavaScript
+user_id	/home/roy/codes/GDSC_wallet/backend/controllers/wallet.js	/^    const user_id = decodedData?.user_id;$/;"	C	language:JavaScript

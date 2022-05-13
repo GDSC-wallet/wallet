@@ -94,8 +94,16 @@ const user_exist = async (id) => {
 
 const insert_user = async (id, channel, channel_id, email, username, nickname) => {
     return new Promise( async (resolve, reject) => {
+        console.log("id: " + id);
+        console.log("channel: " + channel);
+        console.log("channel_id: " + channel_id);
+        console.log("email: " + email);
+        console.log("username: " + username);
+        console.log("nickname: " + nickname);
+        if(nickname == undefined)
+            nickname = "null"
         // generate uuid for the user
-        var sql = "START TRANSACTION; INSERT INTO user VALUE(?,?,?,?,?,?,NOW(),NOW(),0)";
+        var sql = "START TRANSACTION; INSERT INTO user(id,channel,channel_id,email,username,nickname,created_time,updated_time,wallet_num) VALUE(?,?,?,?,?,?,NOW(),NOW(),0)";
         await connection.query(sql, [id, channel, channel_id, email, username, nickname], async (err, results, fields) => {
             if(err) {
                 print_error(err);
@@ -108,7 +116,7 @@ const insert_user = async (id, channel, channel_id, email, username, nickname) =
                 const wallet_title = "預設錢包";
                 const wallet_description = "這是預設錢包";
                 var sql2 = "INSERT INTO wallet VALUE(?,?,?,?,?,?,?,NOW(),NOW(),0); UPDATE user SET wallet_num = wallet_num + 1 WHERE id = ?; UPDATE wallet SET selected = 0 WHERE selected = 1; UPDATE wallet SET selected = 1 WHERE wallet_id = ?; COMMIT";
-                await connection.query(sql2, [wallet_id, id, 0, wallet_name, 0, wallet_title, wallet_description, id, wallet_id], (err, results, fields) => {
+               await connection.query(sql2, [wallet_id, id, 0, wallet_name, 0, wallet_title, wallet_description, id, wallet_id], (err, results, fields) => {
                     if(err) {
                         print_error(err);
                         reject(err);
