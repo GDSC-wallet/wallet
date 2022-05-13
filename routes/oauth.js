@@ -113,11 +113,11 @@ router.get("/google/success", isLoggedIn, (req, res) => {
     //若尚未註冊，回到前端註冊頁
     console.log('req.user :', req.user);
     if(req.user.result==="USER_NOT_EXIST_IN_DB"){
-        res.redirect("http://localhost:3000/callback/signup"+`?token=${token}`);
+        res.redirect(CLIENT_URL + "/callback/signup"+`?token=${token}`);
 		return res;
     }
     else{
-        res.redirect("http://localhost:3000/callback/login"+`?token=${token}`);
+        res.redirect(CLIENT_URL + "/callback/login"+`?token=${token}`);
 		return res;
     }
 });
