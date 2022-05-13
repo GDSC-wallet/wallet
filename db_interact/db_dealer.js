@@ -94,6 +94,14 @@ const user_exist = async (id) => {
 
 const insert_user = async (id, channel, channel_id, email, username, nickname) => {
     return new Promise( async (resolve, reject) => {
+        console.log("id: " + id);
+        console.log("channel: " + channel);
+        console.log("channel_id: " + channel_id);
+        console.log("email: " + email);
+        console.log("username: " + username);
+        console.log("nickname: " + nickname);
+        if(nickname == undefined)
+            nickname = "null"
         // generate uuid for the user
         var sql = "START TRANSACTION; INSERT INTO user(id,channel,channel_id,email,username,nickname,created_time,updated_time,wallet_num) VALUE(?,?,?,?,?,?,NOW(),NOW(),0)";
         await connection.query(sql, [id, channel, channel_id, email, username, nickname], async (err, results, fields) => {
