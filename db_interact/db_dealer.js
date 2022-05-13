@@ -36,15 +36,15 @@ const get_user = (id) => {
     });
 }
 
-const get_wallet = (wallet_id) => {
+const get_wallet = (user_id, wallet_id) => {
     return new Promise(async (resolve, reject) => {
-        var sql = "SELECT wallet_id,wallet_name,wallet_total,wallet_title,wallet_description,record_num,record_id,wallet_record_tag_id,record_ordinary,record_name,record_description,record_amount,record_type,record_date,record_created_time,record_updated_time FROM wallet LEFT JOIN wallet_record ON wallet_record.record_wallet_id=wallet.wallet_id AND record_date BETWEEN date_sub(NOW(),interval 6 MONTH) AND date_add(NOW(),interval 6 MONTH) WHERE wallet_id = ? ORDER BY CAST(wallet_record.record_wallet_id AS UNSIGNED)";
+        var sql = "START TRANSACTION; SELECT wallet_id,wallet_name,wallet_total,wallet_title,wallet_description,record_num,record_id,wallet_record_tag_id,record_ordinary,record_name,record_description,record_amount,record_type,record_date,record_created_time,record_updated_time FROM wallet LEFT JOIN wallet_record ON wallet_record.record_wallet_id=wallet.wallet_id AND record_date BETWEEN date_sub(NOW(),interval 6 MONTH) AND date_add(NOW(),interval 6 MONTH) WHERE wallet_id = ? ORDER BY CAST(wallet_record.record_wallet_id AS UNSIGNED)";
         await connection.query(sql, wallet_id, async (err, results, fields) => {
             if(err) reject(err);
             else {
                 // get wallet的同時改變selected
-                var sql2 = "START TRANSACTION; UPDATE wallet SET selected = 0 WHERE selected = 1; UPDATE wallet SET selected = 1 WHERE wallet_id = ?; COMMIT";
-                await connection.query(sql2, wallet_id, (err, results, fields) => {
+                var sql2 = "UPDATE wallet SET selected = 0 WHERE selected = 1 AND user_id = ?; UPDATE wallet SET selected = 1 WHERE wallet_id = ?; COMMIT";
+                await connection.query(sql2, user_id, wallet_id, (err, results, fields) => {
                     if(err) {
                         print_error(err);
                         reject(err);
@@ -111,18 +111,44 @@ const insert_user = async (id, channel, channel_id, email, username, nickname) =
             }
             else {
                 // 預設給user一個wallet
+                // 不能用call函式的寫法因為會包不到transaction
+                // 預設的錢包selected設為1
                 var wallet_id = "wallet_" + uuid();
                 const wallet_name = "preset_wallet";
                 const wallet_title = "預設錢包";
                 const wallet_description = "這是預設錢包";
-                var sql2 = "INSERT INTO wallet VALUE(?,?,?,?,?,?,?,NOW(),NOW(),0); UPDATE user SET wallet_num = wallet_num + 1 WHERE id = ?; UPDATE wallet SET selected = 0 WHERE selected = 1; UPDATE wallet SET selected = 1 WHERE wallet_id = ?; COMMIT";
-               await connection.query(sql2, [wallet_id, id, 0, wallet_name, 0, wallet_title, wallet_description, id, wallet_id], (err, results, fields) => {
+                var sql2 = "INSERT INTO wallet(wallet_id, user_id, selected, wallet_name, wallet_total, wallet_title, wallet_description, wallet_created_time, wallet_updated_time, record_num) VALUE(?,?,?,?,?,?,?,NOW(),NOW(),0); UPDATE user SET wallet_num = wallet_num + 1 WHERE id = ?; UPDATE wallet SET selected = 0 WHERE selected = 1";
+                await connection.query(sql2, [wallet_id, id, 1, wallet_name, 0, wallet_title, wallet_description, id], async (err, results, fields) => {
                     if(err) {
                         print_error(err);
                         reject(err);
                     }
+                    else {
+                        // 暫時將ordinary都設為1~12,並將預設顏色都設為#BEBEBE(灰)
+                        var name = ["早餐","午餐","晚餐","飲料","宵夜","交通","日用品","其他","工作","現金","轉帳","其他"];
+                        var type = ["支出","支出","支出","支出","支出","支出","支出","支出","收入","收入","收入","收入"];
+                        var color = ["#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE"];
+                        for(var i = 0; i < 12; ++i) {
+                            var tag_id = "tag_" + uuid();
+                            sql = "INSERT INTO wallet_record_tag_id(tag_id, tag_wallet_id, tag_ordinary, tag_name, tag_type, tag_created_time, tag_updated_time, tag_color) VALUE(?,?,?,?,?,NOW(),NOW(),?)";
+                            await connection.query(sql, [tag_id, wallet_id, i+1, name[i], type[i], color[i]], (err, results, fields) => {
+                                if(err) {
+                                    print_error(err);
+                                    reject(err);
+                                }
+                            });
+                            if(i == 11) {
+                                await connection.query("COMMIT", (err, results, fields) => {
+                                    if(err) {
+                                        print_error(err);
+                                        reject(err);
+                                    }
+                                })
+                            }
+                        }
+                    }
                 });
-                console.log("user and default wallet inserted successfully.");
+                console.log("user, default wallet and default tags inserted successfully.");
                 resolve();
             }
         });
@@ -159,36 +185,39 @@ const delete_user = async (id) => {
     // user有的wallet以foreign key on delete cascade一併刪除
 };
 
+// insert wallet不會將新增錢包selected設為1
 const insert_wallet = async (user_id, wallet_name, wallet_title, wallet_description) => {
     return new Promise( async (resolve, reject) => {
         var wallet_id = 'wallet_' + uuid();
-        var sql = "START TRANSACTION; INSERT INTO wallet VALUE(?,?,?,?,?,?,?,NOW(),NOW(),0); UPDATE user SET wallet_num = wallet_num + 1 WHERE id = ?; UPDATE wallet SET selected = 0 WHERE selected = 1; UPDATE wallet SET selected = 1 WHERE wallet_id = ?";
-        await connection.query(sql, [wallet_id, user_id, 0, wallet_name, 0, wallet_title, wallet_description, user_id, wallet_id], async (err, results, fields) => {
+        var sql = "START TRANSACTION; INSERT INTO wallet(wallet_id, user_id, selected, wallet_name, wallet_total, wallet_title, wallet_description, wallet_created_time, wallet_updated_time, record_num) VALUE(?,?,?,?,?,?,?,NOW(),NOW(),0); UPDATE user SET wallet_num = wallet_num + 1 WHERE id = ?; UPDATE wallet SET selected = 0 WHERE selected = 1";
+        await connection.query(sql, [wallet_id, user_id, 0, wallet_name, 0, wallet_title, wallet_description, user_id], async (err, results, fields) => {
             if(err) {
                 print_error(err);
                 reject(err);
             } else {
-                // 暫時將ordinary都設為0,並將預設顏色都設為#BEBEBE(灰)
+                // 暫時將ordinary都設為1~12,並將預設顏色都設為#BEBEBE(灰)
                 var name = ["早餐","午餐","晚餐","飲料","宵夜","交通","日用品","其他","工作","現金","轉帳","其他"];
                 var type = ["支出","支出","支出","支出","支出","支出","支出","支出","收入","收入","收入","收入"];
                 var color = ["#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE"];
                 for(var i = 0; i < 12; ++i) {
                     var tag_id = "tag_" + uuid();
-                    sql = "INSERT INTO wallet_record_tag_id VALUE(?,?,?,?,?,NOW(),NOW(),?)";
-                    await connection.query(sql, [tag_id, wallet_id, 0, name[i], type[i], color[i]], (err, results, fields) => {
+                    sql = "INSERT INTO wallet_record_tag_id(tag_id, tag_wallet_id, tag_ordinary, tag_name, tag_type, tag_created_time, tag_updated_time, tag_color) VALUE(?,?,?,?,?,NOW(),NOW(),?)";
+                    await connection.query(sql, [tag_id, wallet_id, i+1, name[i], type[i], color[i]], (err, results, fields) => {
                         if(err) {
                             print_error(err);
                             reject(err);
                         }
                     });
-                }
-                await connection.query("COMMIT", (err, results, fields) => {
-                    if(err) {
-                        print_error(err);
-                        reject(err);
+                    if(i == 11) {
+                        await connection.query("COMMIT", (err, results, fields) => {
+                            if(err) {
+                                print_error(err);
+                                reject(err);
+                            } else
+                                resolve();
+                        })
                     }
-                })
-                resolve();
+                }
             }
         });
     });
@@ -228,7 +257,7 @@ const delete_wallet = async (user_id, wallet_id) => {
 const insert_record = async (record_wallet_id, wallet_record_tag_id, record_ordinary, record_name, record_description, record_amount, record_type, record_date) => {
     return new Promise( async (resolve, reject) => {
         var record_id = "record_" + uuid();
-        var sql = "START TRANSACTION; INSERT INTO wallet_record VALUE(?,?,?,?,?,?,?,?,?,NOW(),NOW()); UPDATE wallet SET record_num = record_num + 1, wallet_total = wallet_total + ? WHERE wallet_id = ?; COMMIT";
+        var sql = "START TRANSACTION; INSERT INTO wallet_record(record_id, record_wallet_id, wallet_record_tag_id, record_ordinary, record_name, record_description, record_amount, record_type, record_date, record_created_time, record_updated_time) VALUE(?,?,?,?,?,?,?,?,?,NOW(),NOW()); UPDATE wallet SET record_num = record_num + 1, wallet_total = wallet_total + ? WHERE wallet_id = ?; COMMIT";
         await connection.query(sql, [record_id, record_wallet_id, wallet_record_tag_id, record_ordinary, record_name, record_description, record_amount, record_type, record_date, record_amount, record_wallet_id], (err, results, fields) => {
             if(err) {
                 print_error(err);
@@ -273,7 +302,7 @@ const delete_record = async (record_id, record_wallet_id, record_amount) => {
 const insert_tag = async (tag_wallet_id, tag_ordinary, tag_name, tag_type, tag_color) => {
     return new Promise( async (resolve, reject) => {
         var tag_id = "tag_" + uuid();
-        var sql = "INSERT INTO wallet_record_tag_id VALUE(?,?,?,?,?,NOW(),NOW(),?)";
+        var sql = "INSERT INTO wallet_record_tag_id(tag_id, tag_wallet_id, tag_ordinary, tag_name, tag_type, tag_created_time, tag_updated_time, tag_color) VALUE(?,?,?,?,?,NOW(),NOW(),?)";
         await connection.query(sql, [tag_id, tag_wallet_id, tag_ordinary, tag_name, tag_type, tag_color], (err, results, fields) => {
             if(err) {
                 print_error(err);

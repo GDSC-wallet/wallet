@@ -106,9 +106,9 @@ const call_user_data = (user_id) => {
 }
 
 // about wallet
-const call_wallet = (wallet_id) => {
+const call_wallet = (user_id, wallet_id) => {
     return new Promise( async (resolve, reject) => {
-        await db_dealer.get_wallet(wallet_id)
+        await db_dealer.get_wallet(user_id, wallet_id)
             .then(results => {
                 var response = {
                     "success": true,
