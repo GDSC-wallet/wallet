@@ -74,7 +74,7 @@ app.use("/api/record", recordRouter);
 app.use("/api/tag", tagRouter);
 
 //API:測試SERVER在線
-app.get("/", (req, res) => {
+app.get("/api", (req, res) => {
   const result = {
     success: true,
     message: "hello from GDSC WALLET",
