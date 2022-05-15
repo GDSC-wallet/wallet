@@ -24,7 +24,7 @@ const call_user_data = (user_id) => {
         var user_status;
         var selected_wallet;
         var response = {};
-        await db_dealer.get_user(user_id)    // 之後parse req得到要求的user id,just for testing
+        await db_dealer.get_user(user_id)
             .then(results => {
                 if(results.length > 0)
                     user_status = true;
@@ -61,7 +61,7 @@ const call_user_data = (user_id) => {
                         "wallet_total": results[i].wallet_total,
                         "wallet_description": results[i].wallet_description,
                         "selected": results[i].selected,
-                        "record_num": results[i].record_num,
+                       "record_num": results[i].record_num,
                         records:[]
                     };
                     // construct a record array

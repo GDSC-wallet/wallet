@@ -117,7 +117,7 @@ const insert_user = async (id, channel, channel_id, email, username, nickname) =
                 const wallet_name = "preset_wallet";
                 const wallet_title = "預設錢包";
                 const wallet_description = "這是預設錢包";
-                var sql2 = "INSERT INTO wallet(wallet_id, user_id, selected, wallet_name, wallet_total, wallet_title, wallet_description, wallet_created_time, wallet_updated_time, record_num) VALUE(?,?,?,?,?,?,?,NOW(),NOW(),0); UPDATE user SET wallet_num = wallet_num + 1 WHERE id = ?; UPDATE wallet SET selected = 0 WHERE selected = 1";
+                var sql2 = "INSERT INTO wallet(wallet_id, user_id, selected, wallet_name, wallet_total, wallet_title, wallet_description, wallet_created_time, wallet_updated_time, record_num) VALUE(?,?,?,?,?,?,?,NOW(),NOW(),0); UPDATE user SET wallet_num = wallet_num + 1 WHERE id = ?";
                 await connection.query(sql2, [wallet_id, id, 1, wallet_name, 0, wallet_title, wallet_description, id], async (err, results, fields) => {
                     if(err) {
                         print_error(err);
@@ -189,7 +189,7 @@ const delete_user = async (id) => {
 const insert_wallet = async (user_id, wallet_name, wallet_title, wallet_description) => {
     return new Promise( async (resolve, reject) => {
         var wallet_id = 'wallet_' + uuid();
-        var sql = "START TRANSACTION; INSERT INTO wallet(wallet_id, user_id, selected, wallet_name, wallet_total, wallet_title, wallet_description, wallet_created_time, wallet_updated_time, record_num) VALUE(?,?,?,?,?,?,?,NOW(),NOW(),0); UPDATE user SET wallet_num = wallet_num + 1 WHERE id = ?; UPDATE wallet SET selected = 0 WHERE selected = 1";
+        var sql = "START TRANSACTION; INSERT INTO wallet(wallet_id, user_id, selected, wallet_name, wallet_total, wallet_title, wallet_description, wallet_created_time, wallet_updated_time, record_num) VALUE(?,?,?,?,?,?,?,NOW(),NOW(),0); UPDATE user SET wallet_num = wallet_num + 1 WHERE id = ?";
         await connection.query(sql, [wallet_id, user_id, 0, wallet_name, 0, wallet_title, wallet_description, user_id], async (err, results, fields) => {
             if(err) {
                 print_error(err);
