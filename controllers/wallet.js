@@ -1,8 +1,8 @@
 import db_caller from "../db_interact/db_caller.js";
 
 export const get_wallet = async (req, res) => {
-    const { user_id, wallet_id } = req.params; 
-    await db_caller.call_wallet(wallet_id)
+    //const { user_id, wallet_id } = req.params; 
+    await db_caller.call_wallet("id_roy","wallet_11f0c4ed-edef-436d-9b67-46812cdc1d08"/*user_id, wallet_id*/)
         .then(response => {
             res.status(200).json(response);
         })
@@ -17,8 +17,7 @@ export const get_wallet = async (req, res) => {
 };
 
 export const insert_wallet = async (req, res) => {
-    // debug用 "user_7552f100-eba2-44e1-bc7f-7a1690fd4913", "test wallet", "test", "test"
-
+    /*
     const {wallet_name,wallet_title,wallet_description} = req.body;
 
     //從request header取得jwt
@@ -26,9 +25,8 @@ export const insert_wallet = async (req, res) => {
     //解碼jwt取得user_id
     const decodedData = jwt.verify(token, secret);
     const user_id = decodedData?.user_id;
-
-    // await db_caller.Insert_wallet("user_e4451a0f-ce5c-42b4-aecd-f6d178b44ff7","測試錢包","測試","測試用錢包"/*req.body.user_id, req.body.wallet_name, req.body.wallet_title, req.body.wallet_description*/)
-    await db_caller.Insert_wallet(user_id,wallet_name,wallet_title,wallet_description/*req.body.user_id, req.body.wallet_name, req.body.wallet_title, req.body.wallet_description*/)
+    */
+    await db_caller.Insert_wallet("id_roy","日常","日常用錢包","日常用錢包"/*user_id,wallet_name,wallet_title,wallet_description*/)
         .then(result => {
             var response = {
                 "success": true,

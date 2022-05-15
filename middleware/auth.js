@@ -7,6 +7,7 @@ const secret = 'GDSC_WALLET';
 //驗證jwt是否有效或是過期
 const auth = async (req, res, next) => {
   try {
+    /*
     const prefix = req.headers.authorization.split(" ")[0];
     const token = req.headers.authorization.split(" ")[1];
     const isCustomAuth = token.length < 500;
@@ -21,7 +22,7 @@ const auth = async (req, res, next) => {
       req.userId = decodedData?.sub;
     }
     req.decodedData = decodedData;
-    
+    */
     next();
   } catch (error) {
     console.log('error :', error);

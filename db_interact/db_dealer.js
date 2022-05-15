@@ -39,18 +39,23 @@ const get_user = (id) => {
 const get_wallet = (user_id, wallet_id) => {
     return new Promise(async (resolve, reject) => {
         var sql = "START TRANSACTION; SELECT wallet_id,wallet_name,wallet_total,wallet_title,wallet_description,record_num,record_id,wallet_record_tag_id,record_ordinary,record_name,record_description,record_amount,record_type,record_date,record_created_time,record_updated_time FROM wallet LEFT JOIN wallet_record ON wallet_record.record_wallet_id=wallet.wallet_id AND record_date BETWEEN date_sub(NOW(),interval 6 MONTH) AND date_add(NOW(),interval 6 MONTH) WHERE wallet_id = ? ORDER BY CAST(wallet_record.record_wallet_id AS UNSIGNED)";
-        await connection.query(sql, wallet_id, async (err, results, fields) => {
-            if(err) reject(err);
+        await connection.query(sql, [wallet_id, user_id, wallet_id], async (err, results, fields) => {
+            if(err) {
+                print_error(err);
+                reject(err);
+            }
             else {
                 // get wallet的同時改變selected
                 var sql2 = "UPDATE wallet SET selected = 0 WHERE selected = 1 AND user_id = ?; UPDATE wallet SET selected = 1 WHERE wallet_id = ?; COMMIT";
-                await connection.query(sql2, user_id, wallet_id, (err, results, fields) => {
+                await connection.query(sql2, [user_id, wallet_id], (err, result, fields) => {
                     if(err) {
                         print_error(err);
                         reject(err);
+                    } else {
+                        //console.log(results)i;
+                        resolve(results);
                     }
-                })
-                resolve(results);
+                });
             }
         });
     });

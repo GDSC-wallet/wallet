@@ -34,7 +34,6 @@ export const signUp = async (req, res) => {
         if(nickname===undefined||nickname===null||nickname==="") {
             res.status(400).json({success:false,message:"nickname is required.",data:{}});
         }
-
         //註冊使用者到資料庫
         await db_caller.sign_up(user_id, channel, channel_id, email, username, nickname)
             .then(result => {
@@ -113,10 +112,10 @@ export const signUp = async (req, res) => {
 export const getUserProfile = async (req, res) => {
 
     // 從 req.decodedData 取得 jwt decode 的資料，不進行二次解密
-    const user_id = req.decodedData?.user_id;
+   // const user_id = req.decodedData?.user_id;
 
     //從資料庫取得使用者資料
-    await db_caller.call_user_data(user_id)
+    await db_caller.call_user_data("id_roy")
         .then(response => {
             res.status(200).json(response);
             return res;
