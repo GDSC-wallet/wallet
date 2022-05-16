@@ -73,6 +73,20 @@ const get_record = (record_id) => {
     });
 };
 
+const get_wallet_tag = (wallet_id) => {
+    return new Promise(async (resolve, reject) => {
+        var sql = "SELECT * from wallet_record_tag_id WHERE tag_wallet_id = ?";
+        connection.query(sql, wallet_id, (err, results, fields) => {
+            if(err) {
+                print_error(err);
+                reject(err);
+            } else {
+                resolve(results);
+            }
+        })
+    })
+}
+
 const get_tag = (tag_id) => {
     return new Promise(async (resolve, reject) => {
         var sql = "SELECT * from wallet_record_tag_id WHERE tag_id = ?";
@@ -356,7 +370,7 @@ const db_dealer = {
     insert_wallet, update_wallet, delete_wallet,
     insert_record, update_record, delete_record,
     insert_tag, update_tag, delete_tag,
-    get_user, get_wallet, user_exist, get_record, get_tag,
+    get_user, get_wallet, user_exist, get_record, get_tag, get_wallet_tag,
     close_sql_connection
 }
 

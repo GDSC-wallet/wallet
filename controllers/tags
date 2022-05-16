@@ -20,5 +20,4 @@ token	/home/roy/codes/GDSC_wallet/backend/controllers/wallet.js	/^    const toke
 update_record	/home/roy/codes/GDSC_wallet/backend/controllers/record.js	/^export const update_record = async (req, res) => { $/;"	C	language:JavaScript
 update_tag	/home/roy/codes/GDSC_wallet/backend/controllers/tag.js	/^export const update_tag = async (req, res) => {$/;"	C	language:JavaScript
 update_wallet	/home/roy/codes/GDSC_wallet/backend/controllers/wallet.js	/^export const update_wallet = async (req, res) => {$/;"	C	language:JavaScript
-user_id	/home/roy/codes/GDSC_wallet/backend/controllers/user.js	/^    const user_id = req.decodedData?.user_id;$/;"	C	language:JavaScript
 user_id	/home/roy/codes/GDSC_wallet/backend/controllers/wallet.js	/^    const user_id = decodedData?.user_id;$/;"	C	language:JavaScript
