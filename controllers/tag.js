@@ -1,7 +1,7 @@
 import db_caller from "../db_interact/db_caller.js";
 
 export const get_tag = async (req, res) => {
-    await db_caller.call_tag(req.body.tag_id)
+    await db_caller.call_tag(req.params.tag_id)
         .then(response => {
             res.status(201).json(response);
         })
