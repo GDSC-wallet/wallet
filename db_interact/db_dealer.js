@@ -260,7 +260,7 @@ const update_wallet = async (wallet_id, wallet_name, wallet_title, wallet_descri
 
 const delete_wallet = async (user_id, wallet_id) => {
     return new Promise( async (resolve, reject) => {
-        var sql = "START TRANSACTION; DELETE FROM wallet WHERE wallet_id = ?; UPDATE user SET wallet_num = wallet_num - 1 WHERE id = ?; COMMIT";
+        var sql = "START TRANSACTION; DELETE FROM wallet WHERE wallet_id = ?; UPDATE user SET `wallet_num` = ( CASE WHEN `wallet_num` < 1 THEN 0 ELSE (`wallet_num` - 1) end) WHERE id = ?; COMMIT";
         await connection.query(sql, [wallet_id, user_id], (err, results, fields) => {
             if(err) {
                 print_error(err);
