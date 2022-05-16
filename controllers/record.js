@@ -21,7 +21,7 @@ export const insert_record = async (req, res) => {
     const body = req.body
 
     await db_caller.Insert_record(
-        body.record_wallet_id,
+        body.wallet_id,
         body.wallet_record_tag_id,
         body.record_ordinary,
         body.record_name,
