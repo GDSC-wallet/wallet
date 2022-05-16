@@ -147,8 +147,10 @@ const call_wallet = (user_id, wallet_id, time_choosen) => {
                         "records": [],
                         "tags": []
                     }
-                };
+               };
+				console.log(results);
                 for(var i = 0; i < results[1][0].record_num; ++i) {
+					if(i >= results[1].length) break;
                     var record_data = {
                         "record_id": results[1][i].record_id,
                         "wallet_record_tag_id": results[1][i].wallet_record_tag_id,
