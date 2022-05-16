@@ -48,7 +48,7 @@ export const insert_wallet = async (req, res) => {
 
 export const update_wallet = async (req, res) => {
     const {wallet_id,wallet_name, wallet_title, wallet_description} = req.body
-    await db_caller.Update_wallet(wallet_id, wallet_name, wallet_title, wallet_description)
+    await db_caller.Update_wallet(wallet_name, wallet_title, wallet_description,wallet_id)
         .then(result => {
             var response = {
                 "success": true,
