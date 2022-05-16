@@ -1,7 +1,7 @@
 import db_caller from "../db_interact/db_caller.js";
 
 export const get_wallet = async (req, res) => {
-    const { user_id, wallet_id, time_choosen } = req.params; 
+    const { user_id, wallet_id, time_choosen } = req.query; 
     await db_caller.call_wallet(/*"id_roy","wallet_11f0c4ed-edef-436d-9b67-46812cdc1d08"*/user_id, wallet_id, time_choosen)
         .then(response => {
             res.status(200).json(response);
