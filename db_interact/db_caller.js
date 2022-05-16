@@ -24,7 +24,7 @@ const call_user_data = (user_id) => {
         var user_status;
         var selected_wallet;
         var response = {};
-        await db_dealer.get_user(user_id)    // 之後parse req得到要求的user id,just for testing
+        await db_dealer.get_user(user_id)
             .then(results => {
                 if(results.length > 0)
                     user_status = true;
@@ -61,7 +61,7 @@ const call_user_data = (user_id) => {
                         "wallet_total": results[i].wallet_total,
                         "wallet_description": results[i].wallet_description,
                         "selected": results[i].selected,
-                        "record_num": results[i].record_num,
+                       "record_num": results[i].record_num,
                         records:[]
                     };
                     // construct a record array
@@ -106,36 +106,38 @@ const call_user_data = (user_id) => {
 }
 
 // about wallet
-const call_wallet = (wallet_id) => {
+const call_wallet = (user_id, wallet_id) => {
     return new Promise( async (resolve, reject) => {
-        await db_dealer.get_wallet(wallet_id)
+        await db_dealer.get_wallet(user_id, wallet_id)
             .then(results => {
+                // result[0] is OkPacket
                 var response = {
                     "success": true,
                     "message": "取得wallet資料成功",
                     "data": {
-                        "wallet_id": results[0].wallet_id,
-                        "wallet_name": results[0].wallet_name,
-                        "wallet_title": results[0].wallet_title,
-                        "wallet_total": results[0].wallet_total,
-                        "wallet_description": results[0].wallet_description,
-                        "record_num": results[0].record_num,
+                        "wallet_id": results[1][0].wallet_id,
+                        "wallet_name": results[1][0].wallet_name,
+                        "wallet_title": results[1][0].wallet_title,
+                        "wallet_total": results[1][0].wallet_total,
+                        "wallet_description": results[1][0].wallet_description,
+                        "record_num": results[1][0].record_num,
                         "records": []
                     }
                 };
-                for(var i = 0; i < results.length; ++i) {
+                for(var i = 0; i < results[1][0].record_num; ++i) {
                     var record_data = {
-                        "record_id": results[i].record_id,
-                        "wallet_record_tag_id": results[i].wallet_record_tag_id,
-                        "record_ordinary": results[i].record_ordinary,
-                        "record_name": results[i].record_name,
-                        "record_description": results[i].record_description,
-                        "record_amount": results[i].record_amount,
-                        "record_type": results[i].record_type,
-                        "record_date": results[i].record_date,
-                        "record_created_time": results[i].record_created_time,
-                        "record_updated_time": results[i].record_updated_time
+                        "record_id": results[1][i].record_id,
+                        "wallet_record_tag_id": results[1][i].wallet_record_tag_id,
+                        "record_ordinary": results[1][i].record_ordinary,
+                        "record_name": results[1][i].record_name,
+                        "record_description": results[1][i].record_description,
+                        "record_amount": results[1][i].record_amount,
+                        "record_type": results[1][i].record_type,
+                        "record_date": results[1][i].record_date,
+                        "record_created_time": results[1][i].record_created_time,
+                        "record_updated_time": results[1][i].record_updated_time
                     }
+                    console.log(record_data);
                     response.data.records.push(record_data);
                 }
                 console.log(response);
