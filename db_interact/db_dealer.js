@@ -245,7 +245,7 @@ const insert_wallet = async (user_id, wallet_name, wallet_title, wallet_descript
 // wallet_id判斷用
 const update_wallet = async (wallet_id, wallet_name, wallet_title, wallet_description) => {
     return new Promise( async (resolve, reject) => {
-        var sql = "UPDATE wallet SET wallet_name = ?, wallet_title = ?, wallet_description = ?, updated_time = NOW() WHERE wallet_id = ?";
+        var sql = "UPDATE wallet SET wallet_name = ?, wallet_title = ?, wallet_description = ?, wallet_updated_time = NOW() WHERE wallet_id = ?";
         await connection.query(sql, [wallet_name, wallet_title, wallet_description, wallet_id], (err, results, fields) => {
             if(err) {
                 print_error(err);
