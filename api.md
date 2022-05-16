@@ -107,6 +107,7 @@
 - Param:
 ```json
 {
+    "user_id": "user_id"
     "wallet_id": "wallet_2c36aaad-2d40-48cb-9e36-9d3a841ffb37"
 }
 ```

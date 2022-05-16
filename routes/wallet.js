@@ -4,10 +4,10 @@ import { get_wallet,insert_wallet,update_wallet,delete_wallet } from "../control
 
 const router = express.Router();
 
-// router.get("/", get_wallet);    // 除了parse request以外 完成
-// router.post("/create", insert_wallet);  // 除了parse request以外 完成
-// router.post("/edit", update_wallet);
-// router.post("/delete", delete_wallet);
+router.get("/", get_wallet);
+router.post("/create", insert_wallet);
+router.post("/edit", update_wallet);
+router.post("/delete", delete_wallet);
 
 /* 測試階段，先不驗證jwt
 // router.get("/",auth, get_wallet);

@@ -27,18 +27,13 @@ const secret = 'GDSC_WALLET';
 export const signUp = async (req, res) => {
 
     try{
-        //從request header取得jwt
-        const token = req.headers.authorization;
-
-        //解碼jwt取得user_id
-        const decodedData = jwt.verify(token, secret);
-        const {channel,channel_id,email,username,user_id} = decodedData;
+        // 從 req.decodedData 取得 jwt decode 的資料，不進行二次解密
+        const {channel,channel_id,email,username,user_id} = req.decodedData;
         const { nickname } = req.body;
 
         if(nickname===undefined||nickname===null||nickname==="") {
             res.status(400).json({success:false,message:"nickname is required.",data:{}});
         }
-
         //註冊使用者到資料庫
         await db_caller.sign_up(user_id, channel, channel_id, email, username, nickname)
             .then(result => {
@@ -115,17 +110,18 @@ export const signUp = async (req, res) => {
 //     "data": {}
 // }
 export const getUserProfile = async (req, res) => {
-    //從request header取得jwt
-    const token = req.headers.authorization;
 
-    //解碼jwt取得user_id
-    const decodedData = jwt.verify(token, secret);
-    const user_id = decodedData?.user_id;
+    // 從 req.decodedData 取得 jwt decode 的資料，不進行二次解密
+	console.log(req.decodedData)
+    const user_id = req.decodedData?.user_id;
+
+    const current_time = new Date().toISOString().split('Z')[0].split('T').join(" ");
 
     //從資料庫取得使用者資料
-    await db_caller.call_user_data(user_id)
+    await db_caller.call_user_data(user_id/*"id_roy"*/, current_time)
         .then(response => {
             res.status(200).json(response);
+            return res;
         })
         .catch(result => {
             var response = {
@@ -134,5 +130,6 @@ export const getUserProfile = async (req, res) => {
                 "data":{}
             }
             res.status(400).json(response);
+            return res;
         })
 };

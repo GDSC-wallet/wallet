@@ -74,13 +74,20 @@ app.use("/api/record", recordRouter);
 app.use("/api/tag", tagRouter);
 
 //API:測試SERVER在線
-app.get("/", (req, res) => {
+app.get("/api", (req, res) => {
   const result = {
     success: true,
     message: "hello from GDSC WALLET",
     data: {},
   };
   res.status(200).send(result);
+});
+
+// Host dist
+app.use(express.static(path.join(__dirname, "dist")));
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname + "/dist/index.html"));
 });
 
 //const PORT = process.env.PORT || 80;

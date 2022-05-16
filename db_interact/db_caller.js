@@ -4,7 +4,7 @@ import db_dealer from './db_dealer.js'
 const authenticate = (id) => {
     return new Promise( async(resolve, reject) => {
         await db_dealer.user_exist(id)
-        .then(results => {
+            .then(results => {
                 console.log('results :', results);
                 if(results.length === 0) {
                     resolve(false);
@@ -19,13 +19,13 @@ const authenticate = (id) => {
 }
 
 // about user
-const call_user_data = (user_id) => {
+const call_user_data = (user_id, time_choosen) => {
     return new Promise( async (resolve, reject) => {
         var user_status;
         var selected_wallet;
         var response = {};
-        await db_dealer.get_user(user_id)    // 之後parse req得到要求的user id,just for testing
-            .then(results => {
+        await db_dealer.get_user(user_id, time_choosen)
+            .then(async results => {
                 if(results.length > 0)
                     user_status = true;
                 else
@@ -62,9 +62,10 @@ const call_user_data = (user_id) => {
                         "wallet_description": results[i].wallet_description,
                         "selected": results[i].selected,
                         "record_num": results[i].record_num,
-                        records:[]
+                        "records": [],
+                        "tags": [],
                     };
-                    // construct a record array
+                    // construct record and tag array
                     var record_arr = [];
                     var j = 0;
                     if(results[i].selected == 1) {
@@ -82,10 +83,32 @@ const call_user_data = (user_id) => {
                                 record_type: results[i+j].record_type,    //
                                 record_date: results[i+j].record_date,    //
                                 record_created_time: results[i+j].record_created_time,
-                                record_updated_time: results[i+j].record_updated_time
+                                record_updated_time: results[i+j].record_updated_time,
                             }
                             record_arr.push(record_obj);
                         }
+                        await db_dealer.get_wallet_tag(selected_wallet)
+                            .then(results => {
+                                var tag_arr = [];
+                                for(var i = 0; i < results.length; ++i) {
+                                    var tag_obj = {
+                                        tag_id: results[i].tag_id,
+                                        tag_wallet_id: results[i].tag_wallet_id,
+                                        tag_ordinary: results[i].tag_ordinary,
+                                        tag_name: results[i].tag_name,
+                                        tag_type: results[i].tag_type,
+                                        tag_created_time: results[i].tag_created_time,
+                                        tag_updated_time: results[i].tag_updated_time,
+                                        tag_color: results[i].tag_color
+                                    }
+                                    tag_arr.push(tag_obj);
+                                }
+                                wallet_obj.tags = tag_arr;
+                            })
+                            .catch(err => {
+                                console.log('ERROR: ' + err.message);
+                                reject(err);
+                            })
                     }
                     if(j == 0) i++;
                     else
@@ -106,38 +129,66 @@ const call_user_data = (user_id) => {
 }
 
 // about wallet
-const call_wallet = (wallet_id) => {
+const call_wallet = (user_id, wallet_id, time_choosen) => {
     return new Promise( async (resolve, reject) => {
-        await db_dealer.get_wallet(wallet_id)
-            .then(results => {
+        await db_dealer.get_wallet(user_id, wallet_id, time_choosen)
+            .then(async results => {
+                // result[0] is OkPacket
                 var response = {
                     "success": true,
                     "message": "取得wallet資料成功",
                     "data": {
-                        "wallet_id": results[0].wallet_id,
-                        "wallet_name": results[0].wallet_name,
-                        "wallet_title": results[0].wallet_title,
-                        "wallet_total": results[0].wallet_total,
-                        "wallet_description": results[0].wallet_description,
-                        "record_num": results[0].record_num,
-                        "records": []
+                        "wallet_id": results[1][0].wallet_id,
+                        "wallet_name": results[1][0].wallet_name,
+                        "wallet_title": results[1][0].wallet_title,
+                        "wallet_total": results[1][0].wallet_total,
+                        "wallet_description": results[1][0].wallet_description,
+                        "record_num": results[1][0].record_num,
+                        "records": [],
+                        "tags": []
                     }
-                };
-                for(var i = 0; i < results.length; ++i) {
+               };
+				console.log(results);
+                for(var i = 0; i < results[1][0].record_num; ++i) {
+					if(i >= results[1].length) break;
                     var record_data = {
-                        "record_id": results[i].record_id,
-                        "wallet_record_tag_id": results[i].wallet_record_tag_id,
-                        "record_ordinary": results[i].record_ordinary,
-                        "record_name": results[i].record_name,
-                        "record_description": results[i].record_description,
-                        "record_amount": results[i].record_amount,
-                        "record_type": results[i].record_type,
-                        "record_date": results[i].record_date,
-                        "record_created_time": results[i].record_created_time,
-                        "record_updated_time": results[i].record_updated_time
+                        "record_id": results[1][i].record_id,
+                        "wallet_record_tag_id": results[1][i].wallet_record_tag_id,
+                        "record_ordinary": results[1][i].record_ordinary,
+                        "record_name": results[1][i].record_name,
+                        "record_description": results[1][i].record_description,
+                        "record_amount": results[1][i].record_amount,
+                        "record_type": results[1][i].record_type,
+                        "record_date": results[1][i].record_date,
+                        "record_created_time": results[1][i].record_created_time,
+                        "record_updated_time": results[1][i].record_updated_time
                     }
+                    console.log(record_data);
                     response.data.records.push(record_data);
                 }
+                await db_dealer.get_wallet_tag(wallet_id)
+                    .then(results => {
+                        var tag_arr = [];
+                        for(var i = 0; i < results.length; ++i) {
+                            var tag_obj = {
+                                tag_id: results[i].tag_id,
+                                tag_wallet_id: results[i].tag_wallet_id,
+                                tag_ordinary: results[i].tag_ordinary,
+                                tag_name: results[i].tag_name,
+                                tag_type: results[i].tag_type,
+                                tag_created_time: results[i].tag_created_time,
+                                tag_updated_time: results[i].tag_updated_time,
+                                tag_color: results[i].tag_color
+                            }
+                            tag_arr.push(tag_obj);
+                        }
+                        console.log(tag_arr);
+                        response.data.tags = tag_arr;
+                    })
+                    .catch(err => {
+                        console.log('ERROR: ' + err.message);
+                        reject(err);
+                    })
                 console.log(response);
                 resolve(response);
             })
@@ -149,7 +200,7 @@ const call_wallet = (wallet_id) => {
 }
 
 const sign_up = (id, channel, channel_id, email, username, nickname) => {
-console.log('id, channel, channel_id, email, username, nickname :', {id, channel, channel_id, email, username, nickname});
+    console.log('id, channel, channel_id, email, username, nickname :', {id, channel, channel_id, email, username, nickname});
     return new Promise( async (resolve, reject) => {
         await db_dealer.insert_user(id, channel, channel_id, email, username, nickname)
             .then(response => {
