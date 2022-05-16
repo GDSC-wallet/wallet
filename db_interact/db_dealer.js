@@ -63,6 +63,7 @@ const get_wallet = (user_id, wallet_id, time_chosen) => {
 
 
 const get_record = (record_id) => {
+console.log('record_id :', record_id);
     return new Promise(async (resolve, reject) => {
         var sql = "SELECT * from wallet_record WHERE record_id = ?";
         await connection.query(sql, record_id, (err, results, fields) => {
