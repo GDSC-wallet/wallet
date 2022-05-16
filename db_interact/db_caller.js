@@ -129,9 +129,9 @@ const call_user_data = (user_id, time_choosen) => {
 }
 
 // about wallet
-const call_wallet = (user_id, wallet_id) => {
+const call_wallet = (user_id, wallet_id, time_choosen) => {
     return new Promise( async (resolve, reject) => {
-        await db_dealer.get_wallet(user_id, wallet_id)
+        await db_dealer.get_wallet(user_id, wallet_id, time_choosen)
             .then(async results => {
                 // result[0] is OkPacket
                 var response = {
