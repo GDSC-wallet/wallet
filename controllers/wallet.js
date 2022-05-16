@@ -47,7 +47,8 @@ export const insert_wallet = async (req, res) => {
 };
 
 export const update_wallet = async (req, res) => {
-    await db_caller.Update_wallet(req.body.wallet_id, req.body.wallet_name, req.body.wallet_title, req.body.wallet_description)
+    const {wallet_id,wallet_name, wallet_title, wallet_description} = req.body
+    await db_caller.Update_wallet(wallet_id, wallet_name, wallet_title, wallet_description)
         .then(result => {
             var response = {
                 "success": true,
@@ -67,7 +68,9 @@ export const update_wallet = async (req, res) => {
 };
 
 export const delete_wallet = async (req, res) => {
-    await db_caller.Delete_wallet(req.body.user_id, req.body.wallet_id)
+
+    const {user_id,wallet_id} = req.body
+    await db_caller.Delete_wallet(user_id, wallet_id)
         .then(result => {
             var response = {
                 "success": true,

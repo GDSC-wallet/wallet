@@ -24,10 +24,10 @@ function print_error(err) {
 }
 
 // request dealer
-const get_user = (id, time_choosen) => {
+const get_user = (id, time_chosen) => {
     return new Promise( async (resolve, reject) => {
         var sql = "SELECT id,username,nickname,wallet_id,wallet_title,wallet_total,wallet_name,wallet_description,selected,record_id,wallet_record_tag_id,record_ordinary,record_name,record_description,record_amount,record_type,record_date,record_created_time,record_updated_time,wallet_num,record_num FROM user JOIN wallet ON wallet.user_id=user.id LEFT JOIN wallet_record ON wallet_record.record_wallet_id=wallet.wallet_id AND record_date BETWEEN date_sub(?,interval 6 MONTH) AND date_add(?,interval 6 MONTH) AND wallet.selected = 1 WHERE user.id = ? ORDER BY CAST(wallet_record.record_wallet_id AS UNSIGNED)";
-        await connection.query(sql, [time_choosen, time_choosen, id], async (err, results, fields) => {
+        await connection.query(sql, [time_chosen, time_chosen, id], async (err, results, fields) => {
             if(err) reject(err);
             else {
                 resolve(results);
@@ -36,10 +36,10 @@ const get_user = (id, time_choosen) => {
     });
 }
 
-const get_wallet = (user_id, wallet_id, time_choosen) => {
+const get_wallet = (user_id, wallet_id, time_chosen) => {
     return new Promise(async (resolve, reject) => {
         var sql = "START TRANSACTION; SELECT wallet_id,wallet_name,wallet_total,wallet_title,wallet_description,record_num,record_id,wallet_record_tag_id,record_ordinary,record_name,record_description,record_amount,record_type,record_date,record_created_time,record_updated_time FROM wallet LEFT JOIN wallet_record ON wallet_record.record_wallet_id=wallet.wallet_id AND record_date BETWEEN date_sub(? ,interval 6 MONTH) AND date_add(? ,interval 6 MONTH) WHERE wallet_id = ? ORDER BY CAST(wallet_record.record_wallet_id AS UNSIGNED)";
-        await connection.query(sql, [time_choosen, time_choosen, wallet_id], async (err, results, fields) => {
+        await connection.query(sql, [time_chosen, time_chosen, wallet_id], async (err, results, fields) => {
             if(err) {
                 print_error(err);
                 reject(err);
@@ -244,8 +244,9 @@ const insert_wallet = async (user_id, wallet_name, wallet_title, wallet_descript
 
 // wallet_id判斷用
 const update_wallet = async (wallet_id, wallet_name, wallet_title, wallet_description) => {
+    console.log({wallet_id, wallet_name, wallet_title, wallet_description})
     return new Promise( async (resolve, reject) => {
-        var sql = "UPDATE wallet SET wallet_name = ?, wallet_title = ?, wallet_description = ?, updated_time = NOW() WHERE wallet_id = ?";
+        var sql = "UPDATE wallet SET wallet_name = ?, wallet_title = ?, wallet_description = ?, wallet_updated_time = NOW() WHERE wallet_id = ?";
         await connection.query(sql, [wallet_name, wallet_title, wallet_description, wallet_id], (err, results, fields) => {
             if(err) {
                 print_error(err);
@@ -259,7 +260,7 @@ const update_wallet = async (wallet_id, wallet_name, wallet_title, wallet_descri
 
 const delete_wallet = async (user_id, wallet_id) => {
     return new Promise( async (resolve, reject) => {
-        var sql = "START TRANSACTION; DELETE FROM wallet WHERE wallet_id = ?; UPDATE user SET wallet_num = wallet_num - 1 WHERE id = ?; COMMIT";
+        var sql = "START TRANSACTION; DELETE FROM wallet WHERE wallet_id = ?; UPDATE user SET `wallet_num` = ( CASE WHEN `wallet_num` < 1 THEN 0 ELSE (`wallet_num` - 1) end) WHERE id = ?; COMMIT";
         await connection.query(sql, [wallet_id, user_id], (err, results, fields) => {
             if(err) {
                 print_error(err);
