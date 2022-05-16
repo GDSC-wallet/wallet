@@ -62,7 +62,8 @@ const call_user_data = (user_id) => {
                         "wallet_description": results[i].wallet_description,
                         "selected": results[i].selected,
                         "record_num": results[i].record_num,
-                        records:[]
+                        "records": [],
+                        "tags": [],
                     };
                     // construct record and tag array
                     var record_arr = [];
@@ -83,7 +84,6 @@ const call_user_data = (user_id) => {
                                 record_date: results[i+j].record_date,    //
                                 record_created_time: results[i+j].record_created_time,
                                 record_updated_time: results[i+j].record_updated_time,
-                                record_tag: []
                             }
                             record_arr.push(record_obj);
                         }
