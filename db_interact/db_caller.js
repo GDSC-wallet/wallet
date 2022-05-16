@@ -19,12 +19,12 @@ const authenticate = (id) => {
 }
 
 // about user
-const call_user_data = (user_id) => {
+const call_user_data = (user_id, time_choosen) => {
     return new Promise( async (resolve, reject) => {
         var user_status;
         var selected_wallet;
         var response = {};
-        await db_dealer.get_user(user_id)
+        await db_dealer.get_user(user_id, time_choosen)
             .then(async results => {
                 if(results.length > 0)
                     user_status = true;

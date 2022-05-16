@@ -115,8 +115,10 @@ export const getUserProfile = async (req, res) => {
 	console.log(req.decodedData)
     const user_id = req.decodedData?.user_id;
 
+    const current_time = new Date().toISOString().split('Z')[0].split('T').join(" ");
+
     //從資料庫取得使用者資料
-    await db_caller.call_user_data(user_id/*"id_roy"*/)
+    await db_caller.call_user_data(user_id/*"id_roy"*/, current_time)
         .then(response => {
             res.status(200).json(response);
             return res;
