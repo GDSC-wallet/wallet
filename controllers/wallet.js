@@ -1,7 +1,11 @@
 import db_caller from "../db_interact/db_caller.js";
 
 export const get_wallet = async (req, res) => {
-    const { user_id, wallet_id, time_choosen } = req.query; 
+    const { wallet_id, time_choosen } = req.query;
+
+    // 從 req.decodedData 取得 jwt decode 的資料，不進行二次解密
+    const user_id = req.decodedData?.user_id;
+    
     await db_caller.call_wallet(/*"id_roy","wallet_11f0c4ed-edef-436d-9b67-46812cdc1d08"*/user_id, wallet_id, time_choosen)
         .then(response => {
             res.status(200).json(response);
@@ -18,15 +22,12 @@ export const get_wallet = async (req, res) => {
 
 export const insert_wallet = async (req, res) => {
 
-    const {wallet_name,wallet_title,wallet_description} = req.body;
+    const { wallet_name, wallet_title, wallet_description } = req.body;
 
-    //從request header取得jwt
-    const token = req.headers.authorization;
-    //解碼jwt取得user_id
-    const decodedData = jwt.verify(token, secret);
-    const user_id = decodedData?.user_id;
+    // 從 req.decodedData 取得 jwt decode 的資料，不進行二次解密
+    const user_id = req.decodedData?.user_id;
 
-    await db_caller.Insert_wallet(user_id,wallet_name,wallet_title,wallet_description)
+    await db_caller.Insert_wallet(user_id, wallet_name, wallet_title, wallet_description)
         .then(result => {
             var response = {
                 "success": true,
@@ -39,7 +40,7 @@ export const insert_wallet = async (req, res) => {
             var response = {
                 "success": false,
                 "message": "創建wallet失敗 error: " + err.message,
-                "data":{}
+                "data": {}
             }
             res.status(400).json(response);
         })
