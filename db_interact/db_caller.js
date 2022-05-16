@@ -19,12 +19,12 @@ const authenticate = (id) => {
 }
 
 // about user
-const call_user_data = (user_id) => {
+const call_user_data = (user_id, time_choosen) => {
     return new Promise( async (resolve, reject) => {
         var user_status;
         var selected_wallet;
         var response = {};
-        await db_dealer.get_user(user_id)
+        await db_dealer.get_user(user_id, time_choosen)
             .then(async results => {
                 if(results.length > 0)
                     user_status = true;
@@ -129,9 +129,9 @@ const call_user_data = (user_id) => {
 }
 
 // about wallet
-const call_wallet = (user_id, wallet_id) => {
+const call_wallet = (user_id, wallet_id, time_choosen) => {
     return new Promise( async (resolve, reject) => {
-        await db_dealer.get_wallet(user_id, wallet_id)
+        await db_dealer.get_wallet(user_id, wallet_id, time_choosen)
             .then(async results => {
                 // result[0] is OkPacket
                 var response = {
@@ -147,8 +147,10 @@ const call_wallet = (user_id, wallet_id) => {
                         "records": [],
                         "tags": []
                     }
-                };
+               };
+				console.log(results);
                 for(var i = 0; i < results[1][0].record_num; ++i) {
+					if(i >= results[1].length) break;
                     var record_data = {
                         "record_id": results[1][i].record_id,
                         "wallet_record_tag_id": results[1][i].wallet_record_tag_id,
