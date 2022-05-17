@@ -6,7 +6,7 @@ export const get_record_check = async (req, res, next) => {
             res.status(401).json({success:false,msg:"record_id is required"})
             return;
         }
-            next();
+        next();
       } catch (error) {
         console.log('error :', error);
         res.status(401).json({status:"token expired",msg:error})
@@ -18,9 +18,7 @@ export const create_record_check = async (req, res, next) => {
     try {
         if(!!!body.wallet_id){
             res.status(401).json({success:false,msg:"record_id is required"})
-        }
-        else{
-            next();
+            return;
         }
         next();
       } catch (error) {
