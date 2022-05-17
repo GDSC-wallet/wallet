@@ -2,7 +2,7 @@ export const get_wallet_check = async (req, res, next) => {
     try {
         const query = req.query;
         console.log('!!query.record_id :', !!query.record_id);
-        if(!!!query.record_id){
+        if(!!!query.wallet_id){
             res.status(401).json({success:false,msg:"record_id is required"})
             return;
         }
