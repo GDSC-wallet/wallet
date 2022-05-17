@@ -242,8 +242,9 @@ const insert_wallet = async (user_id, wallet_name, wallet_title, wallet_descript
                         })
                     }
                     */
+                    if(i == 11)
+                        resolve();
                 }
-                resolve();
             }
         });
     });
