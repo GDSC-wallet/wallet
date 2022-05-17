@@ -20,6 +20,7 @@ const auth = async (req, res, next) => {
     } else {
       decodedData = jwt.decode(token);
       res.status(401).json({status:"can not verify token",msg:error})
+      return;
     }
     req.decodedData = decodedData;
 
