@@ -263,11 +263,11 @@ const delete_wallet = async (user_id, wallet_id) => {
     return new Promise( async (resolve, reject) => {
         // 檢查wallet如果剩一個就不能刪除
         var sql = "SELECT * FROM wallet WHERE user_id = ?";
-        await connection.query(sql, [user_id], (err, results, fields) => {
+        await connection.query(sql, [user_id], async (err, results, fields) => {
             if(err) {
                 print_error(err);
                 reject(err);
-            } else if (results.length == 0)
+            } else if (results.length == 1)
                 reject("wallet remains one.");
             else {
                 sql = "START TRANSACTION; DELETE FROM wallet WHERE wallet_id = ?; UPDATE user SET `wallet_num` = ( CASE WHEN `wallet_num` < 1 THEN 0 ELSE (`wallet_num` - 1) end) WHERE id = ?; COMMIT";
