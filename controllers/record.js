@@ -2,6 +2,7 @@ import db_caller from "../db_interact/db_caller.js";
 
 export const get_record = async (req, res) => {
     const query = req.query;
+    console.log('query :', query);
 
     await db_caller.call_record(query.record_id)
         .then(response => {
