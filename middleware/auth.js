@@ -19,14 +19,14 @@ const auth = async (req, res, next) => {
       req.userId = decodedData?.user_id;
     } else {
       decodedData = jwt.decode(token);
-      req.userId = decodedData?.sub;
+      res.status(401).json({status:"can not verify token",msg:error})
     }
     req.decodedData = decodedData;
 
     next();
   } catch (error) {
     console.log('error :', error);
-    res.status(401).json({status:"token expired",msg:error})
+    res.status(401).json({success:false,message:"token authentication failed"})
   }
 };
 
