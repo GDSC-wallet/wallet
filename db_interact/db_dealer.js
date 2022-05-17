@@ -308,10 +308,10 @@ const insert_record = async (record_wallet_id, wallet_record_tag_id, record_ordi
 };
 
 // record_id, wallet_id不給改
-const update_record = async (record_id, wallet_record_tag_id, record_ordinary, record_name, record_description, record_amount, record_type, record_date) => {
+const update_record = async (record_id, record_wallet_id, wallet_record_tag_id, record_ordinary, record_name, record_description, record_amount, record_type, record_date, record_amount_diff) => {
     return new Promise( async (resolve, reject) => {
-        var sql = "UPDATE wallet_record SET wallet_record_tag_id = ?, record_ordinary = ?, record_name = ?, record_description = ?, record_amount = ?, record_type = ?, record_date = ?, record_updated_time = NOW() WHERE record_id = ?";
-        await connection.query(sql, [wallet_record_tag_id, record_ordinary, record_name, record_description, record_amount, record_type, record_date, record_id], (err, results, fields) => {
+        var sql = "START TRANSACTION; UPDATE wallet_record SET wallet_record_tag_id = ?, record_ordinary = ?, record_name = ?, record_description = ?, record_amount = record_amount + ?, record_type = ?, record_date = ?, record_updated_time = NOW() WHERE record_id = ?; UPDATE wallet SET wallet_total = wallet_total + ? WHERE wallet_id = ?; COMMIT";
+        await connection.query(sql, [wallet_record_tag_id, record_ordinary, record_name, record_description, record_amount_diff, record_type, record_date, record_id, record_amount_diff, record_wallet_id], (err, results, fields) => {
             if(err) {
                 print_error(err);
                 reject(err);
