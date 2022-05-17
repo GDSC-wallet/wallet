@@ -277,6 +277,8 @@ const call_record = (record_id) => {
 }
 
 const Insert_record = (record_wallet_id, wallet_record_tag_id, record_ordinary, record_name, record_description, record_amount, record_type, record_date) => {
+    if(record_amount == null)
+        record_amount = 0;
     return new Promise( async (resolve, reject) => {
         await db_dealer.insert_record(record_wallet_id, wallet_record_tag_id, record_ordinary, record_name, record_description, record_amount, record_type, record_date)
             .then(response => {
@@ -305,6 +307,8 @@ const Update_record = (record_id, wallet_record_tag_id, record_ordinary, record_
 }
 
 const Delete_record = (record_id, record_wallet_id, record_amount) => {
+    if(record_amount == null)
+        record_amount = 0;
     return new Promise( async (resolve, reject) => {
         await db_dealer.delete_record(record_id, record_wallet_id, record_amount)
             .then(response => {
