@@ -114,7 +114,9 @@ export const getUserProfile = async (req, res) => {
     // 從 req.decodedData 取得 jwt decode 的資料，不進行二次解密
     const user_id = req.decodedData?.user_id;
 
-    const current_time = new Date().toISOString().split('Z')[0].split('T').join(" ");
+    const query = req.query
+
+    const current_time = query.time_choosen ? query.time_choosen : new Date().toISOString().split('Z')[0].split('T').join(" ");
 
     //從資料庫取得使用者資料
     await db_caller.call_user_data(user_id/*"id_roy"*/, current_time)
