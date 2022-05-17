@@ -1,6 +1,7 @@
 export const get_record_check = async (req, res) => {
     try {
-        if(!!body.record_id){
+        const query = req.query;
+        if(!!query.record_id){
             res.status(401).json({success:false,msg:"record_id is required"})
         }
         next();

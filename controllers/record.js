@@ -1,9 +1,9 @@
 import db_caller from "../db_interact/db_caller.js";
 
 export const get_record = async (req, res) => {
-    const body = req.body;
+    const query = req.query;
 
-    await db_caller.call_record(body.record_id)
+    await db_caller.call_record(query.record_id)
         .then(response => {
             res.status(201).json(response);
         })
