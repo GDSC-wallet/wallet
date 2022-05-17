@@ -13,15 +13,10 @@ const auth = async (req, res, next) => {
     const isCustomAuth = token.length < 500;
 
     let decodedData;
+  
+    decodedData = jwt.verify(token, secret);
+    console.log('decodedData :', decodedData);
 
-    if (token && isCustomAuth && prefix == "Bearer") {      
-      decodedData = jwt.verify(token, secret);
-      req.userId = decodedData?.user_id;
-    } else {
-      decodedData = jwt.decode(token);
-      res.status(401).json({status:"can not verify token",msg:error})
-      return;
-    }
     req.decodedData = decodedData;
 
     next();
