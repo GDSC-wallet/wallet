@@ -107,7 +107,7 @@
 - Param:
 ```json
 {
-    "user_id": "user_id"
+    "user_id": "user_id",
     "wallet_id": "wallet_2c36aaad-2d40-48cb-9e36-9d3a841ffb37"
 }
 ```
@@ -342,6 +342,34 @@
 ```
 
 ## /api/record/delete
+- Method: `POST`
+- Header: `Authorization: Bearer {jwt}`
+- Body:
+```json
+{
+    "record_id":"record_0e0d10d0-531b-4f0d-abc2-f157b9f27dfd",
+}
+```
+- Param: `None`
+- Success Response: 
+```json
+{
+    "success": true,
+    "message": "",
+    "data": {}
+}
+```
+- Error Response:
+```json
+{
+    "success": false,
+    "message": "Some error occurs.",
+    "data": {}
+}
+```
+
+
+## /api/wallet/record
 - Method: `POST`
 - Header: `Authorization: Bearer {jwt}`
 - Body:
