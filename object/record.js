@@ -2,7 +2,7 @@ export const get_record_check = async (req, res, next) => {
     try {
         const query = req.query;
         console.log('!!query.record_id :', !!query.record_id);
-        if(!!query.record_id){
+        if(!!!query.record_id){
             res.status(401).json({success:false,msg:"record_id is required"})
         }
         else{
@@ -17,7 +17,7 @@ export const get_record_check = async (req, res, next) => {
 export const create_record_check = async (req, res, next) => {
     const body = req.body
     try {
-        if(!!body.wallet_id){
+        if(!!!body.wallet_id){
             res.status(401).json({success:false,msg:"record_id is required"})
         }
 
@@ -31,7 +31,7 @@ export const create_record_check = async (req, res, next) => {
 export const update_record_check = async (req, res, next) => {
     const body = req.body
     try {
-        if(!!body.record_id){
+        if(!!!body.record_id){
             res.status(401).json({success:false,msg:"record_id is required"})
         }
         if(!!body.record_wallet_id){
@@ -48,7 +48,7 @@ export const update_record_check = async (req, res, next) => {
 
 export const delete_record_check = async (req, res, next) => {
     try {
-        if(!!body.record_id){
+        if(!!!body.record_id){
             res.status(401).json({success:false,msg:"record_id is required"})
         }
         next();
