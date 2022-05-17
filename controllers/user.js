@@ -112,7 +112,6 @@ export const signUp = async (req, res) => {
 export const getUserProfile = async (req, res) => {
 
     // 從 req.decodedData 取得 jwt decode 的資料，不進行二次解密
-	console.log(req.decodedData)
     const user_id = req.decodedData?.user_id;
 
     const current_time = new Date().toISOString().split('Z')[0].split('T').join(" ");

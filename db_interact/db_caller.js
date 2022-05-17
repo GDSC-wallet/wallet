@@ -115,7 +115,7 @@ const call_user_data = (user_id, time_choosen) => {
                         i += j;
                     // put record array into wallet object and put wallet object into response.data.wallets
                     wallet_obj.records = record_arr;
-                    console.log(wallet_obj);
+                    //console.log(wallet_obj);
                     Data.data.wallets.push(wallet_obj);
                 }
                 console.log(Data);
