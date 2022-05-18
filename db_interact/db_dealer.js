@@ -397,7 +397,7 @@ const update_all_tag = async (tags) => {
                     tag.tag_updated_time,
                     tag.tag_wallet_id,
                     tag.tag_color,
-                    tag.tag_created_time
+                    tag.tag_created_time.toISOString().slice(0,-1)
                 ]
             )
     });
