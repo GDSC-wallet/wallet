@@ -409,9 +409,13 @@ const update_all_tag = async (tags) => {
     });
 
     let value_str = "";
-    query_tags.forEach((tag)=>{
+    query_tags.forEach((tag,index)=>{
         value_str+=" (?,?,?,?,NOW(),?,?,NOW() ) ";
-    });
+        if(index!==query_tags.length-1){
+            value_str+=" , ";
+        }
+        }
+    );
 
     console.log('query_tags :', query_tags);
     return new Promise( async (resolve, reject) => {
