@@ -119,7 +119,7 @@ export const getUserProfile = async (req, res) => {
     const current_time = query.time_choosen ? query.time_choosen : new Date().toISOString().split('Z')[0].split('T').join(" ");
 
     //從資料庫取得使用者資料
-    await db_caller.call_user_data(/*user_id*/"id_roy", /*current_time*/"NOW()")
+    await db_caller.call_user_data(user_id, current_time)
         .then(response => {
             res.status(200).json(response);
             return res;
