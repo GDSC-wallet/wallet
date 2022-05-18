@@ -437,7 +437,7 @@ const db_dealer = {
     insert_user, update_user, delete_user,
     insert_wallet, update_wallet, delete_wallet,
     insert_record, update_record, delete_record,
-    insert_tag, update_tag, delete_tag,
+    insert_tag, update_tag,update_all_tag, delete_tag,
     get_user, get_wallet, user_exist, get_record, get_tag, get_wallet_tag,
     close_sql_connection
 }
