@@ -230,7 +230,7 @@ const insert_user = async (id, channel, channel_id, email, username, nickname) =
                             else {
                                 // 暫時將ordinary都設為1~12,並將預設顏色都設為#BEBEBE(灰)
                                 var name = ["早餐","午餐","晚餐","飲料","宵夜","交通","日用品","其他","工作","現金","轉帳","其他"];
-                                var type = ["支出","支出","支出","支出","支出","支出","支出","支出","收入","收入","收入","收入"];
+                                var type = ["expense","expense","expense","expense","expense","expense","expense","expense","income","income","income","income"];
                                 var color = ["#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE"];
                                 for(var i = 0; i < 12; ++i) {
                                     var tag_id = "tag_" + uuid();
