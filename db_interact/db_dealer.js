@@ -3,6 +3,7 @@ import { v4 as uuid } from 'uuid'
 import dotenv from 'dotenv'
 
 dotenv.config();
+
 var connection = mysql.createConnection({
     host: process.env.MYSQL_HOST,
     user: process.env.MYSQL_USER,
@@ -19,6 +20,16 @@ connection.connect(function(err){
         console.log("Successfully connect to mysql : root@localhost ");
 });
 
+
+var pool = mysql.createPool({
+    host: process.env.MYSQL_HOST,
+    user: process.env.MYSQL_USER,
+    password: process.env.MYSQL_PASSWORD,
+    port: process.env.MYSQL_PORT,
+    database: process.env.MYSQL_DATABASE,
+    multipleStatements: true
+});
+
 function print_error(err) {
     console.log("error: " + err.message);
 }
@@ -27,12 +38,29 @@ function print_error(err) {
 const get_user = (id, time_chosen) => {
     return new Promise( async (resolve, reject) => {
         var sql = "SELECT id,username,nickname,wallet_id,wallet_title,wallet_total,wallet_name,wallet_description,selected,record_id,wallet_record_tag_id,record_ordinary,record_name,record_description,record_amount,record_type,record_date,record_created_time,record_updated_time,wallet_num,record_num FROM user JOIN wallet ON wallet.user_id=user.id LEFT JOIN wallet_record ON wallet_record.record_wallet_id=wallet.wallet_id AND record_date BETWEEN date_sub(?,interval 6 MONTH) AND date_add(?,interval 6 MONTH) AND wallet.selected = 1 WHERE user.id = ? ORDER BY CAST(wallet_record.record_wallet_id AS UNSIGNED)";
+        // 連線池向資料庫要求連線
+        pool.getConnection(async (err, conn) => {
+            if(err) {
+                print_error(err);
+                reject(err);
+            } else {
+                await conn.query(sql, [time_chosen, time_chosen, id], async (err, results, fields) => {
+                    if(err) {
+                        print_error(err);
+                        reject(err);
+                    } else
+                        resolve();
+                })
+            }
+        })
+        /*
         await connection.query(sql, [time_chosen, time_chosen, id], async (err, results, fields) => {
             if(err) reject(err);
             else {
                 resolve(results);
             }
         });
+        */
     });
 }
 
@@ -379,6 +407,24 @@ const delete_tag = async (tag_id) => {
         })
     });
 };
+
+const insert_lots_tags = async (datas) => {
+    return new Promise( async (resolve, reject) => {
+        var sql = "";
+    })
+}
+
+const update_lots_tags = async (datas) => {
+    return new Promise( async (resolve, reject) => {
+
+    })
+}
+
+const delete_lots_tags = async (datas) => {
+    return new Promise( async (resolve, reject) => {
+
+    })
+}
 
 const close_sql_connection = ()=> {
     connection.end();
