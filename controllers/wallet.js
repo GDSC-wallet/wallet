@@ -91,3 +91,25 @@ export const delete_wallet = async (req, res) => {
             res.status(400).json(response);
         })
 };
+
+export const update_wallet_tag = async (req, res) => {
+
+    const {user_id,wallet_id} = req.body
+    await db_caller.Delete_wallet(user_id, wallet_id)
+        .then(result => {
+            var response = {
+                "success": true,
+                "message": "刪除wallet成功",
+                "data": {}
+            }
+            res.status(201).json(response);
+        })
+        .catch(err => {
+            var response = {
+                "success": false,
+                "message": "刪除wallet失敗 error: " + err.message,
+                "data": {}
+            }
+            res.status(400).json(response);
+        })
+};

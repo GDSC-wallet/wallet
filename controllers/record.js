@@ -1,9 +1,10 @@
 import db_caller from "../db_interact/db_caller.js";
 
 export const get_record = async (req, res) => {
-    const body = req.body;
+    const query = req.query;
+    console.log('query :', query);
 
-    await db_caller.call_record(body.record_id)
+    await db_caller.call_record(query.record_id)
         .then(response => {
             res.status(201).json(response);
         })
@@ -18,7 +19,7 @@ export const get_record = async (req, res) => {
 };
 
 export const insert_record = async (req, res) => {
-    const body = req.body
+    const body = req.body;
 
     await db_caller.Insert_record(
         body.wallet_id,

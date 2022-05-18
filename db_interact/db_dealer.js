@@ -536,6 +536,73 @@ const update_tag = async (tag_ordinary, tag_name, tag_type, tag_color) => {
     });
 };
 
+// tag_id, wallet_id不給改
+const update_all_tag = async (tags) => {
+    // tags = 
+    // [
+    //   {
+    //     "tag_color": "#BEBEBE",
+    //     "tag_created_time": "2022-05-18T13:00:56.000Z",
+    //     "tag_id": "tag_144b784c-eba7-4e0c-953e-ac407919c456",
+    //     "tag_name": "轉帳",
+    //     "tag_ordinary": 11,
+    //     "tag_type": "收入",
+    //     "tag_updated_time": "2022-05-18T13:00:56.000Z",
+    //     "tag_wallet_id": "wallet_34f9f371-b293-47d8-b7b6-e231722d09a0"
+    //   },
+    //   {
+    //     "tag_color": "#BEBEBE",
+    //     "tag_created_time": "2022-05-18T13:00:56.000Z",
+    //     "tag_id": "tag_2f79de66-3e2d-4f7e-bbda-f7be7e3ca389",
+    //     "tag_name": "午餐",
+    //     "tag_ordinary": 2,
+    //     "tag_type": "支出",
+    //     "tag_updated_time": "2022-05-18T13:00:56.000Z",
+    //     "tag_wallet_id": "wallet_34f9f371-b293-47d8-b7b6-e231722d09a0"
+    //   }
+    // ]
+
+    const query_tags = tags.map((tag)=>{
+        return(
+                [
+                    tag.tag_id,
+                    tag.tag_name,
+                    tag.tag_ordinary,
+                    tag.tag_type,
+                    // tag.tag_updated_time.slice(0,-1),
+                    // "NOW()",
+                    tag.tag_wallet_id,
+                    tag.tag_color,
+                    // "NOW()",
+                ]
+            )
+    });
+
+    let value_str = "";
+    query_tags.forEach((tag,index)=>{
+        value_str+=" (?,?,?,?,NOW(),?,?,NOW() ) ";
+        if(index!==query_tags.length-1){
+            value_str+=" , ";
+        }
+        }
+    );
+
+    console.log('query_tags :', query_tags);
+    return new Promise( async (resolve, reject) => {
+        var sql = `INSERT INTO wallet_record_tag_id (tag_id, tag_name, tag_ordinary, tag_type, tag_updated_time, tag_wallet_id, tag_color, tag_created_time) VALUES ${value_str} ON DUPLICATE KEY UPDATE tag_name=VALUES(tag_name), tag_ordinary=VALUES(tag_ordinary), tag_type=VALUES(tag_type), tag_updated_time=NOW(), tag_wallet_id=VALUES(tag_wallet_id), tag_color=VALUES(tag_color) `;
+        // var sql = "INSERT INTO wallet_record_tag_id (tag_id, tag_name, tag_ordinary, tag_type, tag_updated_time, tag_wallet_id, tag_color, tag_created_time) VALUES ? ON DUPLICATE KEY UPDATE tag_name=VALUES(tag_name), tag_ordinary=VALUES(tag_ordinary), tag_type=VALUES(tag_type), tag_updated_time=VALUES(NOW()), tag_wallet_id=VALUES(tag_wallet_id), tag_color=VALUES(tag_color), tag_created_time ";
+        // await connection.query(sql, [query_tags], (err, results, fields) => {
+        await connection.query(sql, [].concat(...query_tags), (err, results, fields) => {
+            if(err) {
+                print_error(err);
+                reject(err);
+            }
+            else
+                resolve();
+        })
+    });
+};
+
 const delete_tag = async (tag_id) => {
     return new Promise( async (resolve, reject) => {
         var sql = "DELETE FROM wallet_record_tag_id WHERE tag_id = ?";
@@ -567,7 +634,7 @@ const db_dealer = {
     insert_user, update_user, delete_user,
     insert_wallet, update_wallet, delete_wallet,
     insert_record, update_record, delete_record,
-    insert_tag, update_tag, delete_tag,
+    insert_tag, update_tag,update_all_tag, delete_tag,
     get_user, get_wallet, user_exist, get_record, get_tag, get_wallet_tag,
     close_sql_connection
 }
