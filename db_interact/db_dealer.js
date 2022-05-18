@@ -401,7 +401,7 @@ const delete_wallet = async (user_id, wallet_id) => {
                     } else if (results.length == 1)
                         reject(new Error("wallet至少要有一個"));
                     else {
-                        sql = "START TRANSACTION; DELETE FROM wallet WHERE wallet_id = ?; UPDATE user SET `wallet_num` = ( CASE WHEN `wallet_num` < 1 THEN 0 ELSE (`wallet_num` - 1) end) WHERE id = ?; COMMIT";
+                        sql = "START TRANSACTION; DELETE FROM wallet WHERE wallet_id = ?; UPDATE user SET `wallet_num` = ( CASE WHEN `wallet_num` < 1 THEN 0 ELSE (`wallet_num` - 1) end) WHERE id = ?; UPDATE wallet SET selected = 1 WHERE selected = 0 ORDER BY wallet_updated_time DESC LIMIT 1; COMMIT";
                         await conn.query(sql, [wallet_id, user_id], (err, results, fields) => {
                             if(err) {
                                 print_error(err);
