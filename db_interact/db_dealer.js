@@ -364,26 +364,24 @@ const update_all_tag = async (tags) => {
     tags = 
     [
       {
-        tag_id: "tag_0fe2c08c-3d8d-4adf-b5f2-dad290d7112f",
         tag_color: "#BEBEBE",
-        tag_created_time: "2022-05-18T10:50:28.000Z",
-        tag_id: "tag_0fe2c08c-3d8d-4adf-b5f2-dad290d7112f",
-        tag_name: "工作",
-        tag_ordinary: 9,
+        tag_created_time: "2022-05-18T13:00:56.000Z",
+        tag_id: "tag_144b784c-eba7-4e0c-953e-ac407919c456",
+        tag_name: "轉帳",
+        tag_ordinary: 11,
         tag_type: "收入",
-        tag_updated_time: "2022-05-18T10:50:28.000Z",
-        tag_wallet_id: "wallet_bff0af0b-a0c6-4d78-91a9-27b931020513"
+        tag_updated_time: "2022-05-18T13:00:56.000Z",
+        tag_wallet_id: "wallet_34f9f371-b293-47d8-b7b6-e231722d09a0"
       },
       {
-        tag_id: "tag_1b232d1a-8cbf-465b-b4fe-a8ab0a5bec90",
         tag_color: "#BEBEBE",
-        tag_created_time: "2022-05-18T10:50:28.000Z",
-        tag_id: "tag_1b232d1a-8cbf-465b-b4fe-a8ab0a5bec90",
+        tag_created_time: "2022-05-18T13:00:56.000Z",
+        tag_id: "tag_2f79de66-3e2d-4f7e-bbda-f7be7e3ca389",
         tag_name: "午餐",
         tag_ordinary: 2,
         tag_type: "支出",
-        tag_updated_time: "2022-05-18T10:50:28.000Z",
-        tag_wallet_id: "wallet_bff0af0b-a0c6-4d78-91a9-27b931020513"
+        tag_updated_time: "2022-05-18T13:00:56.000Z",
+        tag_wallet_id: "wallet_34f9f371-b293-47d8-b7b6-e231722d09a0"
       }
     ]
 
