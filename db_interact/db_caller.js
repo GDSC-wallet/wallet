@@ -115,7 +115,7 @@ const call_user_data = (user_id, time_choosen) => {
                         i += j;
                     // put record array into wallet object and put wallet object into response.data.wallets
                     wallet_obj.records = record_arr;
-                    console.log(wallet_obj);
+                    //console.log(wallet_obj);
                     Data.data.wallets.push(wallet_obj);
                 }
                 console.log(Data);
@@ -277,6 +277,8 @@ const call_record = (record_id) => {
 }
 
 const Insert_record = (record_wallet_id, wallet_record_tag_id, record_ordinary, record_name, record_description, record_amount, record_type, record_date) => {
+    if(record_amount == null)
+        record_amount = 0;
     return new Promise( async (resolve, reject) => {
         await db_dealer.insert_record(record_wallet_id, wallet_record_tag_id, record_ordinary, record_name, record_description, record_amount, record_type, record_date)
             .then(response => {
@@ -290,9 +292,9 @@ const Insert_record = (record_wallet_id, wallet_record_tag_id, record_ordinary, 
     });
 }
 
-const Update_record = (record_id, wallet_record_tag_id, record_ordinary, record_name, record_description, record_amount, record_type, record_date) => {
+const Update_record = (record_id, record_wallet_id, wallet_record_tag_id, record_ordinary, record_name, record_description, record_amount, record_type, record_date, record_amount_diff) => {
     return new Promise( async (resolve, reject) => {
-        await db_dealer.update_record(record_id, wallet_record_tag_id, record_ordinary, record_name, record_description, record_amount, record_type, record_date)
+        await db_dealer.update_record(record_id, record_wallet_id, wallet_record_tag_id, record_ordinary, record_name, record_description, record_amount, record_type, record_date, record_amount_diff)
             .then(response => {
                 console.log("record updated successfully.");
                 resolve();
@@ -305,6 +307,8 @@ const Update_record = (record_id, wallet_record_tag_id, record_ordinary, record_
 }
 
 const Delete_record = (record_id, record_wallet_id, record_amount) => {
+    if(record_amount == null)
+        record_amount = 0;
     return new Promise( async (resolve, reject) => {
         await db_dealer.delete_record(record_id, record_wallet_id, record_amount)
             .then(response => {

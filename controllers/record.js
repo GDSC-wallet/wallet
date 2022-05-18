@@ -52,13 +52,15 @@ export const update_record = async (req, res) => {
 
     await db_caller.Update_record(
         body.record_id,
+        body.record_wallet_id,
         body.wallet_record_tag_id,
         body.record_ordinary,
         body.record_name,
         body.record_description,
         body.record_amount,
         body.record_type,
-        body.record_date
+        body.record_date,
+        body.record_amount_diff
     ).then(result => {
         var response = {
             "success": true,
