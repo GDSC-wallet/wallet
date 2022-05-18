@@ -175,7 +175,7 @@ const user_exist = async (id) => {
                 print_error(err);
                 reject(err);
             } else {
-                await connection.query(sql, id, (err, results, fields) => {
+                await conn.query(sql, id, (err, results, fields) => {
                     if(err) {
                         print_error(err);
                         reject(err);
@@ -208,7 +208,7 @@ const insert_user = async (id, channel, channel_id, email, username, nickname) =
                 print_error(err);
                 reject(err);
             } else {
-                await connection.query(sql, [id, channel, channel_id, email, username, nickname], async (err, results, fields) => {
+                await conn.query(sql, [id, channel, channel_id, email, username, nickname], async (err, results, fields) => {
                     if(err) {
                         print_error(err);
                         reject(err);
