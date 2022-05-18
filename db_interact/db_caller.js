@@ -375,6 +375,7 @@ const Update_all_tag = (tags) => {
                 resolve();
             })
             .catch(err => {
+                console.log('err :', err);
                 console.log("tag updated failed.");
                 reject(err);
             })
