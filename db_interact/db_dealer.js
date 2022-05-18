@@ -369,28 +369,28 @@ const update_tag = async (tag_ordinary, tag_name, tag_type, tag_color) => {
 // tag_id, wallet_id不給改
 const update_all_tag = async (tags) => {
     // tags = 
-    // [
-    //   {
-    //     tag_color: "#BEBEBE",
-    //     tag_created_time: "2022-05-18T13:00:56.000Z",
-    //     tag_id: "tag_144b784c-eba7-4e0c-953e-ac407919c456",
-    //     tag_name: "轉帳",
-    //     tag_ordinary: 11,
-    //     tag_type: "收入",
-    //     tag_updated_time: "2022-05-18T13:00:56.000Z",
-    //     tag_wallet_id: "wallet_34f9f371-b293-47d8-b7b6-e231722d09a0"
-    //   },
-    //   {
-    //     tag_color: "#BEBEBE",
-    //     tag_created_time: "2022-05-18T13:00:56.000Z",
-    //     tag_id: "tag_2f79de66-3e2d-4f7e-bbda-f7be7e3ca389",
-    //     tag_name: "午餐",
-    //     tag_ordinary: 2,
-    //     tag_type: "支出",
-    //     tag_updated_time: "2022-05-18T13:00:56.000Z",
-    //     tag_wallet_id: "wallet_34f9f371-b293-47d8-b7b6-e231722d09a0"
-    //   }
-    // ]
+    [
+      {
+        "tag_color": "#BEBEBE",
+        "tag_created_time": "2022-05-18T13:00:56.000Z",
+        "tag_id": "tag_144b784c-eba7-4e0c-953e-ac407919c456",
+        "tag_name": "轉帳",
+        "tag_ordinary": 11,
+        "tag_type": "收入",
+        "tag_updated_time": "2022-05-18T13:00:56.000Z",
+        "tag_wallet_id": "wallet_34f9f371-b293-47d8-b7b6-e231722d09a0"
+      },
+      {
+        "tag_color": "#BEBEBE",
+        "tag_created_time": "2022-05-18T13:00:56.000Z",
+        "tag_id": "tag_2f79de66-3e2d-4f7e-bbda-f7be7e3ca389",
+        "tag_name": "午餐",
+        "tag_ordinary": 2,
+        "tag_type": "支出",
+        "tag_updated_time": "2022-05-18T13:00:56.000Z",
+        "tag_wallet_id": "wallet_34f9f371-b293-47d8-b7b6-e231722d09a0"
+      }
+    ]
 
     const query_tags = tags.map((tag)=>{
         return(
@@ -400,17 +400,17 @@ const update_all_tag = async (tags) => {
                     tag.tag_ordinary,
                     tag.tag_type,
                     // tag.tag_updated_time.slice(0,-1),
-                    "NOW()",
+                    // "NOW()",
                     tag.tag_wallet_id,
                     tag.tag_color,
-                    "NOW()",
+                    // "NOW()",
                 ]
             )
     });
 
     let value_str = "";
     query_tags.forEach((tag)=>{
-        value_str+=" (?,?,?,?,NOW(),?,?,NOW()) ";
+        value_str+=" (?,?,?,?,NOW(),?,?,NOW() ) ";
     });
 
     console.log('query_tags :', query_tags);
