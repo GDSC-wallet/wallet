@@ -408,10 +408,14 @@ const update_all_tag = async (tags) => {
             )
     });
 
+    let value_str = "";
+    query_tags.forEach((tag)=>{
+        value_str+=" (?,?,?,?,NOW(),?,?,NOW()) ";
+    });
 
     console.log('query_tags :', query_tags);
     return new Promise( async (resolve, reject) => {
-        var sql = `INSERT INTO wallet_record_tag_id (tag_id, tag_name, tag_ordinary, tag_type, tag_updated_time, tag_wallet_id, tag_color, tag_created_time) VALUES ${query_tags.map(()=>("(?,?,?,?,NOW(),?,?,NOW())"))} ON DUPLICATE KEY UPDATE tag_name=VALUES(tag_name), tag_ordinary=VALUES(tag_ordinary), tag_type=VALUES(tag_type), tag_updated_time=VALUES(NOW()), tag_wallet_id=VALUES(tag_wallet_id), tag_color=VALUES(tag_color), tag_created_time `;
+        var sql = `INSERT INTO wallet_record_tag_id (tag_id, tag_name, tag_ordinary, tag_type, tag_updated_time, tag_wallet_id, tag_color, tag_created_time) VALUES ${value_str} ON DUPLICATE KEY UPDATE tag_name=VALUES(tag_name), tag_ordinary=VALUES(tag_ordinary), tag_type=VALUES(tag_type), tag_updated_time=VALUES(NOW()), tag_wallet_id=VALUES(tag_wallet_id), tag_color=VALUES(tag_color), tag_created_time `;
         // var sql = "INSERT INTO wallet_record_tag_id (tag_id, tag_name, tag_ordinary, tag_type, tag_updated_time, tag_wallet_id, tag_color, tag_created_time) VALUES ? ON DUPLICATE KEY UPDATE tag_name=VALUES(tag_name), tag_ordinary=VALUES(tag_ordinary), tag_type=VALUES(tag_type), tag_updated_time=VALUES(NOW()), tag_wallet_id=VALUES(tag_wallet_id), tag_color=VALUES(tag_color), tag_created_time ";
         // await connection.query(sql, [query_tags], (err, results, fields) => {
         await connection.query(sql, [].concat(...query_tags), (err, results, fields) => {
