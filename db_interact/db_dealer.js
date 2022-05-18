@@ -359,6 +359,62 @@ const update_tag = async (tag_ordinary, tag_name, tag_type, tag_color) => {
     });
 };
 
+// tag_id, wallet_id不給改
+const update_all_tag = async (tags) => {
+    tags = 
+    [
+      {
+        tag_id: "tag_0fe2c08c-3d8d-4adf-b5f2-dad290d7112f",
+        tag_color: "#BEBEBE",
+        tag_created_time: "2022-05-18T10:50:28.000Z",
+        tag_id: "tag_0fe2c08c-3d8d-4adf-b5f2-dad290d7112f",
+        tag_name: "工作",
+        tag_ordinary: 9,
+        tag_type: "收入",
+        tag_updated_time: "2022-05-18T10:50:28.000Z",
+        tag_wallet_id: "wallet_bff0af0b-a0c6-4d78-91a9-27b931020513"
+      },
+      {
+        tag_id: "tag_1b232d1a-8cbf-465b-b4fe-a8ab0a5bec90",
+        tag_color: "#BEBEBE",
+        tag_created_time: "2022-05-18T10:50:28.000Z",
+        tag_id: "tag_1b232d1a-8cbf-465b-b4fe-a8ab0a5bec90",
+        tag_name: "午餐",
+        tag_ordinary: 2,
+        tag_type: "支出",
+        tag_updated_time: "2022-05-18T10:50:28.000Z",
+        tag_wallet_id: "wallet_bff0af0b-a0c6-4d78-91a9-27b931020513"
+      }
+    ]
+
+    const query_tags = tags.map((tag)=>{
+        return(
+                [
+                    tag.tag_id,
+                    tag.tag_name,
+                    tag.tag_ordinary,
+                    tag.tag_type,
+                    tag.tag_updated_time,
+                    tag.tag_wallet_id,
+                    tag.tag_color,
+                    tag.tag_created_time
+                ]
+            )
+    });
+    console.log('query_tags :', query_tags);
+    return new Promise( async (resolve, reject) => {
+        var sql = "INSERT INTO wallet_record_tag_id (tag_id, tag_name, tag_ordinary, tag_type, tag_updated_time, tag_wallet_id, tag_color, tag_created_time) VALUES ? ON DUPLICATE KEY UPDATE tag_name=VALUES(tag_name), tag_ordinary=VALUES(tag_ordinary), tag_type=VALUES(tag_type), tag_updated_time=VALUES(tag_updated_time), tag_wallet_id=VALUES(tag_wallet_id), tag_color=VALUES(tag_color), tag_created_time=VALUES(tag_created_time) ";
+        await connection.query(sql, [query_tags], (err, results, fields) => {
+            if(err) {
+                print_error(err);
+                reject(err);
+            }
+            else
+                resolve();
+        })
+    });
+};
+
 const delete_tag = async (tag_id) => {
     return new Promise( async (resolve, reject) => {
         var sql = "DELETE FROM wallet_record_tag_id WHERE tag_id = ?";

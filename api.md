@@ -396,5 +396,45 @@
 }
 ```
 
+
+## /api/tag/all/update
+- Method: `POST`
+- Header: `Authorization: Bearer {jwt}`
+- Body:
+```json
+{
+    "tags":
+    [
+        {
+            "tag_color": "#BEBEBE",
+            "tag_created_time": "2022-05-18T10:50:28.000Z",
+            "tag_id": "tag_1b232d1a-8cbf-465b-b4fe-a8ab0a5bec90",
+            "tag_name": "午餐",
+            "tag_ordinary": 2,
+            "tag_type": "支出",
+            "tag_updated_time": "2022-05-18T10:50:28.000Z",
+            "tag_wallet_id": "wallet_bff0af0b-a0c6-4d78-91a9-27b931020513"
+        }
+    ]
+}
+```
+- Param: `None`
+- Success Response: 
+```json
+{
+    "success": true,
+    "message": "",
+    "data": {}
+}
+```
+- Error Response:
+```json
+{
+    "success": false,
+    "message": "Some error occurs.",
+    "data": {}
+}
+```
+
 ## /oauth/google/login
 ## /oauth/google/redirect
