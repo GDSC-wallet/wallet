@@ -6,17 +6,10 @@ import { checkStrEmpty } from "../common/type_check.js";
 
 const router = express.Router();
 
-/*
-router.get("/", get_record);
-router.post("/create", insert_record);
-router.post("/edit", update_record);
-router.post("/delete", delete_record);
-*/
-
-router.get("/",auth,get_record_check, get_record);
-router.post("/create",auth,create_record_check, insert_record);
-router.post("/edit",auth,update_record_check, update_record);
-router.post("/delete",auth,delete_record_check, delete_record);
-
+router.get("/",[auth,get_record_check], get_record);
+router.post("/create",[auth,create_record_check], insert_record);
+router.post("/edit",[auth,update_record_check], update_record);
+router.post("/all/update",[auth,update_record_check], update_record);
+router.post("/delete",[auth,delete_record_check], delete_record);
 
 export default router;

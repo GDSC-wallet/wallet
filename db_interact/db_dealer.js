@@ -38,13 +38,14 @@ const get_user = (id, time_chosen) => {
 
 const get_wallet = (user_id, wallet_id, time_chosen) => {
     return new Promise(async (resolve, reject) => {
-        var sql = "START TRANSACTION; SELECT wallet_id,wallet_name,wallet_total,wallet_title,wallet_description,record_num,record_id,wallet_record_tag_id,record_ordinary,record_name,record_description,record_amount,record_type,record_date,record_created_time,record_updated_time FROM wallet LEFT JOIN wallet_record ON wallet_record.record_wallet_id=wallet.wallet_id AND record_date BETWEEN date_sub(? ,interval 6 MONTH) AND date_add(? ,interval 6 MONTH) WHERE wallet_id = ? ORDER BY CAST(wallet_record.record_wallet_id AS UNSIGNED)";
-        await connection.query(sql, [time_chosen, time_chosen, wallet_id], async (err, results, fields) => {
+        var sql = "START TRANSACTION; SELECT wallet_id,wallet_name,wallet_total,wallet_title,wallet_description,record_num,record_id,wallet_record_tag_id,record_ordinary,record_name,record_description,record_amount,record_type,record_date,record_created_time,record_updated_time FROM wallet LEFT JOIN wallet_record ON wallet_record.record_wallet_id=wallet.wallet_id AND record_date BETWEEN date_sub(? ,interval 6 MONTH) AND date_add(? ,interval 6 MONTH) WHERE wallet_id = ? ORDER BY CAST(wallet_record.record_wallet_id AS UNSIGNED); UPDATE wallet SET selected = 0 WHERE selected = 1 AND user_id = ?; UPDATE wallet SET selected = 1 WHERE wallet_id = ?; COMMIT";
+        await connection.query(sql, [time_chosen, time_chosen, wallet_id, user_id, wallet_id], async (err, results, fields) => {
             if(err) {
                 print_error(err);
                 reject(err);
             }
             else {
+                /*
                 // get wallet的同時改變selected
                 var sql2 = "UPDATE wallet SET selected = 0 WHERE selected = 1 AND user_id = ?; UPDATE wallet SET selected = 1 WHERE wallet_id = ?; COMMIT";
                 await connection.query(sql2, [user_id, wallet_id], (err, result, fields) => {
@@ -52,10 +53,12 @@ const get_wallet = (user_id, wallet_id, time_chosen) => {
                         print_error(err);
                         reject(err);
                     } else {
-                        //console.log(results)i;
+                        //console.log(results);
                         resolve(results);
                     }
                 });
+                */
+                resolve(results);
             }
         });
     });
@@ -209,7 +212,7 @@ const delete_user = async (id) => {
 const insert_wallet = async (user_id, wallet_name, wallet_title, wallet_description) => {
     return new Promise( async (resolve, reject) => {
         var wallet_id = 'wallet_' + uuid();
-        var sql = "START TRANSACTION; INSERT INTO wallet(wallet_id, user_id, selected, wallet_name, wallet_total, wallet_title, wallet_description, wallet_created_time, wallet_updated_time, record_num) VALUE(?,?,?,?,?,?,?,NOW(),NOW(),0); UPDATE user SET wallet_num = wallet_num + 1 WHERE id = ?";
+        var sql = "START TRANSACTION; INSERT INTO wallet(wallet_id, user_id, selected, wallet_name, wallet_total, wallet_title, wallet_description, wallet_created_time, wallet_updated_time, record_num) VALUE(?,?,?,?,?,?,?,NOW(),NOW(),0); UPDATE user SET wallet_num = wallet_num + 1 WHERE id = ?; COMMIT";
         await connection.query(sql, [wallet_id, user_id, 0, wallet_name, 0, wallet_title, wallet_description, user_id], async (err, results, fields) => {
             if(err) {
                 print_error(err);
@@ -217,7 +220,7 @@ const insert_wallet = async (user_id, wallet_name, wallet_title, wallet_descript
             } else {
                 // 暫時將ordinary都設為1~12,並將預設顏色都設為#BEBEBE(灰)
                 var name = ["早餐","午餐","晚餐","飲料","宵夜","交通","日用品","其他","工作","現金","轉帳","其他"];
-                var type = ["支出","支出","支出","支出","支出","支出","支出","支出","收入","收入","收入","收入"];
+                var type = ["expense","expense","expense","expense","expense","expense","expense","expense","income","income","income","income"];
                 var color = ["#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE"];
                 for(var i = 0; i < 12; ++i) {
                     var tag_id = "tag_" + uuid();
@@ -228,6 +231,7 @@ const insert_wallet = async (user_id, wallet_name, wallet_title, wallet_descript
                             reject(err);
                         }
                     });
+                    /*
                     if(i == 11) {
                         await connection.query("COMMIT", (err, results, fields) => {
                             if(err) {
@@ -237,6 +241,9 @@ const insert_wallet = async (user_id, wallet_name, wallet_title, wallet_descript
                                 resolve();
                         })
                     }
+                    */
+                    if(i == 11)
+                        resolve();
                 }
             }
         });
@@ -301,10 +308,10 @@ const insert_record = async (record_wallet_id, wallet_record_tag_id, record_ordi
 };
 
 // record_id, wallet_id不給改
-const update_record = async (record_id, wallet_record_tag_id, record_ordinary, record_name, record_description, record_amount, record_type, record_date) => {
+const update_record = async (record_id, record_wallet_id, wallet_record_tag_id, record_ordinary, record_name, record_description, record_amount, record_type, record_date, record_amount_diff) => {
     return new Promise( async (resolve, reject) => {
-        var sql = "UPDATE wallet_record SET wallet_record_tag_id = ?, record_ordinary = ?, record_name = ?, record_description = ?, record_amount = ?, record_type = ?, record_date = ?, record_updated_time = NOW() WHERE record_id = ?";
-        await connection.query(sql, [wallet_record_tag_id, record_ordinary, record_name, record_description, record_amount, record_type, record_date, record_id], (err, results, fields) => {
+        var sql = "START TRANSACTION; UPDATE wallet_record SET wallet_record_tag_id = ?, record_ordinary = ?, record_name = ?, record_description = ?, record_amount = ?, record_type = ?, record_date = ?, record_updated_time = NOW() WHERE record_id = ?; UPDATE wallet SET wallet_total = wallet_total + ? WHERE wallet_id = ?; COMMIT";
+        await connection.query(sql, [wallet_record_tag_id, record_ordinary, record_name, record_description, record_amount, record_type, record_date, record_id, record_amount_diff, record_wallet_id], (err, results, fields) => {
             if(err) {
                 print_error(err);
                 reject(err);
@@ -361,29 +368,29 @@ const update_tag = async (tag_ordinary, tag_name, tag_type, tag_color) => {
 
 // tag_id, wallet_id不給改
 const update_all_tag = async (tags) => {
-    tags = 
-    [
-      {
-        tag_color: "#BEBEBE",
-        tag_created_time: "2022-05-18T13:00:56.000Z",
-        tag_id: "tag_144b784c-eba7-4e0c-953e-ac407919c456",
-        tag_name: "轉帳",
-        tag_ordinary: 11,
-        tag_type: "收入",
-        tag_updated_time: "2022-05-18T13:00:56.000Z",
-        tag_wallet_id: "wallet_34f9f371-b293-47d8-b7b6-e231722d09a0"
-      },
-      {
-        tag_color: "#BEBEBE",
-        tag_created_time: "2022-05-18T13:00:56.000Z",
-        tag_id: "tag_2f79de66-3e2d-4f7e-bbda-f7be7e3ca389",
-        tag_name: "午餐",
-        tag_ordinary: 2,
-        tag_type: "支出",
-        tag_updated_time: "2022-05-18T13:00:56.000Z",
-        tag_wallet_id: "wallet_34f9f371-b293-47d8-b7b6-e231722d09a0"
-      }
-    ]
+    // tags = 
+    // [
+    //   {
+    //     tag_color: "#BEBEBE",
+    //     tag_created_time: "2022-05-18T13:00:56.000Z",
+    //     tag_id: "tag_144b784c-eba7-4e0c-953e-ac407919c456",
+    //     tag_name: "轉帳",
+    //     tag_ordinary: 11,
+    //     tag_type: "收入",
+    //     tag_updated_time: "2022-05-18T13:00:56.000Z",
+    //     tag_wallet_id: "wallet_34f9f371-b293-47d8-b7b6-e231722d09a0"
+    //   },
+    //   {
+    //     tag_color: "#BEBEBE",
+    //     tag_created_time: "2022-05-18T13:00:56.000Z",
+    //     tag_id: "tag_2f79de66-3e2d-4f7e-bbda-f7be7e3ca389",
+    //     tag_name: "午餐",
+    //     tag_ordinary: 2,
+    //     tag_type: "支出",
+    //     tag_updated_time: "2022-05-18T13:00:56.000Z",
+    //     tag_wallet_id: "wallet_34f9f371-b293-47d8-b7b6-e231722d09a0"
+    //   }
+    // ]
 
     const query_tags = tags.map((tag)=>{
         return(
@@ -401,7 +408,7 @@ const update_all_tag = async (tags) => {
     });
     console.log('query_tags :', query_tags);
     return new Promise( async (resolve, reject) => {
-        var sql = "INSERT INTO wallet_record_tag_id (tag_id, tag_name, tag_ordinary, tag_type, tag_updated_time, tag_wallet_id, tag_color, tag_created_time) VALUES ? ON DUPLICATE KEY UPDATE tag_name=VALUES(tag_name), tag_ordinary=VALUES(tag_ordinary), tag_type=VALUES(tag_type), tag_updated_time=VALUES(tag_updated_time), tag_wallet_id=VALUES(tag_wallet_id), tag_color=VALUES(tag_color), tag_created_time=VALUES(tag_created_time) ";
+        var sql = "INSERT INTO wallet_record_tag_id (tag_id, tag_name, tag_ordinary, tag_type, tag_updated_time, tag_wallet_id, tag_color, tag_created_time) VALUES ? ON DUPLICATE KEY UPDATE tag_name=VALUES(tag_name), tag_ordinary=VALUES(tag_ordinary), tag_type=VALUES(tag_type), tag_updated_time=VALUES(NOW()), tag_wallet_id=VALUES(tag_wallet_id), tag_color=VALUES(tag_color), tag_created_time=VALUES(NOW()) ";
         await connection.query(sql, [query_tags], (err, results, fields) => {
             if(err) {
                 print_error(err);
