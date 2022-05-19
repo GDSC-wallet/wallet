@@ -113,10 +113,18 @@ router.get("/google/success", isLoggedIn, (req, res) => {
     //若尚未註冊，回到前端註冊頁
     console.log('req.user :', req.user);
     if(req.user.result==="USER_NOT_EXIST_IN_DB"){
-        res.redirect(CLIENT_URL + "/callback/signup"+`?token=${token}`);
+      const { sub , name,email } = req.user.profile._json;
+      const {  user_id } = req.user.profile;
+      const channel="GOOGLE";
+      const channel_id=sub;
+      const username=name;
+      const token = jwt.sign( { channel, channel_id, email, username, user_id }, secret, { expiresIn: "24h" } );
+      res.redirect(CLIENT_URL + "/callback/signup"+`?token=${token}`);
 		return res;
     }
     else{
+      const {  user_id } = req.user.profile;
+      const token = jwt.sign( { user_id }, secret, { expiresIn: "24h" } );
         res.redirect(CLIENT_URL + "/callback/login"+`?token=${token}`);
 		return res;
     }
