@@ -371,6 +371,22 @@ const Update_tag = (tag_ordinary, tag_name, tag_type, tag_color) => {
     })
 }
 
+const Update_all_tag = (tags) => {
+    return new Promise( async (resolve, reject) => {
+        await db_dealer.update_all_tag(tags)
+            .then(response => {
+                console.log("tag updated successfully.");
+                resolve();
+            })
+            .catch(err => {
+                console.log('err :', err);
+                console.log("tag updated failed.");
+                reject(err);
+            })
+    })
+}
+
+
 const Delete_tag = (tag_id) => {
     return new Promise( async (resolve, reject) => {
         await db_dealer.delete_tag(tag_id)
@@ -385,6 +401,6 @@ const Delete_tag = (tag_id) => {
     })
 }
 
-export default { call_wallet, call_user_data, call_record, authenticate, sign_up,  Insert_wallet, Update_wallet, Delete_wallet, Insert_record, Update_record, Delete_record, Insert_tag, Update_tag, Delete_tag, call_tag };
+export default { call_wallet, call_user_data, call_record, authenticate, sign_up,  Insert_wallet, Update_wallet, Delete_wallet, Insert_record, Update_record, Delete_record, Insert_tag, Update_tag,Update_all_tag,Delete_tag, call_tag };
 
 // 暫時先不做關閉資料庫的動作
