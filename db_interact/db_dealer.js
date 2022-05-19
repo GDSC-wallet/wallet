@@ -38,7 +38,7 @@ function print_error(err) {
 // request dealer
 const get_user = (id, time_chosen) => {
     return new Promise( async (resolve, reject) => {
-        var sql = "SELECT id,username,nickname,wallet_id,wallet_title,wallet_total,wallet_name,wallet_description,selected,record_id,wallet_record_tag_id,record_ordinary,record_name,record_description,record_amount,record_type,record_date,record_created_time,record_updated_time,wallet_num,record_num FROM user JOIN wallet ON wallet.user_id=user.id LEFT JOIN wallet_record ON wallet_record.record_wallet_id=wallet.wallet_id AND record_date BETWEEN date_sub(?,interval 6 MONTH) AND date_add(?,interval 6 MONTH) AND wallet.selected = 1 WHERE user.id = ? ORDER BY CAST(wallet_record.record_wallet_id AS UNSIGNED)";
+        var sql = "SELECT id,username,nickname,wallet_id,wallet_total,wallet_name,wallet_description,selected,record_id,wallet_record_tag_id,record_ordinary,record_name,record_description,record_amount,record_type,record_date,record_created_time,record_updated_time,wallet_num,record_num FROM user JOIN wallet ON wallet.user_id=user.id LEFT JOIN wallet_record ON wallet_record.record_wallet_id=wallet.wallet_id AND record_date BETWEEN date_sub(?,interval 6 MONTH) AND date_add(?,interval 6 MONTH) AND wallet.selected = 1 WHERE user.id = ? ORDER BY CAST(wallet_record.record_wallet_id AS UNSIGNED)";
         // 連線池向資料庫要求連線
         pool.getConnection(async (err, conn) => {
             if(err) {
@@ -69,7 +69,7 @@ const get_user = (id, time_chosen) => {
 
 const get_wallet = (user_id, wallet_id, time_chosen) => {
     return new Promise(async (resolve, reject) => {
-        var sql = "START TRANSACTION; SELECT wallet_id,wallet_name,wallet_total,wallet_title,wallet_description,record_num,record_id,wallet_record_tag_id,record_ordinary,record_name,record_description,record_amount,record_type,record_date,record_created_time,record_updated_time FROM wallet LEFT JOIN wallet_record ON wallet_record.record_wallet_id=wallet.wallet_id AND record_date BETWEEN date_sub(? ,interval 6 MONTH) AND date_add(? ,interval 6 MONTH) WHERE wallet_id = ? ORDER BY CAST(wallet_record.record_wallet_id AS UNSIGNED); UPDATE wallet SET selected = 0 WHERE selected = 1 AND user_id = ?; UPDATE wallet SET selected = 1 WHERE wallet_id = ?; COMMIT";
+        var sql = "START TRANSACTION; SELECT wallet_id,wallet_name,wallet_total,wallet_description,record_num,record_id,wallet_record_tag_id,record_ordinary,record_name,record_description,record_amount,record_type,record_date,record_created_time,record_updated_time FROM wallet LEFT JOIN wallet_record ON wallet_record.record_wallet_id=wallet.wallet_id AND record_date BETWEEN date_sub(? ,interval 6 MONTH) AND date_add(? ,interval 6 MONTH) WHERE wallet_id = ? ORDER BY CAST(wallet_record.record_wallet_id AS UNSIGNED); UPDATE wallet SET selected = 0 WHERE selected = 1 AND user_id = ?; UPDATE wallet SET selected = 1 WHERE wallet_id = ?; COMMIT";
         pool.getConnection( async (err, conn) => {
             if(err) {
                 print_error(err);
@@ -219,10 +219,9 @@ const insert_user = async (id, channel, channel_id, email, username, nickname) =
                         // 預設的錢包selected設為1
                         var wallet_id = "wallet_" + uuid();
                         const wallet_name = "preset_wallet";
-                        const wallet_title = "預設錢包";
                         const wallet_description = "這是預設錢包";
-                        var sql2 = "INSERT INTO wallet(wallet_id, user_id, selected, wallet_name, wallet_total, wallet_title, wallet_description, wallet_created_time, wallet_updated_time, record_num) VALUE(?,?,?,?,?,?,?,NOW(),NOW(),0); UPDATE user SET wallet_num = wallet_num + 1 WHERE id = ?";
-                        await conn.query(sql2, [wallet_id, id, 1, wallet_name, 0, wallet_title, wallet_description, id], async (err, results, fields) => {
+                        var sql2 = "INSERT INTO wallet(wallet_id, user_id, selected, wallet_name, wallet_total, wallet_description, wallet_created_time, wallet_updated_time, record_num) VALUE(?,?,?,?,?,?,?,NOW(),NOW(),0); UPDATE user SET wallet_num = wallet_num + 1 WHERE id = ?";
+                        await conn.query(sql2, [wallet_id, id, 1, wallet_name, 0, wallet_description, id], async (err, results, fields) => {
                             if(err) {
                                 print_error(err);
                                 reject(err);
@@ -311,16 +310,16 @@ const delete_user = async (id) => {
 };
 
 // insert wallet不會將新增錢包selected設為1
-const insert_wallet = async (user_id, wallet_name, wallet_title, wallet_description) => {
+const insert_wallet = async (user_id, wallet_name, wallet_description) => {
     return new Promise( async (resolve, reject) => {
         var wallet_id = 'wallet_' + uuid();
-        var sql = "START TRANSACTION; INSERT INTO wallet(wallet_id, user_id, selected, wallet_name, wallet_total, wallet_title, wallet_description, wallet_created_time, wallet_updated_time, record_num) VALUE(?,?,?,?,?,?,?,NOW(),NOW(),0); UPDATE user SET wallet_num = wallet_num + 1 WHERE id = ?; COMMIT";
+        var sql = "START TRANSACTION; INSERT INTO wallet(wallet_id, user_id, selected, wallet_name, wallet_total, wallet_description, wallet_created_time, wallet_updated_time, record_num) VALUE(?,?,?,?,?,?,NOW(),NOW(),0); UPDATE user SET wallet_num = wallet_num + 1 WHERE id = ?; COMMIT";
         pool.getConnection( async (err, conn) => {
             if(err) {
                 print_error(err);
                 reject(err);
             } else {
-                await conn.query(sql, [wallet_id, user_id, 0, wallet_name, 0, wallet_title, wallet_description, user_id], async (err, results, fields) => {
+                await conn.query(sql, [wallet_id, user_id, 0, wallet_name, 0, wallet_description, user_id], async (err, results, fields) => {
                     if(err) {
                         print_error(err);
                         reject(err);
@@ -362,16 +361,16 @@ const insert_wallet = async (user_id, wallet_name, wallet_title, wallet_descript
 };
 
 // wallet_id判斷用
-const update_wallet = async (wallet_id, wallet_name, wallet_title, wallet_description) => {
-    console.log({wallet_id, wallet_name, wallet_title, wallet_description})
+const update_wallet = async (wallet_id, wallet_name, wallet_description) => {
+    console.log({wallet_id, wallet_name, wallet_description})
     return new Promise( async (resolve, reject) => {
-        var sql = "UPDATE wallet SET wallet_name = ?, wallet_title = ?, wallet_description = ?, wallet_updated_time = NOW() WHERE wallet_id = ?";
+        var sql = "UPDATE wallet SET wallet_name = ?, wallet_description = ?, wallet_updated_time = NOW() WHERE wallet_id = ?";
         pool.getConnection( async (err, conn) => {
             if(err) {
                 print_error(err);
                 reject(err);
             } else {
-                await conn.query(sql, [wallet_name, wallet_title, wallet_description, wallet_id], (err, results, fields) => {
+                await conn.query(sql, [wallet_name, wallet_description, wallet_id], (err, results, fields) => {
                     if(err) {
                         print_error(err);
                         reject(err);
@@ -592,13 +591,20 @@ const update_all_tag = async (tags) => {
         var sql = `INSERT INTO wallet_record_tag_id (tag_id, tag_name, tag_ordinary, tag_type, tag_updated_time, tag_wallet_id, tag_color, tag_created_time) VALUES ${value_str} ON DUPLICATE KEY UPDATE tag_name=VALUES(tag_name), tag_ordinary=VALUES(tag_ordinary), tag_type=VALUES(tag_type), tag_updated_time=NOW(), tag_wallet_id=VALUES(tag_wallet_id), tag_color=VALUES(tag_color) `;
         // var sql = "INSERT INTO wallet_record_tag_id (tag_id, tag_name, tag_ordinary, tag_type, tag_updated_time, tag_wallet_id, tag_color, tag_created_time) VALUES ? ON DUPLICATE KEY UPDATE tag_name=VALUES(tag_name), tag_ordinary=VALUES(tag_ordinary), tag_type=VALUES(tag_type), tag_updated_time=VALUES(NOW()), tag_wallet_id=VALUES(tag_wallet_id), tag_color=VALUES(tag_color), tag_created_time ";
         // await connection.query(sql, [query_tags], (err, results, fields) => {
-        await connection.query(sql, [].concat(...query_tags), (err, results, fields) => {
+        pool.getConnection( async (err, conn) => {
             if(err) {
                 print_error(err);
                 reject(err);
+            } else {
+                await connection.query(sql, [].concat(...query_tags), (err, results, fields) => {
+                if(err) {
+                    print_error(err);
+                    reject(err);
+                }
+                else
+                    resolve();
+                })
             }
-            else
-                resolve();
         })
     });
 };
