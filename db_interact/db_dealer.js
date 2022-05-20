@@ -56,14 +56,6 @@ const get_user = (id, time_chosen) => {
                 })
             }
         })
-        /*
-        await connection.query(sql, [time_chosen, time_chosen, id], async (err, results, fields) => {
-            if(err) reject(err);
-            else {
-                resolve(results);
-            }
-        });
-        */
     });
 }
 
@@ -81,19 +73,6 @@ const get_wallet = (user_id, wallet_id, time_chosen) => {
                         reject(err);
                     }
                     else {
-                        /*
-                            // get wallet的同時改變selected
-                    var sql2 = "UPDATE wallet SET selected = 0 WHERE selected = 1 AND user_id = ?; UPDATE wallet SET selected = 1 WHERE wallet_id = ?; COMMIT";
-                    await connection.query(sql2, [user_id, wallet_id], (err, result, fields) => {
-                        if(err) {
-                            print_error(err);
-                            reject(err);
-                        } else {
-                            //console.log(results);
-                            resolve(results);
-                        }
-                    });
-                    */
                             conn.release();
                             resolve(results);
                         }
@@ -200,57 +179,45 @@ const insert_user = async (id, channel, channel_id, email, username, nickname) =
         console.log("username: " + username);
         console.log("nickname: " + nickname);
         if(nickname == undefined)
-            nickname = "null"
-        // generate uuid for the user
-        var sql = "START TRANSACTION; INSERT INTO user(id,channel,channel_id,email,username,nickname,created_time,updated_time,wallet_num) VALUE(?,?,?,?,?,?,NOW(),NOW(),0)";
+            nickname = "null";
+        // generate uuid for the use
+        var wallet_id = "wallet_" + uuid();
+        const wallet_name = "preset_wallet";
+        const wallet_description = "這是預設錢包";
+        var name = ["早餐","午餐","晚餐","飲料","宵夜","交通","日用品","其他","工作","現金","轉帳","其他"];
+        var type = ["expense","expense","expense","expense","expense","expense","expense","expense","income","income","income","income"];
+        var color = ["#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE"];
+        var query_tags = function () {
+            var values = [];
+            values.push(id, channel, channel_id, email, username, nickname, wallet_id, id, 1, wallet_name, 0, wallet_description);
+            for(var i = 0; i < 12; ++i) {
+                values.push("tag_" + uuid());
+                values.push(wallet_id);
+                values.push(i+1);
+                values.push(name[i]);
+                values.push(type[i]);
+                values.push(color[i]);
+            }
+            return values;
+        }
+        var value_str = "";
+        for(var i = 0; i < 12; ++i) {
+            value_str += "(?,?,?,?,?,NOW(),NOW(),?)";
+            if(i != 11)
+                value_str += ", ";
+        }
+        var sql = `START TRANSACTION; INSERT INTO user(id,channel,channel_id,email,username,nickname,created_time,updated_time,wallet_num) VALUE(?,?,?,?,?,?,NOW(),NOW(),1); INSERT INTO wallet(wallet_id, user_id, selected, wallet_name, wallet_total, wallet_description, wallet_created_time, wallet_updated_time, record_num) VALUE(?,?,?,?,?,?,NOW(),NOW(),0); INSERT INTO wallet_record_tag_id(tag_id, tag_wallet_id, tag_ordinary, tag_name, tag_type, tag_created_time, tag_updated_time, tag_color) VALUES ${value_str}; COMMIT`;
         pool.getConnection( async (err, conn) => {
             if(err) {
                 print_error(err);
                 reject(err);
             } else {
-                await conn.query(sql, [id, channel, channel_id, email, username, nickname], async (err, results, fields) => {
+                await conn.query(sql, [].concat(...query_tags()), async (err, results, fields) => {
                     if(err) {
                         print_error(err);
                         reject(err);
                     }
                     else {
-                        // 預設給user一個wallet
-                        // 不能用call函式的寫法因為會包不到transaction
-                        // 預設的錢包selected設為1
-                        var wallet_id = "wallet_" + uuid();
-                        const wallet_name = "preset_wallet";
-                        const wallet_description = "這是預設錢包";
-                        var sql2 = "INSERT INTO wallet(wallet_id, user_id, selected, wallet_name, wallet_total, wallet_description, wallet_created_time, wallet_updated_time, record_num) VALUE(?,?,?,?,?,?,?,NOW(),NOW(),0); UPDATE user SET wallet_num = wallet_num + 1 WHERE id = ?";
-                        await conn.query(sql2, [wallet_id, id, 1, wallet_name, 0, wallet_description, id], async (err, results, fields) => {
-                            if(err) {
-                                print_error(err);
-                                reject(err);
-                            }
-                            else {
-                                // 暫時將ordinary都設為1~12,並將預設顏色都設為#BEBEBE(灰)
-                                var name = ["早餐","午餐","晚餐","飲料","宵夜","交通","日用品","其他","工作","現金","轉帳","其他"];
-                                var type = ["expense","expense","expense","expense","expense","expense","expense","expense","income","income","income","income"];
-                                var color = ["#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE"];
-                                for(var i = 0; i < 12; ++i) {
-                                    var tag_id = "tag_" + uuid();
-                                    sql = "INSERT INTO wallet_record_tag_id(tag_id, tag_wallet_id, tag_ordinary, tag_name, tag_type, tag_created_time, tag_updated_time, tag_color) VALUE(?,?,?,?,?,NOW(),NOW(),?)";
-                                    await conn.query(sql, [tag_id, wallet_id, i+1, name[i], type[i], color[i]], (err, results, fields) => {
-                                        if(err) {
-                                            print_error(err);
-                                            reject(err);
-                                        }
-                                    });
-                                    if(i == 11) {
-                                        await conn.query("COMMIT", (err, results, fields) => {
-                                            if(err) {
-                                                print_error(err);
-                                                reject(err);
-                                            }
-                                        })
-                                    }
-                                }
-                            }
-                        });
                         console.log("user, default wallet and default tags inserted successfully.");
                         conn.release();
                         resolve();
@@ -313,46 +280,41 @@ const delete_user = async (id) => {
 const insert_wallet = async (user_id, wallet_name, wallet_description) => {
     return new Promise( async (resolve, reject) => {
         var wallet_id = 'wallet_' + uuid();
-        var sql = "START TRANSACTION; INSERT INTO wallet(wallet_id, user_id, selected, wallet_name, wallet_total, wallet_description, wallet_created_time, wallet_updated_time, record_num) VALUE(?,?,?,?,?,?,NOW(),NOW(),0); UPDATE user SET wallet_num = wallet_num + 1 WHERE id = ?; COMMIT";
+        var name = ["早餐","午餐","晚餐","飲料","宵夜","交通","日用品","其他","工作","現金","轉帳","其他"];
+        var type = ["expense","expense","expense","expense","expense","expense","expense","expense","income","income","income","income"];
+        var color = ["#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE"];
+        var query_tags = function () {
+            var values = [];
+            values.push(wallet_id, user_id, 0, wallet_name, 0, wallet_description, user_id);
+            for(var i = 0; i < 12; ++i) {
+                values.push("tag_" + uuid());
+                values.push(wallet_id);
+                values.push(i+1);
+                values.push(name[i]);
+                values.push(type[i]);
+                values.push(color[i]);
+            }
+            return values;
+        }
+        var value_str = "";
+        for(var i = 0; i < 12; ++i) {
+            value_str += "(?,?,?,?,?,NOW(),NOW(),?)";
+            if(i != 11)
+                value_str += ", ";
+        }
+        var sql = `START TRANSACTION; INSERT INTO wallet(wallet_id, user_id, selected, wallet_name, wallet_total, wallet_description, wallet_created_time, wallet_updated_time, record_num) VALUE(?,?,?,?,?,?,NOW(),NOW(),0); UPDATE user SET wallet_num = wallet_num + 1 WHERE id = ?; INSERT INTO wallet_record_tag_id(tag_id, tag_wallet_id, tag_ordinary, tag_name, tag_type, tag_created_time, tag_updated_time, tag_color) VALUES ${value_str}; COMMIT;`;
         pool.getConnection( async (err, conn) => {
             if(err) {
                 print_error(err);
                 reject(err);
             } else {
-                await conn.query(sql, [wallet_id, user_id, 0, wallet_name, 0, wallet_description, user_id], async (err, results, fields) => {
+                await conn.query(sql, [].concat(query_tags()), async (err, results, fields) => {
                     if(err) {
                         print_error(err);
                         reject(err);
                     } else {
-                        // 暫時將ordinary都設為1~12,並將預設顏色都設為#BEBEBE(灰)
-                        var name = ["早餐","午餐","晚餐","飲料","宵夜","交通","日用品","其他","工作","現金","轉帳","其他"];
-                        var type = ["expense","expense","expense","expense","expense","expense","expense","expense","income","income","income","income"];
-                        var color = ["#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE"];
-                        for(var i = 0; i < 12; ++i) {
-                            var tag_id = "tag_" + uuid();
-                            sql = "INSERT INTO wallet_record_tag_id(tag_id, tag_wallet_id, tag_ordinary, tag_name, tag_type, tag_created_time, tag_updated_time, tag_color) VALUE(?,?,?,?,?,NOW(),NOW(),?)";
-                            await conn.query(sql, [tag_id, wallet_id, i+1, name[i], type[i], color[i]], (err, results, fields) => {
-                                if(err) {
-                                    print_error(err);
-                                    reject(err);
-                                }
-                            });
-                            /*
-                    if(i == 11) {
-                        await connection.query("COMMIT", (err, results, fields) => {
-                            if(err) {
-                                print_error(err);
-                                reject(err);
-                            } else
-                                resolve();
-                        })
-                    }
-                    */
-                            if(i == 11) {
-                                conn.release();
-                                resolve();
-                            }
-                        }
+                        console.log("wallet inserted successfully.");
+                        resolve();
                     }
                 });
             }

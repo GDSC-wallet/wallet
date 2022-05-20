@@ -6,8 +6,9 @@ const secret = 'GDSC_WALLET';
 
 //驗證jwt是否有效或是過期
 const auth = async (req, res, next) => {
-  try {
 
+  try {
+    
     const prefix = req.headers.authorization.split(" ")[0];
     const token = req.headers.authorization.split(" ")[1];
     const isCustomAuth = token.length < 500;
