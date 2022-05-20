@@ -22,10 +22,10 @@ export const get_wallet = async (req, res) => {
 
 export const insert_wallet = async (req, res) => {
 
-    // const { wallet_name, wallet_description } = req.body;
+    const { wallet_name, wallet_description } = req.body;
 
     // 從 req.decodedData 取得 jwt decode 的資料，不進行二次解密
-    // const user_id = req.decodedData?.user_id;
+    const user_id = req.decodedData?.user_id;
 
     await db_caller.Insert_wallet(user_id, wallet_name, wallet_description)
         .then(result => {

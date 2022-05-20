@@ -28,3 +28,4 @@ update_wallet_tag	/home/roy/codes/GDSC_wallet/backend/controllers/wallet.js	/^ex
 user_id	/home/roy/codes/GDSC_wallet/backend/controllers/user.js	/^    const user_id = req.decodedData?.user_id;$/;"	C	language:JavaScript
 user_id	/home/roy/codes/GDSC_wallet/backend/controllers/wallet.js	/^    const user_id = req.decodedData?.user_id;$/;"	C	language:JavaScript
 user_id	/home/roy/codes/GDSC_wallet/backend/controllers/wallet.js	/^    const user_id = req.decodedData?.user_id;$/;"	C	language:JavaScript
+user_id	/home/roy/codes/GDSC_wallet/backend/controllers/wallet.js	/^    const user_id = req.decodedData?.user_id;$/;"	C	language:JavaScript
