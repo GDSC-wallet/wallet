@@ -5,7 +5,6 @@ body	/home/roy/codes/GDSC_wallet/backend/controllers/record.js	/^    const body 
 body	/home/roy/codes/GDSC_wallet/backend/controllers/record.js	/^    const body = req.body;$/;"	C	language:JavaScript
 current_time	/home/roy/codes/GDSC_wallet/backend/controllers/user.js	/^    const current_time = query.time_choosen ? query.time_choosen : new Date().toISOString().spli/;"	C	language:JavaScript
 data	/home/roy/codes/GDSC_wallet/backend/controllers/user.js	/^        "data": undefined$/;"	p	language:JavaScript	class:response
-decodedData	/home/roy/codes/GDSC_wallet/backend/controllers/wallet.js	/^    const decodedData = jwt.verify(token, secret);$/;"	C	language:JavaScript
 delete_record	/home/roy/codes/GDSC_wallet/backend/controllers/record.js	/^export const delete_record = async (req, res) => {$/;"	C	language:JavaScript
 delete_tag	/home/roy/codes/GDSC_wallet/backend/controllers/tag.js	/^export const delete_tag = async (req, res) => {$/;"	C	language:JavaScript
 delete_wallet	/home/roy/codes/GDSC_wallet/backend/controllers/wallet.js	/^export const delete_wallet = async (req, res) => {$/;"	C	language:JavaScript
@@ -22,9 +21,11 @@ response	/home/roy/codes/GDSC_wallet/backend/controllers/user.js	/^        var r
 secret	/home/roy/codes/GDSC_wallet/backend/controllers/user.js	/^const secret = 'GDSC_WALLET';$/;"	C	language:JavaScript
 signUp	/home/roy/codes/GDSC_wallet/backend/controllers/user.js	/^export const signUp = async (req, res) => {$/;"	C	language:JavaScript
 success	/home/roy/codes/GDSC_wallet/backend/controllers/user.js	/^        "success": false,$/;"	p	language:JavaScript	class:response
-token	/home/roy/codes/GDSC_wallet/backend/controllers/wallet.js	/^    const token = req.headers.authorization;$/;"	C	language:JavaScript
 update_record	/home/roy/codes/GDSC_wallet/backend/controllers/record.js	/^export const update_record = async (req, res) => {$/;"	C	language:JavaScript
 update_tag	/home/roy/codes/GDSC_wallet/backend/controllers/tag.js	/^export const update_tag = async (req, res) => {$/;"	C	language:JavaScript
 update_wallet	/home/roy/codes/GDSC_wallet/backend/controllers/wallet.js	/^export const update_wallet = async (req, res) => {$/;"	C	language:JavaScript
+update_wallet_tag	/home/roy/codes/GDSC_wallet/backend/controllers/wallet.js	/^export const update_wallet_tag = async (req, res) => {$/;"	C	language:JavaScript
 user_id	/home/roy/codes/GDSC_wallet/backend/controllers/user.js	/^    const user_id = req.decodedData?.user_id;$/;"	C	language:JavaScript
-user_id	/home/roy/codes/GDSC_wallet/backend/controllers/wallet.js	/^    const user_id = decodedData?.user_id;$/;"	C	language:JavaScript
+user_id	/home/roy/codes/GDSC_wallet/backend/controllers/wallet.js	/^    const user_id = req.decodedData?.user_id;$/;"	C	language:JavaScript
+user_id	/home/roy/codes/GDSC_wallet/backend/controllers/wallet.js	/^    const user_id = req.decodedData?.user_id;$/;"	C	language:JavaScript
+user_id	/home/roy/codes/GDSC_wallet/backend/controllers/wallet.js	/^    const user_id = req.decodedData?.user_id;$/;"	C	language:JavaScript
