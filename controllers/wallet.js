@@ -6,7 +6,7 @@ export const get_wallet = async (req, res) => {
     // 從 req.decodedData 取得 jwt decode 的資料，不進行二次解密
     const user_id = req.decodedData?.user_id;
 
-    await db_caller.call_wallet(/*"id_roy","wallet_11f0c4ed-edef-436d-9b67-46812cdc1d08"*/user_id, wallet_id, time_choosen)
+    await db_caller.call_wallet(user_id, wallet_id, time_choosen)
         .then(response => {
             res.status(200).json(response);
         })
@@ -22,12 +22,12 @@ export const get_wallet = async (req, res) => {
 
 export const insert_wallet = async (req, res) => {
 
-    const { wallet_name, wallet_title, wallet_description } = req.body;
+    const { wallet_name, wallet_description } = req.body;
 
     // 從 req.decodedData 取得 jwt decode 的資料，不進行二次解密
     const user_id = req.decodedData?.user_id;
 
-    await db_caller.Insert_wallet(user_id, wallet_name, wallet_title, wallet_description)
+    await db_caller.Insert_wallet(user_id, wallet_name, wallet_description)
         .then(result => {
             var response = {
                 "success": true,
@@ -47,8 +47,8 @@ export const insert_wallet = async (req, res) => {
 };
 
 export const update_wallet = async (req, res) => {
-    const { wallet_id, wallet_name, wallet_title, wallet_description } = req.body
-    await db_caller.Update_wallet(wallet_id, wallet_name, wallet_title, wallet_description)
+    const { wallet_id, wallet_name, wallet_description } = req.body
+    await db_caller.Update_wallet(wallet_id, wallet_name, wallet_description)
         .then(result => {
             var response = {
                 "success": true,

@@ -57,7 +57,6 @@ const call_user_data = (user_id, time_choosen) => {
                     var wallet_obj = {
                         "wallet_id": results[i].wallet_id,
                         "wallet_name": results[i].wallet_name,
-                        "wallet_title": results[i].wallet_title,
                         "wallet_total": results[i].wallet_total,
                         "wallet_description": results[i].wallet_description,
                         "selected": results[i].selected,
@@ -140,7 +139,6 @@ const call_wallet = (user_id, wallet_id, time_choosen) => {
                     "data": {
                         "wallet_id": results[1][0].wallet_id,
                         "wallet_name": results[1][0].wallet_name,
-                        "wallet_title": results[1][0].wallet_title,
                         "wallet_total": results[1][0].wallet_total,
                         "wallet_description": results[1][0].wallet_description,
                         "record_num": results[1][0].record_num,
@@ -214,9 +212,9 @@ const sign_up = (id, channel, channel_id, email, username, nickname) => {
     });
 }
 
-const Insert_wallet = (user_id, wallet_name, wallet_title, wallet_description) => {
+const Insert_wallet = (user_id, wallet_name, wallet_description) => {
     return new Promise( async (resolve, reject) => {
-        await db_dealer.insert_wallet(user_id, wallet_name, wallet_title, wallet_description)
+        await db_dealer.insert_wallet(user_id, wallet_name, wallet_description)
             .then(response => {
                 console.log("wallet inserted successfully.");
                 resolve();
@@ -228,9 +226,9 @@ const Insert_wallet = (user_id, wallet_name, wallet_title, wallet_description) =
     });
 }
 
-const Update_wallet = (wallet_id, wallet_name, wallet_title, wallet_description) => {
+const Update_wallet = (wallet_id, wallet_name, wallet_description) => {
     return new Promise( async (resolve, reject) => {
-        await db_dealer.update_wallet(wallet_id, wallet_name, wallet_title, wallet_description)
+        await db_dealer.update_wallet(wallet_id, wallet_name, wallet_description)
             .then(response => {
                 console.log("wallet updated successfully.");
                 resolve();
