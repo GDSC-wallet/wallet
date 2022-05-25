@@ -99,7 +99,7 @@ error : TypeError: Cannot read properties of undefined (reading 'length')
     at router (/home/andyjjrt/GDSC_wallet_backend/node_modules/express/lib/router/index.js:47:12)
 id : iZO3YdJzDrIIt4o/pEP2lAhdasfOPSn3KMIcNIG0HC0=
 results : []
-user_exist : false
+ser_exist : false
 req.user : {
   result: 'USER_NOT_EXIST_IN_DB',
   profile: {

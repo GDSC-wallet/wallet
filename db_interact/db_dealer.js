@@ -147,7 +147,7 @@ const get_tag = (tag_id) => {
 
 const user_exist = async (id) => {
     console.log('id :', id);
-    var sql = "SELECT * FROM user WHERE id = ?";
+    var sql = "SELECT id FROM user WHERE id = ?";
     return new Promise( async (resolve, reject) => {
         pool.getConnection( async (err, conn) => {
             if(err) {
@@ -349,7 +349,7 @@ const update_wallet = async (wallet_id, wallet_name, wallet_description) => {
 const delete_wallet = async (user_id, wallet_id) => {
     return new Promise( async (resolve, reject) => {
         // 檢查wallet如果剩一個就不能刪除
-        var sql = "SELECT * FROM wallet WHERE user_id = ?";
+        var sql = "SELECT id FROM wallet WHERE user_id = ?";
         pool.getConnection( async (err, conn) => {
             if(err) {
                 print_error(err);
@@ -359,11 +359,11 @@ const delete_wallet = async (user_id, wallet_id) => {
                     if(err) {
                         print_error(err);
                         reject(err);
-                    } else if (results.length == 1)
+                    } else if (results.length == 1) {
                         reject(new Error("wallet至少要有一個"));
-                    else {
-                        sql = "START TRANSACTION; DELETE FROM wallet WHERE wallet_id = ?; UPDATE user SET `wallet_num` = ( CASE WHEN `wallet_num` < 1 THEN 0 ELSE (`wallet_num` - 1) end) WHERE id = ?; UPDATE wallet SET selected = 1 WHERE selected = 0 ORDER BY wallet_updated_time DESC LIMIT 1; COMMIT";
-                        await conn.query(sql, [wallet_id, user_id], (err, results, fields) => {
+                    } else {
+                        sql = "START TRANSACTION; DELETE FROM wallet WHERE wallet_id = ?; UPDATE user SET `wallet_num` = ( CASE WHEN `wallet_num` < 1 THEN 0 ELSE (`wallet_num` - 1) end) WHERE id = ?; UPDATE wallet SET selected = 1 WHERE selected = 0 AND user_id = ? ORDER BY wallet_updated_time DESC LIMIT 1; COMMIT";
+                        await conn.query(sql, [wallet_id, user_id, user_id], (err, results, fields) => {
                             if(err) {
                                 print_error(err);
                                 reject(err);
@@ -474,15 +474,15 @@ const insert_tag = async (tag_wallet_id, tag_ordinary, tag_name, tag_type, tag_c
 };
 
 // tag_id, wallet_id不給改
-const update_tag = async (tag_ordinary, tag_name, tag_type, tag_color) => {
+const update_tag = async (tag_id, tag_ordinary, tag_name, tag_type, tag_color) => {
     return new Promise( async (resolve, reject) => {
-        var sql = "UPDATE wallet_record_tag_id SET tag_ordinary = ?, tag_name = ?, tag_type = ?, tag_color = ?";
+        var sql = "UPDATE wallet_record_tag_id SET tag_ordinary = ?, tag_name = ?, tag_type = ?, tag_color = ? WHERE tag_id = ?";
         pool.getConnection( async (err, conn) => {
             if(err) {
                 print_error(err);
                 reject(err);
             } else {
-                await conn.query(sql, [tag_ordinary, tag_name, tag_type, tag_color], (err, results, fields) => {
+                await conn.query(sql, [ tag_ordinary, tag_name, tag_type, tag_color, tag_id], (err, results, fields) => {
                     if(err) {
                         print_error(err);
                         reject(err);
