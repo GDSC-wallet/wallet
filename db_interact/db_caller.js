@@ -212,6 +212,20 @@ const sign_up = (id, channel, channel_id, email, username, nickname) => {
     });
 }
 
+const Update_user = (id, nickname) => {
+    return new Promise( async (resolve, reject) => {
+        await db_dealer.update_user(id, nickname)
+            .then(response => {
+                console.log("user updated successfully.");
+                resolve();
+            })
+            .catch(err => {
+                console.log("wallet inserted failed.");
+                reject(err);
+            })
+    })
+}
+
 const Insert_wallet = (user_id, wallet_name, wallet_description) => {
     return new Promise( async (resolve, reject) => {
         await db_dealer.insert_wallet(user_id, wallet_name, wallet_description)
