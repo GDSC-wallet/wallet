@@ -34,7 +34,7 @@ export const update_record_check = async (req, res, next) => {
             res.status(401).json({success:false,msg:"record_id is required"})
             return;
         }
-        if(!!body.record_wallet_id){
+        if(!!!body.record_wallet_id){
             res.status(401).json({success:false,msg:"record_wallet_id is required"})
             return;
         }
