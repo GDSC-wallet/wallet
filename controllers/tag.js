@@ -36,7 +36,7 @@ export const insert_tag = async (req, res) => {
 };
 
 export const update_tag = async (req, res) => {
-    await db_caller.Update_tag(req.body.tag_ordinary, req.body.tag_name, req.body.tag_type, req.body.tag_color)
+    await db_caller.Update_tag(req.body.tag_id, req.body.tag_ordinary, req.body.tag_name, req.body.tag_type, req.body.tag_color)
         .then(result => {
             var response = {
                 "success": true,

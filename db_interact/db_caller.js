@@ -355,9 +355,9 @@ const Insert_tag = (tag_wallet_id, tag_ordinary, tag_name, tag_type, tag_color) 
     });
 }
 
-const Update_tag = (tag_ordinary, tag_name, tag_type, tag_color) => {
+const Update_tag = (tag_id, tag_ordinary, tag_name, tag_type, tag_color) => {
     return new Promise( async (resolve, reject) => {
-        await db_dealer.update_tag(tag_ordinary, tag_name, tag_type, tag_color)
+        await db_dealer.update_tag(tag_id, tag_ordinary, tag_name, tag_type, tag_color)
             .then(response => {
                 console.log("tag updated successfully.");
                 resolve();
