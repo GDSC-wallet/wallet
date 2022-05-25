@@ -82,7 +82,7 @@ export const update_all_tag = async (req, res) => {
         .then(result => {
             var response = {
                 "success": true,
-                "message": "刪除tag成功",
+                "message": "更新tag成功",
                 "data": {}
             }
             res.status(201).json(response);
@@ -90,7 +90,7 @@ export const update_all_tag = async (req, res) => {
         .catch(err => {
             var response = {
                 "success": false,
-                "message": "刪除tag失敗",
+                "message": "更新tag失敗",
                 "data": {}
             }
             res.status(400).json(response);
