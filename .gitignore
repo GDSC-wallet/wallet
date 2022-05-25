@@ -1,5 +1,6 @@
 /.env
 .env
+nohup.out
 .vscode
 .aws
 node_modules

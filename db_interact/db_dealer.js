@@ -349,7 +349,7 @@ const update_wallet = async (wallet_id, wallet_name, wallet_description) => {
 const delete_wallet = async (user_id, wallet_id) => {
     return new Promise( async (resolve, reject) => {
         // 檢查wallet如果剩一個就不能刪除
-        var sql = "SELECT id FROM wallet WHERE user_id = ?";
+        var sql = "SELECT user_id FROM wallet WHERE user_id = ?";
         pool.getConnection( async (err, conn) => {
             if(err) {
                 print_error(err);
