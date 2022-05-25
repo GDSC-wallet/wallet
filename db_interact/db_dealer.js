@@ -4,24 +4,7 @@ import dotenv from 'dotenv'
 
 dotenv.config();
 
-/*
-var connection = mysql.createConnection({
-    host: process.env.MYSQL_HOST,
-    user: process.env.MYSQL_USER,
-    password: process.env.MYSQL_PASSWORD,
-    port: process.env.MYSQL_PORT,
-    database: process.env.MYSQL_DATABASE,
-    multipleStatements: true
-});
-
-connection.connect(function(err){
-    if(err)
-        return err;
-    else
-        console.log("Successfully connect to mysql : root@localhost ");
-});
-*/
-
+// 連接mysql連線池
 var pool = mysql.createPool({
     host: process.env.MYSQL_HOST,
     user: process.env.MYSQL_USER,
@@ -105,7 +88,7 @@ const get_record = (record_id) => {
 
 const get_wallet_tag = (wallet_id) => {
     return new Promise(async (resolve, reject) => {
-        var sql = "SELECT * from wallet_record_tag_id WHERE tag_wallet_id = ?";
+        var sql = "SELECT * from wallet_record_tag_id WHERE tag_wallet_id = ? ORDER BY tag_ordinary ASC";
         pool.getConnection( async (err, conn) => {
             if(err) {
                 print_error(err);
@@ -229,15 +212,15 @@ const insert_user = async (id, channel, channel_id, email, username, nickname) =
 };
 
 // id判斷用,channel,channel_id不給改
-const update_user = async (id, email, username, nickname, created_time) => {
+const update_user = async (id, nickname) => {
     return new Promise( async(resolve, reject) => {
-        var sql = "UPDATE user SET email = ?, username = ?, nickname = ?, created_time = ?, updated_time = NOW() WHERE id = ?";
+        var sql = "UPDATE user SET nickname = ?, updated_time = NOW() WHERE id = ?";
         pool.getConnection( async (err, conn) => {
             if(err) {
                 print_error(err);
                 reject(err);
             } else {
-                await conn.query(sql, [email, username, nickname, created_time], id, (err, results, fields) => {
+                await conn.query(sql, [nickname, id], (err, results, fields) => {
                     if(err) {
                         print_error(err);
                         reject(err);
