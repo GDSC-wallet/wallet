@@ -1,6 +1,8 @@
 import db_caller from "../db_interact/db_caller.js";
+import Record from "../db_interact/record.js";
 
 export const get_record = async (req, res) => {
+    /*
     const query = req.query;
     console.log('query :', query);
 
@@ -16,6 +18,15 @@ export const get_record = async (req, res) => {
             }
             res.status(400).json(response);
         })
+        */
+    const query = req.query;
+    await Record.get_record(query.record_id)
+        .then(results => {
+            res.status(201).json(results);
+        })
+        .catch(err => {
+            res.status(400).json(err);
+        });
 };
 
 export const insert_record = async (req, res) => {

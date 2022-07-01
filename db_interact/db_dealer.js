@@ -363,7 +363,7 @@ const delete_wallet = async (user_id, wallet_id) => {
     // 被刪除的wallet的record與tag都以foreign key on delete cascade一併刪除
 };
 
-// sql error
+
 const insert_record = async (record_wallet_id, wallet_record_tag_id, record_ordinary, record_name, record_description, record_amount, record_type, record_date) => {
     return new Promise( async (resolve, reject) => {
         var record_id = "record_" + uuid();

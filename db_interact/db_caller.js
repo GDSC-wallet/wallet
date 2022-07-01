@@ -279,7 +279,7 @@ const call_record = (record_id) => {
                     "data": results
                 }
                 console.log(response);
-                resolve(response);
+                resolve(results);
             })
             .catch(err => {
                 console.log('ERROR: ' + err.message);
