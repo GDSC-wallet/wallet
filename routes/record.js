@@ -1,4 +1,4 @@
-import express from "express";
+iport express from "express";
 import auth from "../middleware/auth.js";
 import { get_record,insert_record,update_record,delete_record } from "../controllers/record.js";
 import { get_record_check,create_record_check,update_record_check,delete_record_check } from "../object/record.js";
