@@ -6,7 +6,7 @@ import GoogleStrategy from "passport-google-oauth20";
 import crypto from "crypto";
 
 //DB CALLER
-import db_caller from "../db_interact/db_caller.js";
+import User from "../db_interact/user.js";
 
 const router = express.Router();
 const secret = "GDSC_WALLET";
@@ -37,8 +37,7 @@ passport.use(
           const user_id = sha256Hasher.update(user_email).digest('base64');
 
           //確認此使用者是否已經存在WALLET的DB
-          /*
-          const user_exist = await db_caller.authenticate(user_id); 
+          const user_exist = await User.authenticate(user_id); 
           console.log('user_exist :', user_exist);
      
           if(user_exist){
@@ -55,27 +54,6 @@ passport.use(
                     profile:{...profile,user_id:user_id}
                 });
             }
-          */
-            await db_caller.authenticate(user_id)
-                .then(user_exist => {
-                    if(user_exist) {
-                        return done(null,
-                            {
-                                result:"USER_EXIST_IN_DB",
-                                profile:{...profile,user_id:user_id}
-                            });
-                    }
-                    else {
-                        return done(null,
-                            {
-                                result:"USER_NOT_EXIST_IN_DB",
-                                profile:{...profile,user_id:user_id}
-                            })
-                    }
-                })
-                .catch(err => {
-                    throw err;
-                })
         }
         catch(err){
 

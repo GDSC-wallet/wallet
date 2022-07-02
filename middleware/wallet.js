@@ -1,10 +1,11 @@
-export const get_record_response = async (req, res, next) => {
+/*
+export const get_wallet_response = async (req, res, next) => {
     var response = {};
     // 錯誤回傳
     if(req.message) {
         response = {
             "success": false,
-            "message": "取得record資料失敗 error: " + req.message,
+            "message": "取得wallet資料失敗 error: " + req.message,
             "data": {}
         }
         console.log(response);
@@ -14,22 +15,22 @@ export const get_record_response = async (req, res, next) => {
     else {
         response = {
             "success": true,
-            "message": "取得record資料成功",
+            "message": "取得wallet資料成功",
             "data": req
         }
         console.log(response);
         res.status(201).json(response);
     }
 }
+*/
 
-
-export const insert_record_response = async (req, res, next) => {
+export const insert_wallet_response = async (req, res, next) => {
     var response = {};
     // 錯誤回傳
     if(req.message) {
         response = {
             "success": false,
-            "message": "新增record資料失敗 error: " + req.message,
+            "message": "新增wallet資料失敗 error: " + req.message,
             "data": {}
         }
         console.log(response);
@@ -39,7 +40,7 @@ export const insert_record_response = async (req, res, next) => {
     else {
         response = {
             "success": true,
-            "message": "新增record資料成功",
+            "message": "新增wallet資料成功",
             "data": {}
         }
         console.log(response);
@@ -48,13 +49,13 @@ export const insert_record_response = async (req, res, next) => {
 }
 
 
-export const update_record_response = async (req, res, next) => {
+export const update_wallet_response = async (req, res, next) => {
     var response = {};
     // 錯誤回傳
     if(req.message) {
         response = {
             "success": false,
-            "message": "更新record資料失敗 error: " + req.message,
+            "message": "更新wallet資料失敗 error: " + req.message,
             "data": {}
         }
         console.log(response);
@@ -64,7 +65,7 @@ export const update_record_response = async (req, res, next) => {
     else {
         response = {
             "success": true,
-            "message": "更新record資料成功",
+            "message": "更新walllet資料成功",
             "data": {}
         }
         console.log(response);
@@ -73,13 +74,13 @@ export const update_record_response = async (req, res, next) => {
 }
 
 
-export const delete_record_response = async (req, res, next) => {
+export const delete_wallet_response = async (req, res, next) => {
     var response = {};
     // 錯誤回傳
     if(req.message) {
         response = {
             "success": false,
-            "message": "刪除record資料失敗 error: " + req.message,
+            "message": "刪除wallet資料失敗 error: " + req.message,
             "data": {}
         }
         console.log(response);
@@ -89,7 +90,7 @@ export const delete_record_response = async (req, res, next) => {
     else {
         response = {
             "success": true,
-            "message": "刪除record資料成功",
+            "message": "刪除wallet資料成功",
             "data": {}
         }
         console.log(response);
