@@ -47,6 +47,7 @@ export const update_record_check = async (req, res, next) => {
 };
 
 export const delete_record_check = async (req, res, next) => {
+	const body = req.body;
     try {
         if(!!!body.record_id){
             res.status(401).json({success:false,msg:"record_id is required"})
