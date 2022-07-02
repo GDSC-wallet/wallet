@@ -26,6 +26,7 @@ const call_user_data = (user_id, time_choosen) => {
         var response = {};
         await db_dealer.get_user(user_id, time_choosen)
             .then(async results => {
+                console.log(results);
                 if(results.length > 0)
                     user_status = true;
                 else
