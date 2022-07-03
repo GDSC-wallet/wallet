@@ -5,7 +5,7 @@ const secret = 'GDSC_WALLET';
 
 
 export const authenticate = async (id) => {
-    await User.user_exist(id)
+    return await User.user_exist(id)
         .then(results => {
             console.log('results :', results);
             if(results.length === 0) {

@@ -149,4 +149,5 @@ const delete_wallet = async (user_id, wallet_id) => {
     // 被刪除的wallet的record與tag都以foreign key on delete cascade一併刪除
 };
 
+
 export default {  get_wallet, insert_wallet, update_wallet, delete_wallet };

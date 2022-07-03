@@ -69,7 +69,7 @@ const get_wallet_tag = (wallet_id) => {
 
 const user_exist = async (id) => {
     console.log('id :', id);
-    var sql = "SELECT id FROM user WHERE id = ?";
+    var sql = "SELECT * FROM user WHERE id = ?";
     return new Promise( async (resolve, reject) => {
         pool.getConnection( async (err, conn) => {
             if(err) {

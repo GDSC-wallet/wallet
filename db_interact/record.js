@@ -108,4 +108,5 @@ const delete_record = async (record_id, record_wallet_id, record_amount) => {
     });
 };
 
+
 export default { get_record, insert_record, update_record, delete_record };
