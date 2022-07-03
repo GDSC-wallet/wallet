@@ -3,13 +3,15 @@ import express from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
 import session from "express-session";
+import mysqlSession from "express-mysql-session";
+import { pool } from "./db_interact/db_pool.js";
 import morgan from "morgan";
 import passport from "passport";
 import dotenv from "dotenv";
 import helmet from "helmet";
 import fs from 'fs';
 import path from 'path';
-import {fileURLToPath} from 'url';
+import { fileURLToPath } from 'url';
 
 //ROUTER
 import oauthRouter from "./routes/oauth.js";
@@ -43,18 +45,30 @@ app.use(express.urlencoded({ limit: "30mb", extended: true }));
 
 //設定localhost port
 const PORT = 80;
-app.listen(PORT, () =>console.log(`Server Running on Port: http://localhost:${PORT}`))
+app.listen(PORT, () => console.log(`Server Running on Port: http://localhost:${PORT}`))
 
 //設定跨域
 app.use(cors());
 
 //設定session
-app.use(session({ secret: "cats", resave: false, saveUninitialized: true }));
+const MySQLStore = mysqlSession(session);
+var sessionStore = new MySQLStore({}, pool)
+
+app.use(session({
+  secret: process.env.SECRET,
+  resave: false,
+  saveUninitialized: false,
+  store: sessionStore,
+  cookie: {
+    maxAge: 86400000
+  }
+}));
+
 app.use(passport.initialize());
 app.use(passport.session());
 
 //設定request body parser
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 //設定cors，測試時請註解掉

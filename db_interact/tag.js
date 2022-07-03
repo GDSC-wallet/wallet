@@ -1,18 +1,5 @@
-import mysql from 'mysql'
+import { pool } from "./db_pool.js"
 import { v4 as uuid } from 'uuid'
-import dotenv from 'dotenv'
-
-dotenv.config();
-
-// 連接mysql連線池
-var pool = mysql.createPool({
-    host: process.env.MYSQL_HOST,
-    user: process.env.MYSQL_USER,
-    password: process.env.MYSQL_PASSWORD,
-    port: process.env.MYSQL_PORT,
-    database: process.env.MYSQL_DATABASE,
-    multipleStatements: true
-});
 
 function print_error(err) {
     console.log("error: " + err.message);

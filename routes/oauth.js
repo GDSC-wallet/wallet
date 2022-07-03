@@ -9,7 +9,7 @@ import crypto from "crypto";
 import { authenticate } from "../controllers/user.js";
 
 const router = express.Router();
-const secret = "GDSC_WALLET";
+const secret = process.env.SECRET;
 
 // create a sha-256 hasher
 
@@ -29,44 +29,47 @@ passport.use(
       passReqToCallback: true,
     },
     async function (request, res, accessToken, refreshToken, profile, done) {
-        try{
-          const user_email = profile._json.email;
-          
-          //使用email hash出 使用者id
-          const sha256Hasher = crypto.createHmac("sha256", secret);
-          const user_id = sha256Hasher.update(user_email).digest('base64');
+      try {
+        const user_email = profile._json.email;
 
-          //確認此使用者是否已經存在WALLET的DB
+        //使用email hash出 使用者id
+        const sha256Hasher = crypto.createHmac("sha256", secret);
+        const user_id = sha256Hasher.update(user_email).digest('base64');
 
-          const user_exist = await authenticate(user_id);
-          console.log('user_exist :', user_exist);
-     
-          if(user_exist){
-              return done(null, 
-                {
-                    result:"USER_EXIST_IN_DB",
-                    profile:{...profile,user_id:user_id}
-                });
-          }
-            else{                
-                return done(null,
-                {
-                    result:"USER_NOT_EXIST_IN_DB",
-                    profile:{...profile,user_id:user_id}
-                });
-            }
+        //確認此使用者是否已經存在WALLET的DB
+
+        const user_exist = await authenticate(user_id);
+
+        if (user_exist) {
+          return done(null,
+            {
+              result: "USER_EXIST_IN_DB",
+              user_id: user_id,
+            });
         }
-        catch(err){
-
-          //寫到紀錄檔，尚未實作
-          console.log(err);
-          var response = {
-            "success": false,
-            "message": "註冊使用者失敗",
-            "data": undefined
-          }
-          res.status(400).json(response);
+        else {
+          return done(null,
+            {
+              result: "USER_NOT_EXIST_IN_DB",
+              user_id: user_id,
+              channel: "GOOGLE",
+              channel_id: profile._json.sub,
+              email: profile._json.email,
+              username: profile._json.username,
+            });
         }
+      }
+      catch (err) {
+
+        //寫到紀錄檔，尚未實作
+        console.log(err);
+        var response = {
+          "success": false,
+          "message": "註冊使用者失敗",
+          "data": undefined
+        }
+        res.status(400).json(response);
+      }
     }
   )
 );
@@ -83,9 +86,9 @@ passport.deserializeUser(function (user, done) {
 
 //GOOGLE OAUTH LOGIN
 router.get(
-    "/google/login",
-    passport.authenticate("google", { scope: ["email", "profile"] })
-  );
+  "/google/login",
+  passport.authenticate("google", { scope: ["email", "profile"] })
+);
 
 //GOOGLE OAUTH CALLBACK HANDLER
 router.get(
@@ -99,46 +102,27 @@ router.get(
 
 //GOOGLE OAUTH SUCCESS CALLBACK
 router.get("/google/success", isLoggedIn, (req, res) => {
-    
-    //製作jwt
-    // console.log('req.user :', req.user);
-    const { sub , name,email } = req.user.profile._json;
-    const {  user_id } = req.user.profile;
-    const channel="GOOGLE";
-    const channel_id=sub;
-    const username=name;
-    const token = jwt.sign( { channel, channel_id, email, username, user_id }, secret, { expiresIn: "24h" } );
 
-    res.header('Authorization', token);
-    
-    //若尚未註冊，回到前端註冊頁
-    console.log('req.user :', req.user);
-    if(req.user.result==="USER_NOT_EXIST_IN_DB"){
-      const { sub , name,email } = req.user.profile._json;
-      const {  user_id } = req.user.profile;
-      const channel="GOOGLE";
-      const channel_id=sub;
-      const username=name;
-      const token = jwt.sign( { channel, channel_id, email, username, user_id }, secret, { expiresIn: "24h" } );
-      res.redirect("/callback/signup"+`?token=${token}`);
-		return res;
-    }
-    else{
-      const {  user_id } = req.user.profile;
-      const token = jwt.sign( { user_id }, secret, { expiresIn: "24h" } );
-        res.redirect("/callback/login"+`?token=${token}`);
-		return res;
-    }
+  //若尚未註冊，回到前端註冊頁
+  console.log('req.user :', req.user);
+  console.log("session")
+  console.log(req.sessionID, req.session, res.getHeaders())
+  if (req.user.result === "USER_NOT_EXIST_IN_DB") {
+    res.redirect("/callback/signup");
+  }
+  else {
+    res.redirect("/login");
+  }
 });
 
 //GOOGLE OAUTH FAILURE CALLBACK
 router.get("/google/failure", (req, res) => {
-    res.send("Failed to authenticate..");
+  res.send("Failed to authenticate..");
 });
 
 //GOOGLE OAUTH SUCCESS MIDDLEWARE
 function isLoggedIn(req, res, next) {
-    req.user ? next() : res.sendStatus(401);
+  req.user ? next() : res.sendStatus(401);
 }
 
 //登出 (暫時不用)
