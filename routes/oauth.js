@@ -17,7 +17,7 @@ dotenv.config();
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
 const CLIENT_URL = process.env.CLIENT_URL;
-const SERVER_URL = process.env.SERVER_URL;
+const SERVER_URL = process.env.MODE == "DEV" ? process.env.DEV_URL : process.env.PRO_URL;
 
 //設定passport
 passport.use(
@@ -25,7 +25,7 @@ passport.use(
     {
       clientID: GOOGLE_CLIENT_ID,
       clientSecret: GOOGLE_CLIENT_SECRET,
-      callbackURL: SERVER_URL+"/oauth/google/callback",
+      callbackURL: SERVER_URL + "/oauth/google/callback",
       passReqToCallback: true,
     },
     async function (request, accessToken, refreshToken, profile, done) {
@@ -119,13 +119,13 @@ router.get("/google/success", isLoggedIn, (req, res) => {
       const channel_id=sub;
       const username=name;
       const token = jwt.sign( { channel, channel_id, email, username, user_id }, secret, { expiresIn: "24h" } );
-      res.redirect(CLIENT_URL + "/callback/signup"+`?token=${token}`);
+      res.redirect("/callback/signup"+`?token=${token}`);
 		return res;
     }
     else{
       const {  user_id } = req.user.profile;
       const token = jwt.sign( { user_id }, secret, { expiresIn: "24h" } );
-        res.redirect(CLIENT_URL + "/callback/login"+`?token=${token}`);
+        res.redirect("/callback/login"+`?token=${token}`);
 		return res;
     }
 });
