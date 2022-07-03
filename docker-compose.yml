@@ -3,8 +3,9 @@ services:
   database:
     image: mysql
     container_name: database
-    command:  --default-authentication-plugin=mysql_native_password
+    command: --default-authentication-plugin=mysql_native_password
     volumes:
+      #- wallet-data:/var/lib/mysql
       - ./sqls:/docker-entrypoint-initdb.d
     environment:
       MYSQL_ROOT_USER: root
@@ -30,5 +31,7 @@ services:
       - PRO_URL=${PROD_URL}
       - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
       - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
-      - SECRET=GDSC_WALLET
+      - SECRET=${SECRET}
       - MODE=${MODE}
+#volumes:
+#  wallet-data:

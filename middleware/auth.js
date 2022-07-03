@@ -1,6 +1,8 @@
 import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+dotenv.config();
 
-const secret = 'GDSC_WALLET';
+const secret = process.env.SECRET;
 
 //TODO: JWT過期 => 重新發一個？
 
@@ -8,21 +10,11 @@ const secret = 'GDSC_WALLET';
 const auth = async (req, res, next) => {
 
   try {
-    
-    const prefix = req.headers.authorization.split(" ")[0];
-    const token = req.headers.authorization.split(" ")[1];
-    const isCustomAuth = token.length < 500;
-
-    let decodedData;
-  
-    decodedData = jwt.verify(token, secret);
-
-    req.decodedData = decodedData;
-
+    res.user = req.session?.passport?.user
     next();
   } catch (error) {
     console.log('error :', error);
-    res.status(401).json({success:false,message:"token authentication failed"})
+    res.status(401).json({ success: false, message: "session parse error" })
   }
 };
 

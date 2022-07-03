@@ -4,8 +4,8 @@ import User from "../db_interact/user.js";
 export const get_wallet = async (req, res, next) => {
     const { wallet_id, time_choosen } = req.query;
 
-    // 從 req.decodedData 取得 jwt decode 的資料，不進行二次解密
-    const user_id = req.decodedData?.user_id;
+    // 從 req.session?.passport?.user 取得 jwt decode 的資料，不進行二次解密
+    const user_id = req.session?.passport?.user?.user_id;
 
     await Wallet.get_wallet(user_id, wallet_id, time_choosen)
         .then(async results => {
@@ -87,8 +87,8 @@ export const insert_wallet = async (req, res, next) => {
 
     const { wallet_name, wallet_description } = req.body;
 
-    // 從 req.decodedData 取得 jwt decode 的資料，不進行二次解密
-    const user_id = req.decodedData?.user_id;
+    // 從 req.session?.passport?.user 取得 jwt decode 的資料，不進行二次解密
+    const user_id = req.session?.passport?.user?.user_id;
 
     await Wallet.insert_wallet(user_id, wallet_name, wallet_description)
         .then(result => {
@@ -113,8 +113,8 @@ export const update_wallet = async (req, res, next) => {
 export const delete_wallet = async (req, res, next) => {
     const { wallet_id } = req.body
 
-    // 從 req.decodedData 取得 jwt decode 的資料，不進行二次解密
-    const user_id = req.decodedData?.user_id;
+    // 從 req.session?.passport?.user 取得 jwt decode 的資料，不進行二次解密
+    const user_id = req.session?.passport?.user?.user_id;
 
     await Wallet.delete_wallet(user_id, wallet_id)
         .then(result => {

@@ -42,8 +42,8 @@ export const authenticate = async (id) => {
 export const signUp = async (req, res, next) => {
 
     try{
-        // 從 req.decodedData 取得 jwt decode 的資料，不進行二次解密
-        const {channel,channel_id,email,username,user_id} = req.decodedData;
+        // 從 req.session.passport.user 取得 jwt decode 的資料，不進行二次解密
+        const {channel,channel_id,email,username,user_id} = req.session?.passport?.user;
         const { nickname } = req.body;
 
         if(nickname===undefined||nickname===null||nickname==="") {
@@ -109,8 +109,9 @@ export const signUp = async (req, res, next) => {
 // }
 export const getUserProfile = async (req, res, next) => {
 
-    // 從 req.decodedData 取得 jwt decode 的資料，不進行二次解密
-    const user_id = req.decodedData?.user_id;
+    // 從 req.session?.passport?.user 取得 jwt decode 的資料，不進行二次解密
+    const user_id = req.user?.user_id;
+    console.log(user_id)
 
     const query = req.query
 
