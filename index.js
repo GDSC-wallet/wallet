@@ -42,7 +42,7 @@ app.use(express.json({ limit: "30mb", extended: true }));
 app.use(express.urlencoded({ limit: "30mb", extended: true }));
 
 //設定localhost port
-const PORT = 3000;
+const PORT = 80;
 app.listen(PORT, () =>console.log(`Server Running on Port: http://localhost:${PORT}`))
 
 //設定跨域
