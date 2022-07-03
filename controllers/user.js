@@ -9,13 +9,12 @@ export const authenticate = async (id) => {
         .then(results => {
             console.log('results :', results);
             if(results.length === 0) {
-                resolve(false);
+                return false;
             } else {
-                resolve(true);
+                return true;
             }
         }).catch(err => {
-            console.log("ERROR: " + err.message);
-            reject(err);
+            return err;
         });
 };
 
