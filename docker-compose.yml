@@ -1,37 +1,41 @@
 version: '2'
 services:
   database:
-    image: mysql
     container_name: database
+    build: database
     command: --default-authentication-plugin=mysql_native_password
-    volumes:
-      #- wallet-data:/var/lib/mysql
-      - ./sqls:/docker-entrypoint-initdb.d
-    environment:
-      MYSQL_ROOT_USER: root
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: wallet
-  service: 
+  backend: 
     image: node
-    container_name: service
+    container_name: backend
     depends_on:
       - database
-    ports:
-      - ${PORT}:80
     volumes:
-      - ./:/app
-    command: bash -c "cd ./app && node index.js"
+      - ./backend:/app
+      - ./dist:/app/dist
+    command: bash -c "cd ./app && npm install && node index.js"
     environment:
       - MYSQL_HOST=database
       - MYSQL_USER=root
       - MYSQL_PASSWORD=root
       - MYSQL_PORT=3306
       - MYSQL_DATABASE=wallet
-      - DEV_URL=http://localhost:${PORT}
+      - DEV_URL=http://localhost:${SERVER_PORT}
       - PRO_URL=${PROD_URL}
       - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
       - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
       - SECRET=${SECRET}
       - MODE=${MODE}
+      - FRONTEND_PORT=${FRONTEND_PORT}
+  frontend:
+    container_name: frontend
+    build: frontend
+    environment:
+      - SERVER_PORT=${SERVER_PORT}
+      - PORT=${FRONTEND_PORT}
+  service:
+    container_name: service
+    build: service
+    ports:
+      - ${SERVER_PORT}:80
 #volumes:
 #  wallet-data:

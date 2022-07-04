@@ -16,7 +16,7 @@ const secret = process.env.SECRET;
 dotenv.config();
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
-const CLIENT_URL = process.env.CLIENT_URL;
+const CLIENT_URL = process.env.MODE == "DEV" ? "http://localhost:" + process.env.FRONTEND_PORT : "";
 const SERVER_URL = process.env.MODE == "DEV" ? process.env.DEV_URL : process.env.PRO_URL;
 
 //設定passport
@@ -108,10 +108,10 @@ router.get("/google/success", isLoggedIn, (req, res) => {
   console.log("session")
   console.log(req.sessionID, req.session, res.getHeaders())
   if (req.user.result === "USER_NOT_EXIST_IN_DB") {
-    res.redirect("/callback/signup");
+    res.redirect(CLIENT_URL + "/callback/signup");
   }
   else {
-    res.redirect("/login");
+    res.redirect(CLIENT_URL + "/login");
   }
 });
 
