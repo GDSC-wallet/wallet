@@ -35,6 +35,9 @@ services:
   service:
     container_name: service
     build: service
+    depends_on:
+      - backend
+      - frontend
     ports:
       - ${SERVER_PORT}:80
 #volumes:

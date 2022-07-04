@@ -97,12 +97,22 @@ app.get("/api", (req, res) => {
   res.status(200).send(result);
 });
 
+app.get("*", (req, res) => {
+  res.status(400).send({
+    success: false,
+    message: "unknown url",
+    data: {},
+  });
+});
+
 // Host dist
+/*
 app.use(express.static(path.join(__dirname, "dist")));
 
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname + "/dist/index.html"));
 });
+*/
 
 //const PORT = process.env.PORT || 80;
 
