@@ -137,4 +137,27 @@ const delete_wallet = async (user_id, wallet_id) => {
 };
 
 
-export default {  get_wallet, insert_wallet, update_wallet, delete_wallet };
+const search_record = async (wallet_id, search_str) => {
+    return new Promise( async (resolve, reject) => {
+        // 搜尋record
+        var sql = `START TRANSACTION; SELECT * FROM wallet_record WHERE record_wallet_id = ? AND record_name REGEXP '${search_str}'; COMMIT`;
+        pool.getConnection( async (err, conn) => {
+            if(err) {
+                print_error(err);
+                reject(err);
+            } else {
+                await conn.query(sql, wallet_id, (err, results, fields) => {
+                    if(err) {
+                        print_error(err);
+                        reject(err);
+                    } else {
+                        conn.release();
+                        resolve(results);
+                    }
+                });
+            }
+        })
+    })
+}
+
+export default {  get_wallet, insert_wallet, update_wallet, delete_wallet, search_record };

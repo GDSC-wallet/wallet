@@ -125,6 +125,18 @@ export const delete_wallet = async (req, res, next) => {
         })
 };
 
+export const search_record = async (req, res, next) => {
+    
+    const { wallet_id, search_str } = req.query;
+
+    await Wallet.search_record(wallet_id, search_str)
+        .then(result => {
+            next(result);
+        })
+        .catch(err => {
+            next(err);
+        })
+}
 
 
 // 未實做

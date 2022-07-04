@@ -17,6 +17,7 @@ insert_wallet	/home/roy/codes/GDSC_wallet/backend/controllers/wallet.js	/^export
 query	/home/roy/codes/GDSC_wallet/backend/controllers/record.js	/^    const query = req.query;$/;"	C	language:JavaScript
 query	/home/roy/codes/GDSC_wallet/backend/controllers/user.js	/^    const query = req.query$/;"	C	language:JavaScript
 response	/home/roy/codes/GDSC_wallet/backend/controllers/user.js	/^    var response = {};$/;"	v	language:JavaScript
+search_record	/home/roy/codes/GDSC_wallet/backend/controllers/wallet.js	/^export const search_record = async (req, res, next) => {$/;"	C	language:JavaScript
 secret	/home/roy/codes/GDSC_wallet/backend/controllers/user.js	/^const secret = 'GDSC_WALLET';$/;"	C	language:JavaScript
 selected_wallet	/home/roy/codes/GDSC_wallet/backend/controllers/user.js	/^    var selected_wallet;$/;"	v	language:JavaScript
 signUp	/home/roy/codes/GDSC_wallet/backend/controllers/user.js	/^export const signUp = async (req, res, next) => {$/;"	C	language:JavaScript
@@ -25,7 +26,7 @@ update_record	/home/roy/codes/GDSC_wallet/backend/controllers/record.js	/^export
 update_tag	/home/roy/codes/GDSC_wallet/backend/controllers/tag.js	/^export const update_tag = async (req, res, next) => {$/;"	C	language:JavaScript
 update_wallet	/home/roy/codes/GDSC_wallet/backend/controllers/wallet.js	/^export const update_wallet = async (req, res, next) => {$/;"	C	language:JavaScript
 user_id	/home/roy/codes/GDSC_wallet/backend/controllers/user.js	/^    const user_id = req.decodedData?.user_id;$/;"	C	language:JavaScript
-user_id	/home/roy/codes/GDSC_wallet/backend/controllers/wallet.js	/^    const user_id = req.decodedData?.user_id;$/;"	C	language:JavaScript
-user_id	/home/roy/codes/GDSC_wallet/backend/controllers/wallet.js	/^    const user_id = req.decodedData?.user_id;$/;"	C	language:JavaScript
-user_id	/home/roy/codes/GDSC_wallet/backend/controllers/wallet.js	/^    const user_id = req.decodedData?.user_id;$/;"	C	language:JavaScript
+user_id	/home/roy/codes/GDSC_wallet/backend/controllers/wallet.js	/^    const user_id = req.session?.passport?.user?.user_id;$/;"	C	language:JavaScript
+user_id	/home/roy/codes/GDSC_wallet/backend/controllers/wallet.js	/^    const user_id = req.session?.passport?.user?.user_id;$/;"	C	language:JavaScript
+user_id	/home/roy/codes/GDSC_wallet/backend/controllers/wallet.js	/^    const user_id = req.session?.passport?.user?.user_id;$/;"	C	language:JavaScript
 user_status	/home/roy/codes/GDSC_wallet/backend/controllers/user.js	/^    var user_status;$/;"	v	language:JavaScript
