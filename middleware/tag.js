@@ -1,3 +1,4 @@
+/*
 export const get_tag_response = async (req, res, next) => {
     var response = {};
     // 錯誤回傳
@@ -21,7 +22,7 @@ export const get_tag_response = async (req, res, next) => {
         res.status(201).json(response);
     }
 }
-
+*/
 
 export const insert_tag_response = async (req, res, next) => {
     var response = {};

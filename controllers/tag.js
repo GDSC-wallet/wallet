@@ -3,10 +3,22 @@ import Tag from "../db_interact/tag.js";
 export const get_tag = async (req, res, next) => {
     await Tag.get_tag(req.query.tag_id)
         .then(result => {
-            next(result);
+            var response = {
+                "success": true,
+                "message": "取得tag資料成功",
+                "data": result
+            }
+            console.log(response);
+            res.status(201).json(response);
         })
         .catch(err => {
-            next(err);
+            var response = {
+                "success": false,
+                "message": "取得tag資料失敗",
+                "data": {}
+            }
+            console.log(response);
+            res.status(400).json(response);
         })
 };
 

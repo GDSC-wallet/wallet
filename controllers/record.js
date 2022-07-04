@@ -6,10 +6,22 @@ export const get_record = async (req, res, next) => {
     
     await Record.get_record(query.record_id)
     .then(results => {
-        next(results);
+        var response = {
+            "success": true,
+            "message": "取得record資料成功",
+            "data": results
+        }
+        console.log(response);
+        res.status(201).json(response);
     })
     .catch(err => {
-        next(err);
+        var response = {
+            "success": false,
+            "message": "取得record資料失敗",
+            "data": {}
+        }
+        console.log(response);
+        res.status(400).json(response);
     });
 };
 

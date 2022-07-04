@@ -233,6 +233,34 @@
 }
 ```
 
+## /api/wallet/search
+- Method: `GET`
+- Header: `Authorization: Bearer {jwt}`
+- Body: `None`
+- Param:
+```json
+{
+    "wallet_id": "wallet_2c36aaad-2d40-48cb-9e36-9d3a841ffb37",
+    "search_str": "123456"
+}
+```
+- Success Response: 
+```json
+{
+    "success": true,
+    "message": "",
+    "data": {[searched records]}
+}
+```
+- Error Response:
+```json
+{
+    "success": false,
+    "message": "Some error occurs.",
+    "data": {}
+}
+```
+
 ## /api/record
 - Method: `GET`
 - Header: `Authorization: Bearer {jwt}`

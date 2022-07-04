@@ -126,15 +126,42 @@ export const delete_wallet = async (req, res, next) => {
 };
 
 export const search_record = async (req, res, next) => {
-    
+
     const { wallet_id, search_str } = req.query;
 
     await Wallet.search_record(wallet_id, search_str)
-        .then(result => {
-            next(result);
+        .then(results => {
+            var response = {
+                "success": true,
+                "message": "搜尋record資料成功",
+                "data": []
+            };
+            for(var i = 0; i < results[1].length; ++i) {
+                var record_data = {
+                    "record_id": results[1][i].record_id,
+                    "wallet_record_tag_id": results[1][i].wallet_record_tag_id,
+                    "record_ordinary": results[1][i].record_ordinary,
+                    "record_name": results[1][i].record_name,
+                    "record_description": results[1][i].record_description,
+                    "record_amount": results[1][i].record_amount,
+                    "record_type": results[1][i].record_type,
+                    "record_date": results[1][i].record_date,
+                    "record_created_time": results[1][i].record_created_time,
+                    "record_updated_time": results[1][i].record_updated_time
+                }
+                response.data.push(record_data);
+            }
+            console.log(response);
+            res.status(201).json(response);
         })
         .catch(err => {
-            next(err);
+            var response = {
+                "success": false,
+                "message": "搜尋record資料失敗 error: " + err.message,
+                "data": {}
+            }
+            console.log(response);
+            res.status(400).json(response);
         })
 }
 

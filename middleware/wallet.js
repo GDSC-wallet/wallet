@@ -98,7 +98,7 @@ export const delete_wallet_response = async (req, res, next) => {
     }
 }
 
-
+/*
 export const search_record_response = async (req, res, next) => {
     var response = {};
     // 錯誤回傳
@@ -122,3 +122,4 @@ export const search_record_response = async (req, res, next) => {
         res.status(201).json(response);
     }
 }
+*/
