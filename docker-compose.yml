@@ -4,6 +4,8 @@ services:
     container_name: database
     build: database
     command: --default-authentication-plugin=mysql_native_password
+    volumes:
+      - wallet-data:/var/lib/mysql
   backend: 
     image: node
     container_name: backend
@@ -12,7 +14,6 @@ services:
     volumes:
       - ./backend:/app
       - ./dist:/app/dist
-      - ./db_data:/var/lib/mysql
     command: bash -c "cd ./app && npm install && node index.js"
     environment:
       - MYSQL_HOST=database
@@ -41,5 +42,5 @@ services:
       - frontend
     ports:
       - ${SERVER_PORT}:80
-#volumes:
-#  wallet-data:
+volumes:
+  wallet-data:
