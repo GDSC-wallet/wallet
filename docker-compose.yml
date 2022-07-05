@@ -12,6 +12,7 @@ services:
     volumes:
       - ./backend:/app
       - ./dist:/app/dist
+      - ./db_data:/var/lib/mysql
     command: bash -c "cd ./app && npm install && node index.js"
     environment:
       - MYSQL_HOST=database
