@@ -1,0 +1,7 @@
+FROM mysql
+WORKDIR /
+ENV MYSQL_ROOT_USER=root
+ENV MYSQL_ROOT_PASSWORD=root
+ENV MYSQL_DATABASE=wallet
+ADD init.sql /docker-entrypoint-initdb.d
+ADD session-schema.sql /docker-entrypoint-initdb.d

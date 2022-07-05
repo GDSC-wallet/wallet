@@ -5,6 +5,7 @@ nohup.out
 .aws
 node_modules
 access.log
+*/node_modules
 
 # dependencies
 /node_modules
