@@ -55,7 +55,7 @@ passport.use(
               channel: "GOOGLE",
               channel_id: profile._json.sub,
               email: profile._json.email,
-              username: profile._json.username,
+              username: profile._json.name,
             });
         }
       }
