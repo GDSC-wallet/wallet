@@ -140,8 +140,8 @@ export const getUserProfile = async (req, res, next) => {
                 message: "取得user資料成功",
                 data: {
                     user_id: results[0].id,
-                    username: results[0].username,
-                    nickname: results[0].nickname,
+                    username: results[0].username.slice(1, results[0].username.length-1),
+                    nickname: results[0].nickname.slice(1, results[0].nickname.length-1),
                     selected_wallet_id: selected_wallet,
                     wallets:[]
                 }
@@ -152,9 +152,9 @@ export const getUserProfile = async (req, res, next) => {
                 // construct a wallet object
                 var wallet_obj = {
                     "wallet_id": results[i].wallet_id,
-                    "wallet_name": results[i].wallet_name,
+                    "wallet_name": results[i].wallet_name.slice(1, results[i].wallet_name.length-1),
                     "wallet_total": results[i].wallet_total,
-                    "wallet_description": results[i].wallet_description,
+                    "wallet_description": results[i].wallet_description.slice(1, results[i].wallet_description.lenght-1),
                     "selected": results[i].selected,
                     "record_num": results[i].record_num,
                     "records": [],
@@ -172,11 +172,11 @@ export const getUserProfile = async (req, res, next) => {
                             record_id: results[i+j].record_id,
                             wallet_record_tag_id: results[i+j].wallet_record_tag_id,
                             record_ordinary: results[i+j].record_ordinary,
-                            record_name: results[i+j].record_name,
-                            record_description: results[i+j].record_description,  //
-                            record_amount: results[i+j].record_amount,    //
-                            record_type: results[i+j].record_type,    //
-                            record_date: results[i+j].record_date,    //
+                            record_name: results[i+j].record_name.slice(1, results[i+j].record_name.length-1),
+                            record_description: results[i+j].record_description.slice(1, results[i+j].record_description.length-1),
+                            record_amount: results[i+j].record_amount,
+                            record_type: results[i+j].record_type,
+                            record_date: results[i+j].record_date,
                             record_created_time: results[i+j].record_created_time,
                             record_updated_time: results[i+j].record_updated_time,
                         }

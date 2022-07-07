@@ -34,7 +34,7 @@ const insert_record = async (record_wallet_id, wallet_record_tag_id, record_ordi
                 print_error(err);
                 reject(err);
             } else {
-                await conn.query(sql, [record_id, record_wallet_id, wallet_record_tag_id, record_ordinary, record_name, record_description, record_amount, record_type, record_date, record_wallet_id, record_amount, record_wallet_id], (err, results, fields) => {
+                await conn.query(sql, [record_id, record_wallet_id, wallet_record_tag_id, record_ordinary, conn.escape(record_name), conn.escape(record_description), conn.escape(record_amount), record_type, record_date, record_wallet_id, conn.escape(record_amount), record_wallet_id], (err, results, fields) => {
                     if(err) {
                         print_error(err);
                         reject(err);
@@ -57,7 +57,7 @@ const update_record = async (record_id, record_wallet_id, wallet_record_tag_id, 
                 print_error(err);
                 reject(err);
             } else {
-                await conn.query(sql, [wallet_record_tag_id, record_ordinary, record_name, record_description, record_amount, record_type, record_date, record_id, record_amount_diff, record_wallet_id], (err, results, fields) => {
+                await conn.query(sql, [wallet_record_tag_id, record_ordinary, conn.escape(record_name), conn.escape(record_description), conn.escape(record_amount), record_type, record_date, record_id, record_amount_diff, record_wallet_id], (err, results, fields) => {
                     if(err) {
                         print_error(err);
                         reject(err);
@@ -81,7 +81,7 @@ const delete_record = async (record_id, record_wallet_id, record_amount) => {
                 print_error(err);
                 reject(err);
             } else {
-                await conn.query(sql, [record_wallet_id, record_amount, record_wallet_id, record_id], (err, results, fields) => {
+                await conn.query(sql, [record_wallet_id, conn.escape(record_amount), record_wallet_id, record_id], (err, results, fields) => {
                     if(err) {
                         print_error(err);
                         reject(err);

@@ -6,6 +6,8 @@ export const get_record = async (req, res, next) => {
     
     await Record.get_record(query.record_id)
     .then(results => {
+        results.record_name = results.record_name.slice(1, results.record_name.length-1);
+        results.record_description = results.record_description.slice(1, results.record_description.length-1);
         var response = {
             "success": true,
             "message": "取得record資料成功",
