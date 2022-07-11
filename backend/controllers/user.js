@@ -1,4 +1,5 @@
 import User from "../db_interact/user.js";
+import Debtor from "../db_interact/debtor.js";
 import jwt from "jsonwebtoken";
 
 const secret = 'GDSC_WALLET';
@@ -177,9 +178,14 @@ export const getUserProfile = async (req, res, next) => {
                             record_amount: results[i+j].record_amount,
                             record_type: results[i+j].record_type,
                             record_date: results[i+j].record_date,
+                            record_debtors: [],
                             record_created_time: results[i+j].record_created_time,
                             record_updated_time: results[i+j].record_updated_time,
                         }
+                        // add record_debtors
+                        await Debtor.get_record_debtors(record_obj.record_id)
+                            .then()
+                            .catch()
                         record_arr.push(record_obj);
                     }
                     await User.get_wallet_tag(selected_wallet)

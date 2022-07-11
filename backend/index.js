@@ -19,6 +19,7 @@ import userRouter from "./routes/user.js";
 import walletRouter from "./routes/wallet.js";
 import recordRouter from "./routes/record.js";
 import tagRouter from "./routes/tag.js";
+import debtorRouter from "./routes/debtor.js"
 dotenv.config();
 
 const app = express();
@@ -86,6 +87,7 @@ app.use("/api/user", userRouter);
 app.use("/api/wallet", walletRouter);
 app.use("/api/record", recordRouter);
 app.use("/api/tag", tagRouter);
+app.use("/api/debtor", debtorRouter);
 
 //API:測試SERVER在線
 app.get("/api", (req, res) => {

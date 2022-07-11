@@ -1,6 +1,7 @@
 // 資料庫存的資料
 debtor_record:      (用來交錯映射debtor和record)
 {
+    debtor_record_id,
     debtor_id,
     record_id
 }
