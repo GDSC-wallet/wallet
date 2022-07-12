@@ -13,6 +13,10 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
+//SWAGGER
+import swaggerUi from "swagger-ui-express";
+import swaggerFile from './swagger/swagger.json' assert {type: "json"};
+
 //ROUTER
 import oauthRouter from "./routes/oauth.js";
 import userRouter from "./routes/user.js";
@@ -86,6 +90,7 @@ app.use("/api/user", userRouter);
 app.use("/api/wallet", walletRouter);
 app.use("/api/record", recordRouter);
 app.use("/api/tag", tagRouter);
+app.use('/api-doc', swaggerUi.serve, swaggerUi.setup(swaggerFile))
 
 //API:測試SERVER在線
 app.get("/api", (req, res) => {

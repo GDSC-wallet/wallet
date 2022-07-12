@@ -1,0 +1,85 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "wallet api document",
+    "version": "1.0.0",
+    "title": "Wallet"
+  },
+  "basePath": "/api",
+  "tags": [
+    {
+      "name": "api",
+      "description": ""
+    },
+    {
+      "name": "wallet",
+      "description": ""
+    },
+    {
+      "name": "record",
+      "description": ""
+    },
+    {
+      "name": "user",
+      "description": ""
+    }
+  ],
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "paths": {
+    "/": {
+      "get": {
+        "tags": [
+          "api"
+        ],
+        "summary": "Just to test if api is alive",
+        "responses": {
+          "200": {
+            "description": "valid Input",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          }
+        }
+      }
+    }
+  },
+  "securityDefinitions": {
+    "petstore_auth": {
+      "type": "oauth2",
+      "authorizationUrl": "http://petstore.swagger.io/oauth/dialog",
+      "flow": "implicit",
+      "scopes": {
+        "write:pets": "modify pets in your account",
+        "read:pets": "read your pets"
+      }
+    },
+    "api_key": {
+      "type": "apiKey",
+      "name": "api_key",
+      "in": "header"
+    }
+  },
+  "definitions": {
+    "ApiResponse": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string"
+        },
+        "data": {
+          "type": "object"
+        }
+      }
+    }
+  },
+  "externalDocs": {
+    "description": "Find out more about Swagger",
+    "url": "http://swagger.io"
+  }
+}
