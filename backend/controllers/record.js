@@ -6,6 +6,8 @@ export const get_record = async (req, res, next) => {
     
     await Record.get_record(query.record_id)
     .then(results => {
+        results.record_name = results.record_name.slice(1, results.record_name.length-1);
+        results.record_description = results.record_description.slice(1, results.record_description.length-1);
         var response = {
             "success": true,
             "message": "取得record資料成功",
@@ -31,7 +33,7 @@ export const insert_record = async (req, res, next) => {
     
     if(body.record_amount == null)
         body.record_amount = 0;
-    
+
     await Record.insert_record(
         body.wallet_id,
         body.wallet_record_tag_id,
@@ -79,7 +81,8 @@ export const delete_record = async (req, res, next) => {
     await Record.delete_record(
         body.record_id,
         body.record_wallet_id,
-        body.record_amount
+        body.record_amount,
+        body.debtor_id
     ).then(result => {
         next(result);
     })
