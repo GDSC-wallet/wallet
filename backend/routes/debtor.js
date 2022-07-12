@@ -1,7 +1,7 @@
 import express from "express";
 import auth from "../middleware/auth.js";
 import { insert_debtor_response, insert_debtor_record_response, delete_debtor_record_response, update_debtor_response, delete_debtor_response } from '../middleware/debtor.js';
-import { get_all_debtors, insert_debtor, insert_debtor_record, delete_debtor_record, update_debtor, delete_debtor } from "../controller/debtor.js";
+import { get_all_debtors, insert_debtor, insert_debtor_record, delete_debtor_record, update_debtor, delete_debtor } from "../controllers/debtor.js";
 
 const router = express.Router();
 

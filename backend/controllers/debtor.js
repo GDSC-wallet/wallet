@@ -6,6 +6,7 @@ export const get_record_debtors = async (req, res, next) => {
 
     await Debtor.get_record_debtors(record_id)
         .then(results => {
+            console.log(results);
             var response = {
         
             };
@@ -25,6 +26,7 @@ export const get_all_debtors = async (req, res, next) => {
 
     await Debtor.get_all_debtors(user_id)
         .then(results => {
+            console.log(results);
             var response = {
 
             };

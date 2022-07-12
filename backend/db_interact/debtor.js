@@ -8,7 +8,7 @@ function print_error(err) {
 // return debtor_id, debtor_name
 const get_record_debtors = (record_id) => {
     return new Promise(async (resolve, reject) => {
-        var sql = "SELECT debtor_id, debtor_name FROM debtor WHERE debtor.debtor_id = (SELECT debtor_record.debtor_id WHERE record_id = ?)";
+        var sql = "SELECT debtor_id, debtor_name FROM debtor WHERE debtor.debtor_id = (SELECT debtor_id FROM debtor_record WHERE record_id = ?)";
         pool.getConnection( async (err, conn) => {
             if(err) {
                 print_error(err);

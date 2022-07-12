@@ -1,4 +1,6 @@
 import Record from "../db_interact/record.js";
+import Debtor from "../db_interact/debtor.js";
+import { v4 as uuid } from 'uuid'
 
 export const get_record = async (req, res, next) => {
 
@@ -34,7 +36,9 @@ export const insert_record = async (req, res, next) => {
     if(body.record_amount == null)
         body.record_amount = 0;
 
+    var record_id = "record_" + uuid();
     await Record.insert_record(
+        record_id,
         body.wallet_id,
         body.wallet_record_tag_id,
         body.record_ordinary,
@@ -43,7 +47,15 @@ export const insert_record = async (req, res, next) => {
         body.record_amount,
         body.record_type,
         body.record_date
-    ).then(result => {
+    ).then( async result => {
+        if(body.record_debtors) {
+            for(var i = 0; i < body.record_debtors.length; ++i) {
+                await Debtor.insert_debtor_record(record_id, body.record_debtors[i].debtor_id)
+                    .catch(err => {
+                        next(err);
+                    })
+            }
+        }
         next(result);
     })
     .catch(err => {
