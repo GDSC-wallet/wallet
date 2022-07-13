@@ -34,7 +34,7 @@
     "message": "",
     "data": {
         "user_id": "user_",
-        "user_name": "uese",
+        "user_name": "user",
         "user_nick_name": "UESR",
         "selected_wallet_id": "wallet_2c36aaad-2d40-48cb-9e36-9d3a841ffb37",
         "wallets" :[
@@ -57,9 +57,25 @@
                         "record_date": "1648912357",
                         "record_created_time": "1648912357",
                         "record_updated_time": "1648912357",
+                        "record_debtors": [
+                            {
+                                "debtor_id": "debtor_123456",
+                                "debtor_name": "james"
+                            }
+                        ]
                     },
                 ]
             },
+        ]
+        "debtors": [
+            {
+                "debtor_id": "debtor_123456",
+                "debtor_user_id": "user_123456",
+                "debtor_name": "james",
+                "debtor_amount": "100",
+                "debtor_created_time": "",
+                "debtor_updated_time": ""
+            }
         ]
     }
 }
@@ -308,6 +324,9 @@
 {
     "wallet_id": "wallet_2c36aaad-2d40-48cb-9e36-9d3a841ffb37",
     "wallet_record_tag_id":"tag_80d4a691-14bd-494c-98e1-8187a669e0d2",
+    "record_debtors": [
+        "many debtor_id, (not necessary)"
+    ]
     "record_ordinary": "",
     "record_name": "Some name",
     "record_description": "Some description",
@@ -376,6 +395,9 @@
 ```json
 {
     "record_id":"record_0e0d10d0-531b-4f0d-abc2-f157b9f27dfd",
+    "record_wallet_id": "wallet_123456",
+    "record_amount": "100",
+    "debtor_id": "debtor_123456"
 }
 ```
 - Param: `None`

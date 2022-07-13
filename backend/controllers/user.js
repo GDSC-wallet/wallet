@@ -143,7 +143,8 @@ export const getUserProfile = async (req, res, next) => {
                     username: results[0].username,
                     nickname: results[0].nickname,
                     selected_wallet_id: selected_wallet,
-                    wallets:[]
+                    wallets: [],
+                    debtors: []
                 }
             };
 
@@ -180,8 +181,31 @@ export const getUserProfile = async (req, res, next) => {
                             record_created_time: results[i+j].record_created_time,
                             record_updated_time: results[i+j].record_updated_time,
                         }
+                        // add record_debtors
+                        await Debtor.get_record_debtors(record_obj.record_id)
+                            .then(result => {
+                                if(result.length > 0) {
+                                    for(var i = 0; i < result.length; ++i) {
+                                        var record_debtors_obj = {
+                                            debtor_id: result[i].debtor_id,
+                                            debtor_name: result[i].debtor_name
+                                        }
+                                        record_obj.record_debtors.push(record_debtors_obj);
+                                    }
+                                }
+                            })
+                            .catch(err => {
+                                var response = {
+                                    success: false,
+                                    message: "取得user資料失敗 error1: " + err.message,
+                                    data: {}
+                                }
+                                console.log(response);
+                                res.status(400).json(response);
+                            })
                         record_arr.push(record_obj);
                     }
+                    // add tags
                     await User.get_wallet_tag(selected_wallet)
                         .then(results => {
                             var tag_arr = [];
@@ -203,7 +227,7 @@ export const getUserProfile = async (req, res, next) => {
                         .catch(err => {
                             var response = {
                                 success: false,
-                                message: "取得user資料失敗",
+                                message: "取得user資料失敗 error2: " + err.message,
                                 data: {}
                             }
                             console.log(response);
@@ -213,18 +237,43 @@ export const getUserProfile = async (req, res, next) => {
                 if(j == 0) i++;
                 else
                     i += j;
-                // put record array into wallet object and put wallet object into response.data.wallets
                 wallet_obj.records = record_arr;
                 //console.log(wallet_obj);
                 Data.data.wallets.push(wallet_obj);
             }
+
+            // add all_debtors
+            await Debtor.get_all_debtors(user_id)
+                .then(results => {
+                    for(var i = 0; i < results.length; ++i) {
+                        var debtor_obj = {
+                            debtor_id: results[i].debtor_id,
+                            debtor_user_id: results[i].debtor_user_id,
+                            debtor_name: results[i].debtor_name,
+                            debtor_amount: results[i].debtor_amount,
+                            debtor_created_time: results[i].debtor_created_time,
+                            debtor_updated_time: results[i].debtor_updated_time
+                        };
+                        Data.data.debtors.push(debtor_obj);
+                    }
+                })
+                .catch(err => {
+                    var response = {
+                        success: false,
+                        message: "取得user資料失敗 error3: " + err.message,
+                        data: {}
+                    }
+                    console.log(response);
+                    res.status(400).json(response);
+                })
+
             response = Data;
             console.log(response);
             res.status(201).json(response);
         }).catch(err => {
             var response = {
                 success: false,
-                message: "取得user資料失敗",
+                message: "取得user資料失敗 error4: " + err.message,
                 data: {}
             }
             console.log(response);
