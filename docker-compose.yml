@@ -4,8 +4,8 @@ services:
     container_name: database
     build: database
     command: --default-authentication-plugin=mysql_native_password
-    volumes:
-      - wallet-data:/var/lib/mysql
+    #volumes:
+      #- wallet-data:/var/lib/mysql
   backend: 
     image: node
     container_name: backend
@@ -28,12 +28,12 @@ services:
       - SECRET=${SECRET}
       - MODE=${MODE}
       - FRONTEND_PORT=${FRONTEND_PORT}
-  frontend:
-    container_name: frontend
-    build: frontend
-    environment:
-      - SERVER_PORT=${SERVER_PORT}
-      - PORT=${FRONTEND_PORT}
+  #frontend:
+  #  container_name: frontend
+  #  build: frontend
+  #  environment:
+  #    - SERVER_PORT=${SERVER_PORT}
+  #    - PORT=${FRONTEND_PORT}
   service:
     container_name: service
     build: service
@@ -42,5 +42,5 @@ services:
       - frontend
     ports:
       - ${SERVER_PORT}:80
-volumes:
-  wallet-data:
+#volumes:
+#  wallet-data:
