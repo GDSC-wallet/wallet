@@ -92,8 +92,8 @@ const insert_user = async (id, channel, channel_id, email, username, nickname) =
             nickname = "null";
         // generate uuid for the use
         var wallet_id = "wallet_" + uuid();
-        const wallet_name = "preset_wallet";
-        const wallet_description = "這是預設錢包";
+        const wallet_name = "錢包1";
+        const wallet_description = "預設錢包";
         var name = ["早餐","午餐","晚餐","飲料","宵夜","交通","日用品","其他","工作","現金","轉帳","其他"];
         var type = ["expense","expense","expense","expense","expense","expense","expense","expense","income","income","income","income"];
         var color = ["#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE"];

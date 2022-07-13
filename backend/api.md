@@ -397,7 +397,9 @@
     "record_id":"record_0e0d10d0-531b-4f0d-abc2-f157b9f27dfd",
     "record_wallet_id": "wallet_123456",
     "record_amount": "100",
-    "debtor_id": "debtor_123456"
+    "record_debtors": "[
+        (not necessary)
+    ]"
 }
 ```
 - Param: `None`

@@ -6,16 +6,79 @@ export const get_record_debtors = async (req, res, next) => {
 
     await Debtor.get_record_debtors(record_id)
         .then(results => {
-            console.log(results);
             var response = {
-        
+                "success": true,
+                "message": "取得帳目債務人資料成功",
+                "data": {
+                    "record_debtors": []
+                }
             };
-            // data process
-            next(response);
+            if(results.length > 0) {
+                for(var i = 0; i < results.length; ++i) {
+                    var record_debtor_obj = {
+                        debtor_id: results[i].debtor_id,
+                        debtor_name: results[i].debtor_name
+                    }
+                    response.data.record_debtors.push(record_debtor_obj);
+                }
+            }
         })
         .catch(err => {
-            next(err);
+            var response = {
+                "success": false,
+                "message": "取得帳目債務人資料失敗 error: " + err.message,
+                "data": {}
+            }
+            console.log(response);
+            res.status(400).json(response);
         })
+    console.log(response);
+    res.status(201).json(response);
+}
+
+
+export const get_debtor_records = async (req, res, next) => {
+    
+    const { debtor_id } = req.query;
+
+    await Debtor.get_debtor_records(debtor_id)
+        .then(results => {
+            var response = {
+                "success": true,
+                "message": "取得債務人帳目資料成功",
+                "data": {
+                    "debtor_records": []
+                }
+            }
+            if(results.length > 0) {
+                for(var i = 0; i < results.length; ++i) {
+                    var record_data = {
+                        "record_id": results[i].record_id,
+                        "wallet_record_tag_id": results[i].wallet.record_tag_id,
+                        "record_ordinary": results[i].record_ordinary,
+                        "record_name": results[i].record_name,
+                        "record_description": results[i].record_description,
+                        "record_amount": results[i].record.amount,
+                        "record_type": results[i].record_type,
+                        "record_date": results[i].record_date,
+                        "record_created_time": results[i].record_created_time,
+                        "record_updated_time": results[i].record_updated_time
+                    }
+                    response.data.debtor_records.push(record_data);
+                }
+            }
+        })
+        .catch(err => {
+            var response = {
+                "success": false,
+                "message": "取得債務人帳目資料失敗 error: " + err.message,
+                "data": {}
+            }
+            console.log(response);
+            res.status(400).json(response);
+        })
+    console.log(response);
+    res.status(201).json(response)
 }
 
 
@@ -26,16 +89,38 @@ export const get_all_debtors = async (req, res, next) => {
 
     await Debtor.get_all_debtors(user_id)
         .then(results => {
-            console.log(results);
             var response = {
-
+                "success": true,
+                "message": "取得使用者所有債務人資料成功",
+                "data": {
+                    "debtors": []
+                }
             };
-            // data process
-            next(response);
+            if(results.length > 0) {
+                for(var i = 0; i < results.length; ++i) {
+                    var debtor_obj = {
+                        debtor_id: results[i].debtor_id,
+                        debtor_user_id: results[i].debtor_user_id,
+                        debtor_name: results[i].debtor_name,
+                        debtor_amount: results[i].debtor_amount,
+                        debtor_created_time: results[i].debtor_created_time,
+                        debtor_updated_time: results[i].debtoe_updated_time
+                    }
+                    response.data.debtors.push(debtor_obj);
+                }
+            }
         })
         .catch(err => {
-            next(err);
+            var response = {
+                "success": false,
+                "message": "取得使用者所有債務人資料失敗 error: " + err.message,
+                "data": {}
+            }
+            console.log(response);
+            res.status(400).json(response);
         })
+    console.log(response);
+    res.status(201).json(response);
 }
 
 

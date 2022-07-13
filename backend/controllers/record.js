@@ -7,7 +7,34 @@ export const get_record = async (req, res, next) => {
     const query = req.query;
     
     await Record.get_record(query.record_id)
-    .then(results => {
+    .then( async results => {
+        results.record_name = results.record_name.slice(1, results.record_name.length-1);
+        results.record_description = results.record_description.slice(1, results.record_description.length-1);
+
+        // add record_debtors
+        results['record_debtors'] = [];
+        await Debtor.get_record_debtors(query.record_id)
+            .then(result => {
+                if(result.length > 0) {
+                    for(var i = 0; i < result.length; ++i) {
+                        var record_debtor_obj = {
+                            debtor_id: result[i].debtor_id,
+                            debtor_name: result[i].debtor_name
+                        }
+                        results.record_debtors.push(record_debtor_obj);
+                    }
+                }
+            })
+            .catch(err => {
+                var response = {
+                    "success": false,
+                    "message": "取得record資料失敗 error1: " + err.message,
+                    "data": {}
+                }
+                console.log(response);
+                res.status(400).json(response);
+            })
+
         var response = {
             "success": true,
             "message": "取得record資料成功",
@@ -19,7 +46,7 @@ export const get_record = async (req, res, next) => {
     .catch(err => {
         var response = {
             "success": false,
-            "message": "取得record資料失敗",
+            "message": "取得record資料失敗 error2: " + err.message,
             "data": {}
         }
         console.log(response);
@@ -48,7 +75,7 @@ export const insert_record = async (req, res, next) => {
     ).then( async result => {
         if(body.record_debtors) {
             for(var i = 0; i < body.record_debtors.length; ++i) {
-                await Debtor.insert_debtor_record(record_id, body.record_debtors[i].debtor_id)
+                await Debtor.insert_debtor_record(record_id, body.record_debtors[i].debtor_id, body.record_amount)
                     .catch(err => {
                         next(err);
                     })
@@ -91,8 +118,16 @@ export const delete_record = async (req, res, next) => {
     await Record.delete_record(
         body.record_id,
         body.record_wallet_id,
-        body.record_amount
-    ).then(result => {
+        body.record_amount,
+    ).then(async result => {
+        if(body.record_debtors) {
+            for(var i = 0; i < body.record_debtors.length; ++i) {
+                await Debtor.delete_debtor_record(body.record_id, body.record_debtors[i].debtor_id, body.record_amount)
+                    .catch(err => {
+                        next(err);
+                    })
+            }
+        }
         next(result);
     })
     .catch(err => {

@@ -80,7 +80,7 @@ const delete_record = async (record_id, record_wallet_id, record_amount) => {
                 print_error(err);
                 reject(err);
             } else {
-                await conn.query(sql, [record_wallet_id, record_amount, record_wallet_id, record_id], (err, results, fields) => {
+                await conn.query(sql, [record_wallet_id, conn.escape(record_amount), record_wallet_id, record_id], (err, results, fields) => {
                     if(err) {
                         print_error(err);
                         reject(err);
