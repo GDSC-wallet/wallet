@@ -1,4 +1,5 @@
 import User from "../db_interact/user.js";
+import Debtor from "../db_interact/debtor.js"
 import jwt from "jsonwebtoken";
 
 const secret = 'GDSC_WALLET';
