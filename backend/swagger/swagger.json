@@ -1,85 +1,754 @@
 {
-  "swagger": "2.0",
+  "openapi": "3.0.0",
   "info": {
-    "description": "wallet api document",
-    "version": "1.0.0",
-    "title": "Wallet"
+    "title": "Wallet",
+    "description": "wallet api socumention",
+    "version": "1.0.0"
   },
-  "basePath": "/api",
-  "tags": [
+  "servers": [
     {
-      "name": "api",
-      "description": ""
+      "url": "http://localhost:{port}/api",
+      "description": "Developement",
+      "variables": {
+        "port": {
+          "default": "59001"
+        }
+      }
     },
     {
-      "name": "wallet",
-      "description": ""
-    },
-    {
-      "name": "record",
-      "description": ""
-    },
-    {
-      "name": "user",
-      "description": ""
+      "url": "https://wallet.andyjjrt.cc/api",
+      "description": "Stable"
     }
   ],
-  "schemes": [
-    "http",
-    "https"
+  "security": [
+    {
+      "login": []
+    }
   ],
   "paths": {
     "/": {
       "get": {
+        "description": "Test if the server is alive",
         "tags": [
-          "api"
+          "default"
         ],
-        "summary": "Just to test if api is alive",
+        "security": [],
         "responses": {
           "200": {
-            "description": "valid Input",
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/API"
+                },
+                "example": {
+                  "success": true,
+                  "message": "hello from GDSC WALLET",
+                  "data": {}
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/record": {
+      "get": {
+        "description": "get record",
+        "tags": [
+          "record"
+        ],
+        "security": [
+          {
+            "login": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "record_id",
             "schema": {
-              "$ref": "#/definitions/ApiResponse"
+              "type": "string"
+            },
+            "description": "record id"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/API_array"
+                },
+                "example": {
+                  "success": true,
+                  "message": "取得record資料成功",
+                  "data": [
+                    {
+                      "record_wallet_id": "wallet_2c36aaad-2d40-48cb-9e36-9d3a841ffb37",
+                      "record_id": "record_0e0d10d0-531b-4f0d-abc2-f157b9f27dfd",
+                      "wallet_record_tag_id": "tag_80d4a691-14bd-494c-98e1-8187a669e0d2",
+                      "record_ordinary": "",
+                      "record_name": "Some name",
+                      "record_description": "Some description",
+                      "record_amount": "100",
+                      "record_type": "income",
+                      "record_date": "1648912357",
+                      "record_created_time": "1648912357",
+                      "record_updated_time": "1648912357"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/record/create": {
+      "post": {
+        "tags": [
+          "record"
+        ],
+        "security": [
+          {
+            "login": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RecordCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/API"
+                },
+                "example": {
+                  "success": true,
+                  "message": "新增record資料成功",
+                  "data": {}
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/API"
+                },
+                "example": {
+                  "success": false,
+                  "message": "新增record資料失敗 error:...",
+                  "data": {}
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/record/edit": {
+      "post": {
+        "tags": [
+          "record"
+        ],
+        "security": [
+          {
+            "login": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RecordEdit"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/API"
+                },
+                "example": {
+                  "success": true,
+                  "message": "更新record資料成功",
+                  "data": {}
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/API"
+                },
+                "example": {
+                  "success": false,
+                  "message": "更新record資料失敗 error:...",
+                  "data": {}
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/record/delete": {
+      "post": {
+        "tags": [
+          "record"
+        ],
+        "security": [
+          {
+            "login": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "record_id": {
+                    "type": "string",
+                    "default": ""
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/API"
+                },
+                "example": {
+                  "success": true,
+                  "message": "刪除record資料成功",
+                  "data": {}
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/API"
+                },
+                "example": {
+                  "success": false,
+                  "message": "刪除record資料失敗 error:...",
+                  "data": {}
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tag": {
+      "get": {
+        "description": "get tag",
+        "tags": [
+          "tag"
+        ],
+        "security": [
+          {
+            "login": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "tag_id",
+            "schema": {
+              "type": "string"
+            },
+            "description": "tag id"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/API_array"
+                },
+                "example": {
+                  "success": true,
+                  "message": "取得tag資料成功",
+                  "data": []
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tag/create": {
+      "post": {
+        "tags": [
+          "tag"
+        ],
+        "security": [
+          {
+            "login": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TagCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/API"
+                },
+                "example": {
+                  "success": true,
+                  "message": "新增tag資料成功",
+                  "data": {}
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/API"
+                },
+                "example": {
+                  "success": false,
+                  "message": "新增tag資料失敗 error:...",
+                  "data": {}
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tag/edit": {
+      "post": {
+        "tags": [
+          "tag"
+        ],
+        "security": [
+          {
+            "login": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TagEdit"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/API"
+                },
+                "example": {
+                  "success": true,
+                  "message": "更新tag資料成功",
+                  "data": {}
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/API"
+                },
+                "example": {
+                  "success": false,
+                  "message": "更新tag資料失敗 error:...",
+                  "data": {}
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tag/delete": {
+      "post": {
+        "tags": [
+          "tag"
+        ],
+        "security": [
+          {
+            "login": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "tag_id": {
+                    "type": "string",
+                    "default": ""
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/API"
+                },
+                "example": {
+                  "success": true,
+                  "message": "刪除tag資料成功",
+                  "data": {}
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/API"
+                },
+                "example": {
+                  "success": false,
+                  "message": "刪除tag資料失敗 error:...",
+                  "data": {}
+                }
+              }
             }
           }
         }
       }
     }
   },
-  "securityDefinitions": {
-    "petstore_auth": {
-      "type": "oauth2",
-      "authorizationUrl": "http://petstore.swagger.io/oauth/dialog",
-      "flow": "implicit",
-      "scopes": {
-        "write:pets": "modify pets in your account",
-        "read:pets": "read your pets"
+  "components": {
+    "securitySchemes": {
+      "login": {
+        "type": "oauth2",
+        "description": "This API uses OAuth 2 with the implicit grant flow. [More info](https://api.example.com/docs/auth)",
+        "flows": {
+          "implicit": {
+            "authorizationUrl": "/oauth/google/login",
+            "scopes": {}
+          }
+        }
       }
     },
-    "api_key": {
-      "type": "apiKey",
-      "name": "api_key",
-      "in": "header"
-    }
-  },
-  "definitions": {
-    "ApiResponse": {
-      "type": "object",
-      "properties": {
-        "success": {
-          "type": "boolean"
-        },
-        "message": {
-          "type": "string"
-        },
-        "data": {
-          "type": "object"
+    "responses": {
+      "DefaultApiResponse": {
+        "description": "The specified resource was not found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/API"
+            }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "API": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object"
+          }
+        }
+      },
+      "API_array": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          }
+        }
+      },
+      "Record": {
+        "type": "object",
+        "properties": {
+          "record_wallet_id": {
+            "type": "string"
+          },
+          "record_id": {
+            "type": "string"
+          },
+          "wallet_record_tag_id": {
+            "type": "string"
+          },
+          "record_ordinary": {
+            "type": "string"
+          },
+          "record_name": {
+            "type": "string"
+          },
+          "record_description": {
+            "type": "string"
+          },
+          "record_amount": {
+            "type": "string"
+          },
+          "record_type": {
+            "type": "string"
+          },
+          "record_date": {
+            "type": "string"
+          },
+          "record_created_time": {
+            "type": "string"
+          },
+          "record_updated_time": {
+            "type": "string"
+          }
+        }
+      },
+      "RecordCreate": {
+        "type": "object",
+        "properties": {
+          "wallet_id": {
+            "type": "string",
+            "default": ""
+          },
+          "wallet_record_tag_id": {
+            "type": "string",
+            "default": ""
+          },
+          "record_ordinary": {
+            "type": "string",
+            "default": ""
+          },
+          "record_name": {
+            "type": "string",
+            "default": ""
+          },
+          "record_description": {
+            "type": "string",
+            "default": ""
+          },
+          "record_amount": {
+            "type": "string",
+            "default": ""
+          },
+          "record_type": {
+            "type": "string",
+            "default": ""
+          },
+          "record_date": {
+            "type": "string",
+            "default": ""
+          }
+        }
+      },
+      "RecordEdit": {
+        "type": "object",
+        "properties": {
+          "record_id": {
+            "type": "string",
+            "default": ""
+          },
+          "wallet_id": {
+            "type": "string",
+            "default": ""
+          },
+          "wallet_record_tag_id": {
+            "type": "string",
+            "default": ""
+          },
+          "record_ordinary": {
+            "type": "string",
+            "default": ""
+          },
+          "record_name": {
+            "type": "string",
+            "default": ""
+          },
+          "record_description": {
+            "type": "string",
+            "default": ""
+          },
+          "record_amount": {
+            "type": "string",
+            "default": ""
+          },
+          "record_type": {
+            "type": "string",
+            "default": ""
+          },
+          "record_date": {
+            "type": "string",
+            "default": ""
+          }
+        }
+      },
+      "Tag": {
+        "type": "object",
+        "properties": {
+          "tag_color": {
+            "type": "string",
+            "default": ""
+          },
+          "tag_created_time": {
+            "type": "string",
+            "default": ""
+          },
+          "tag_id": {
+            "type": "string",
+            "default": ""
+          },
+          "tag_name": {
+            "type": "string",
+            "default": ""
+          },
+          "tag_ordinary": {
+            "type": "string",
+            "default": ""
+          },
+          "tag_type": {
+            "type": "string",
+            "default": ""
+          },
+          "tag_updated_time": {
+            "type": "string",
+            "default": ""
+          },
+          "tag_wallet_id": {
+            "type": "string",
+            "default": ""
+          }
+        }
+      },
+      "TagCreate": {
+        "type": "object",
+        "properties": {
+          "tag_wallet_id": {
+            "type": "string",
+            "default": ""
+          },
+          "tag_ordinary": {
+            "type": "string",
+            "default": ""
+          },
+          "tag_name": {
+            "type": "string",
+            "default": ""
+          },
+          "tag_type": {
+            "type": "string",
+            "default": ""
+          },
+          "tag_color": {
+            "type": "string",
+            "default": ""
+          }
+        }
+      },
+      "TagEdit": {
+        "type": "object",
+        "properties": {
+          "tag_id": {
+            "type": "string",
+            "default": ""
+          },
+          "tag_ordinary": {
+            "type": "string",
+            "default": ""
+          },
+          "tag_name": {
+            "type": "string",
+            "default": ""
+          },
+          "tag_type": {
+            "type": "string",
+            "default": ""
+          },
+          "tag_color": {
+            "type": "string",
+            "default": ""
+          }
+        }
+      },
+      "TagEditAll": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Tag"
         }
       }
     }
-  },
-  "externalDocs": {
-    "description": "Find out more about Swagger",
-    "url": "http://swagger.io"
   }
 }
