@@ -28,6 +28,30 @@ const get_record_debtors = (record_id) => {
     })
 }
 
+
+const get_debtor_records = (debtor_id) => {
+    return new Promise(async (resolve, reject) => {
+        var sql = "SELECT * FROM wallet_record WHERE record_id = (SELECT record_id FROM debtor_record WHERE debtor_id = ?)";
+        pool.getConnection( async (err, conn) => {
+            if(err) {
+                print_error(err);
+                reject(err);
+            } else {
+                await conn.query(sql, debtor_id, async (err, results, fields) => {
+                    if(err) {
+                        print_error(err);
+                        reject(err);
+                    } else {
+                        conn.release();
+                        resolve(results);
+                    }
+                })
+            }
+        })
+    })
+}
+
+
 // return all debtor datas
 const get_all_debtors = (user_id) => {
     return new Promise(async (resolve, reject) => {
@@ -74,16 +98,16 @@ const insert_debtor = (debtor_user_id, debtor_name, debtor_amount) => {
     })
 }
 
-const insert_debtor_record = (record_id, debtor_id) => {
+const insert_debtor_record = (record_id, debtor_id, record_amount) => {
     return new Promise( async (resolve, reject) => {
         var debtor_record_id = 'debtor_record_' + uuid();
-        var sql = "INSERT INTO debtor_record(debtor_record_id, debtor_id, record_id) VALUE(?,?,?)";
+        var sql = "START TRANSACTION; INSERT INTO debtor_record(debtor_record_id, debtor_id, record_id) VALUE(?,?,?); UPDATE debtor SET debtor_amount = debtor_amount + ? WHERE debtor_id = ?; COMMIT";
         pool.getConnection( async (err, conn) => {
             if(err) {
                 print_error(err);
                 reject(err);
             } else {
-                await conn.query(sql, [debtor_record_id, debtor_id, record_id], (err, results, fields) => {
+                await conn.query(sql, [debtor_record_id, debtor_id, record_id, record_amount, debtor_id], (err, results, fields) => {
                     if(err) {
                         print_error(err);
                         reject(err);
@@ -97,15 +121,15 @@ const insert_debtor_record = (record_id, debtor_id) => {
     })    
 }
 
-const delete_debtor_record = (record_id, debtor_id) => {
+const delete_debtor_record = (record_id, debtor_id, record_amount) => {
     return new Promise( async (resolve, reject) => {
-        var sql = "DELETE FROM debtor_record WHERE record_id = ? AND debtor_id = ?";
+        var sql = "START TRANSACTION; DELETE FROM debtor_record WHERE record_id = ? AND debtor_id = ?; UPDATE debtor SET debtor_amount = debtor_amount - ? WHERE debtor_id = ?; COMMIT";
         pool.getConnection( async (err, conn) => {
             if(err) {
                 print_error(err);
                 reject(err);
             } else {
-                await conn.query(sql, [record_id, debtor_id], (err, results, fields) => {
+                await conn.query(sql, [record_id, debtor_id, record_amount, debtor_id], (err, results, fields) => {
                     if(err) {
                         print_error(err);
                         reject(err);
@@ -164,4 +188,4 @@ const delete_debtor = (debtor_id) => {
 
 }
 
-export default { get_record_debtors, get_all_debtors, insert_debtor, insert_debtor_record, delete_debtor_record, update_debtor, delete_debtor };
+export default { get_record_debtors, get_debtor_records, get_all_debtors, insert_debtor, insert_debtor_record, delete_debtor_record, update_debtor, delete_debtor };

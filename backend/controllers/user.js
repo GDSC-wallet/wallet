@@ -188,11 +188,11 @@ export const getUserProfile = async (req, res, next) => {
                             .then(result => {
                                 if(result.length > 0) {
                                     for(var i = 0; i < result.length; ++i) {
-                                        var record_debtors_obj = {
+                                        var record_debtor_obj = {
                                             debtor_id: result[i].debtor_id,
                                             debtor_name: result[i].debtor_name
                                         }
-                                        record_obj.record_debtors.push(record_debtors_obj);
+                                        record_obj.record_debtors.push(record_debtor_obj);
                                     }
                                 }
                             })

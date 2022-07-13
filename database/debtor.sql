@@ -29,7 +29,9 @@ CREATE TABLE `debtor` (
   `debtor_amount` int DEFAULT NULL,
   `debtor_created_time` datetime DEFAULT NULL,
   `debtor_updated_time` datetime DEFAULT NULL,
-  PRIMARY KEY (`debtor_id`)
+  PRIMARY KEY (`debtor_id`),
+  KEY `debtor_user_id` (`debtor_user_id`),
+  CONSTRAINT `debtor_ibfk_1` FOREIGN KEY (`debtor_user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -75,4 +77,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-07-10  2:41:58
+-- Dump completed on 2022-07-13 19:59:19

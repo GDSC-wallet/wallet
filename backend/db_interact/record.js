@@ -71,16 +71,16 @@ const update_record = async (record_id, record_wallet_id, wallet_record_tag_id, 
 };
 
 
-const delete_record = async (record_id, record_wallet_id, record_amount, debtor_id) => {
+const delete_record = async (record_id, record_wallet_id, record_amount) => {
     return new Promise( async (resolve, reject) => {
         // 刪減wallet中的record_num和wallet_total
-        var sql = "START TRANSACTION; UPDATE wallet SET record_num = record_num - 1 WHERE wallet_id = ?; UPDATE wallet SET wallet_total = wallet_total - ? WHERE wallet_id = ?; DELETE FROM wallet_record WHERE record_id = ?; DELETE FROM debtor_record WHERE record_id = ? AND debtor_id = ? COMMIT";
+        var sql = "START TRANSACTION; UPDATE wallet SET record_num = record_num - 1 WHERE wallet_id = ?; UPDATE wallet SET wallet_total = wallet_total - ? WHERE wallet_id = ?; DELETE FROM wallet_record WHERE record_id = ?; COMMIT";
         pool.getConnection( async (err, conn) => {
             if(err) {
                 print_error(err);
                 reject(err);
             } else {
-                await conn.query(sql, [record_wallet_id, conn.escape(record_amount), record_wallet_id, record_id, record_id, debtor_id], (err, results, fields) => {
+                await conn.query(sql, [record_wallet_id, conn.escape(record_amount), record_wallet_id, record_id], (err, results, fields) => {
                     if(err) {
                         print_error(err);
                         reject(err);
