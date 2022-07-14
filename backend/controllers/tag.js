@@ -3,6 +3,7 @@ import Tag from "../db_interact/tag.js";
 export const get_tag = async (req, res, next) => {
     await Tag.get_tag(req.query.tag_id)
         .then(result => {
+            result.tag_name = result.tag_name.slice(1, result.tag_name.length-1);
             var response = {
                 "success": true,
                 "message": "取得tag資料成功",

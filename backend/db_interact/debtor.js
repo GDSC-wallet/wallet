@@ -84,7 +84,7 @@ const insert_debtor = (debtor_user_id, debtor_name, debtor_amount) => {
                 print_error(err);
                 reject(err);
             } else {
-                await conn.query(sql, [debtor_id, debtor_user_id, debtor_name, debtor_amount], async (err, results, fields) => {
+                await conn.query(sql, [debtor_id, debtor_user_id, conn.escape(debtor_name), debtor_amount], async (err, results, fields) => {
                     if(err) {
                         print_error(err);
                         reject(err);
@@ -151,7 +151,7 @@ const update_debtor = (debtor_id, debtor_name, debtor_amount) => {
                 print_error(err);
                 reject(err);
             } else {
-                await conn.query(sql, [debtor_name, debtor_amount, debtor_id], async (err, results, fields) => {
+                await conn.query(sql, [conn.escape(debtor_name), debtor_amount, debtor_id], async (err, results, fields) => {
                     if(err) {
                         print_error(err);
                         reject(err);
@@ -185,7 +185,6 @@ const delete_debtor = (debtor_id) => {
             }
         })
     })
-
 }
 
 export default { get_record_debtors, get_debtor_records, get_all_debtors, insert_debtor, insert_debtor_record, delete_debtor_record, update_debtor, delete_debtor };
