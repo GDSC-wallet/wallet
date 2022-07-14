@@ -43,7 +43,7 @@ export const get_debtor_records = async (req, res, next) => {
     const { debtor_id } = req.query;
 
     await Debtor.get_debtor_records(debtor_id)
-        .then(results => {
+        .then( async results => {
             var response = {
                 "success": true,
                 "message": "取得債務人帳目資料成功",
@@ -64,7 +64,7 @@ export const get_debtor_records = async (req, res, next) => {
                         "record_amount": results[i].record.amount,
                         "record_type": results[i].record_type,
                         "record_date": results[i].record_date,
-                        "record_debtors": []
+                        "record_debtors": [],
                         "record_created_time": results[i].record_created_time,
                         "record_updated_time": results[i].record_updated_time
                     }
@@ -144,11 +144,11 @@ export const get_all_debtors = async (req, res, next) => {
 
 export const insert_debtor = async (req, res, next) => {
 
-    const { debtor_name, debtor_amount } = req.body;
+    const { debtor_name } = req.body;
 
     // 從 req.session?.passport?.user 取得 jwt decode 的資料，不進行二次解密
     const debtor_user_id = req.session?.passport?.user?.user_id;
-    await Debtor.insert_debtor(debtor_user_id, debtor_name, debtor_amount)
+    await Debtor.insert_debtor(debtor_user_id, debtor_name)
         .then(result => {
             next(result);
         })
@@ -188,9 +188,9 @@ export const delete_debtor_record = async (req, res, next) => {
 
 export const update_debtor = async (req, res, next) => {
 
-    const { debtor_id, debtor_name, debtor_amount } = req.body;
+    const { debtor_id, debtor_name } = req.body;
 
-    await Debtor.update_debtor(debtor_id, debtor_name, debtor_amount)
+    await Debtor.update_debtor(debtor_id, debtor_name)
         .then(result => {
             next(result);
         })

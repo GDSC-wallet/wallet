@@ -61,22 +61,23 @@ export const get_month_records = async (req, res, next) => {
         .then( async results => { 
             var response = {
                 "success": true,
-                "message": "取得指定月份records成功",
+                "message": "取得指定月份records資料成功",
                 "data": []
             }
-            for(var i = 0; i < results[1].length; ++i) {
+            console.log(results);
+            for(var i = 0; i < results.length; ++i) {
                 var record_obj = {
-                    "record_id": results[1][i].record_id,
-                    "wallet_record_tag_id": results[1][i].wallet_record_tag_id,
-                    "record_ordinary": results[1][i].record_ordinary,
-                    "record_name": results[1][i].record_name.slice(1, results[1][i].record_name.length-1),
-                    "record_description": results[1][i].record_description.slice(1, results[1][i].record_description.length-1),
-                    "record_amount": results[1][i].record_amount,
-                    "record_type": results[1][i].record_type,
-                    "record_date": results[1][i].record_date,
+                    "record_id": results[i].record_id,
+                    "wallet_record_tag_id": results[i].wallet_record_tag_id,
+                    "record_ordinary": results[i].record_ordinary,
+                    "record_name": results[i].record_name.slice(1, results[i].record_name.length-1),
+                    "record_description": results[i].record_description.slice(1, results[i].record_description.length-1),
+                    "record_amount": results[i].record_amount,
+                    "record_type": results[i].record_type,
+                    "record_date": results[i].record_date,
                     "record_debtors": [],
-                    "record_created_time": results[1][i].record_created_time,
-                    "record_updated_time": results[1][i].record_updated_time
+                    "record_created_time": results[i].record_created_time,
+                    "record_updated_time": results[i].record_updated_time
                 }
                 await Debtor.get_record_debtors(results[i].record_id)
                     .then(result => {
@@ -94,7 +95,7 @@ export const get_month_records = async (req, res, next) => {
                     .catch(err => {
                         var response = {
                             "success": false,
-                            "message": "取得指定月份records失敗 error: " + err.message,
+                            "message": "取得指定月份records資料失敗 error: " + err.message,
                             "data": {}
                         }
                         console.log(response);
@@ -108,7 +109,7 @@ export const get_month_records = async (req, res, next) => {
         .catch(err => {
             var response = {
                 "success": false,
-                "message": "取得指定月份records失敗 error: " + err.message,
+                "message": "取得指定月份records資料失敗 error: " + err.message,
                 "data": {}
             }
             console.log(response);
