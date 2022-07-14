@@ -1,17 +1,19 @@
 <template>
   <div>
-    <vc-date-picker 
-      v-model="date"
-      :attributes="statusBar"
-      is-expanded
-      is-required
-      @update:to-page="toPage"
-    />
+    <vc-date-picker v-model="date" :attributes="statusBar" is-expanded is-required @update:to-page="toPage" ref="calendar">
+      <template v-slot:footer>
+        <div class="pa-2">
+          <v-btn block elevation="2" @click="toToday">
+            <v-icon>mdi-calendar-check</v-icon>
+          </v-btn>
+        </div>
+      </template>
+    </vc-date-picker>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 
 export default {
   name: "Calendar",
@@ -20,24 +22,33 @@ export default {
   },
   mounted() { },
   methods: {
+    ...mapActions({
+      setDate: "calendar/setDate"
+    }),
     toPage(e) {
       // First check if date is equal to score's date,
       // because render will trigger this function.
       if (e.month != this.date.getMonth() + 1 || e.year != this.date.getFullYear()) {
         this.date = new Date(new Date(this.date.setMonth(e.month - 1)).setFullYear(e.year))
       }
+    },
+    toToday() {
+      const calendar = this.$refs.calendar;
+      calendar.move(new Date());
+      this.setDate(new Date());
     }
   },
   computed: {
     ...mapGetters({
-      getRecords: "wallet/getRecords"
+      getRecords: "wallet/getRecords",
+      getDate: "calendar/getDate",
     }),
     date: {
       get() {
-        return this.$store.getters["calendar/getDate"];
+        return this.getDate;
       },
       set(value) {
-        this.$store.dispatch("calendar/setDate", value)
+        this.setDate(value)
       }
     },
     statusBar() {
@@ -50,7 +61,7 @@ export default {
           expenseDates.push(new Date(record.record_date))
         }
       })
-      return [{bar: true, dates: incomeDates},{bar: "red", dates: expenseDates}]
+      return [{ bar: true, dates: incomeDates }, { bar: "red", dates: expenseDates }]
     }
   },
 };
