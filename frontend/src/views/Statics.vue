@@ -1,16 +1,29 @@
 <template>
   <div>
+    <MonthSelector v-model="date" />
     <Chart :data="test" :options="{}" type="doughnut" chartId="123" />
   </div>
 </template>
 
 <script>
 import Chart from "@/components/Chart/Main.vue"
+import MonthSelector from "@/components/Calendar/components/MonthSelector.vue"
 export default {
   name: "Statics",
   components: {
-    Chart: Chart
+    Chart: Chart,
+    MonthSelector: MonthSelector
   },
+  data() {
+    return {
+      date: new Date()
+    }
+  },
+  methods: {
+    changeDate(v) {
+      console.log(v)
+    }
+  },  
   computed: {
     test() {
       return {
