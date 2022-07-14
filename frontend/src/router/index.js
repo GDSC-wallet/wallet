@@ -1,8 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
-import Search from '../views/Search.vue'
-import Chart from '../views/Chart.vue'
+import Statics from "../views/Statics.vue"
 import Setting from '../views/Setting.vue'
 import Login from '../views/Login.vue'
 import CallbackSignup from '../views/Callback/Signup.vue'
@@ -20,14 +19,9 @@ const routes = [
         meta: { requiresAuth: true },
     },
     {
-        path: '/search',
-        name: 'Search',
-        component: Search
-    },
-    {
-        path: '/chart',
-        name: 'Chart',
-        component: Chart,
+        path: '/statics',
+        name: 'Statics',
+        component: Statics,
         meta: { requiresAuth: true },
     },
     {
@@ -66,7 +60,6 @@ router.beforeEach((to, from, next) => {
     // console.log('to=', to.fullPath, '| from=', from.fullPath);
     const isAuthenticated = store.getters['auth/isLoggedin'];
     //const isReady = store.getters['auth/isReady'];
-    console.log(isAuthenticated)
     if (to.matched.some(record => record.meta.requiresAuth)) {
         !isAuthenticated ? next({ path: '/login' }) : next();
     } else {
