@@ -175,10 +175,11 @@ export const getUserProfile = async (req, res, next) => {
                             wallet_record_tag_id: results[i+j].wallet_record_tag_id,
                             record_ordinary: results[i+j].record_ordinary,
                             record_name: results[i+j].record_name,
-                            record_description: results[i+j].record_description,  //
-                            record_amount: results[i+j].record_amount,    //
-                            record_type: results[i+j].record_type,    //
-                            record_date: results[i+j].record_date,    //
+                            record_description: results[i+j].record_description,
+                            record_amount: results[i+j].record_amount,
+                            record_type: results[i+j].record_type,
+                            record_date: results[i+j].record_date,
+                            record_debtors: [],
                             record_created_time: results[i+j].record_created_time,
                             record_updated_time: results[i+j].record_updated_time,
                         }

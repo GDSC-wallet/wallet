@@ -1,4 +1,5 @@
 import Wallet from "../db_interact/wallet.js";
+import Debtor from "../db_interact/debtor.js";
 import User from "../db_interact/user.js";
 
 export const get_wallet = async (req, res, next) => {
@@ -154,7 +155,7 @@ export const search_record = async (req, res, next) => {
     const { wallet_id, search_str } = req.query;
 
     await Wallet.search_record(wallet_id, search_str)
-        .then(results => {
+        .then( async results => {
             var response = {
                 "success": true,
                 "message": "搜尋record資料成功",
@@ -170,9 +171,31 @@ export const search_record = async (req, res, next) => {
                     "record_amount": results[1][i].record_amount,
                     "record_type": results[1][i].record_type,
                     "record_date": results[1][i].record_date,
+                    "record_debtors": []
                     "record_created_time": results[1][i].record_created_time,
                     "record_updated_time": results[1][i].record_updated_time
                 }
+                await Debtor.get_record_debtors(results[1][i].record_id)
+                    .then(result => {
+                        if(result.length > 0) {
+                            for(var i = 0; i < result.length; ++i) {
+                                var record_debtor_obj = {
+                                    debtor_id: result[i].debtor_id,
+                                    debtor_name: result[i].debtor_name
+                                }
+                                results.record_debtors.push(record_debtor_obj);
+                            }
+                        }
+                    })
+                    .catch(err => {
+                        var response = {
+                            "success": false,
+                            "message": " 搜尋record資料失敗 error1: " + err.message,
+                            "data": {}
+                        }
+                        console.log(response);
+                        res.status(400).json(response);
+                    })
                 response.data.push(record_data);
             }
             console.log(response);
@@ -181,7 +204,7 @@ export const search_record = async (req, res, next) => {
         .catch(err => {
             var response = {
                 "success": false,
-                "message": "搜尋record資料失敗 error: " + err.message,
+                "message": "搜尋record資料失敗 error2: " + err.message,
                 "data": {}
             }
             console.log(response);
