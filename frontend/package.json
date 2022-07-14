@@ -21,6 +21,7 @@
     "deepmerge": "^4.2.2",
     "sass": "~1.32",
     "sass-loader": "^13.0.2",
+    "unplugin-vue-components": "^0.21.1",
     "vite": "^2.9.9",
     "vue-cli-plugin-vuetify": "~2.5.1"
   }
