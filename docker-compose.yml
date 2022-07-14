@@ -28,12 +28,11 @@ services:
       - SECRET=${SECRET}
       - MODE=${MODE}
       - FRONTEND_PORT=${FRONTEND_PORT}
-  #frontend:
-  #  container_name: frontend
-  #  build: frontend
-  #  environment:
-  #    - SERVER_PORT=${SERVER_PORT}
-  #    - PORT=${FRONTEND_PORT}
+  frontend:
+    container_name: frontend
+    build: frontend
+    volumes:
+      - frontend:/app/dist
   service:
     container_name: service
     build: service
@@ -42,5 +41,8 @@ services:
       - frontend
     ports:
       - ${SERVER_PORT}:80
-#volumes:
+    volumes:
+      - frontend:/frontend
+volumes:
+  frontend:
 #  wallet-data:
