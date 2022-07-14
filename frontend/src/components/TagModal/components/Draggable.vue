@@ -50,7 +50,7 @@ import draggable from "vuedraggable";
 import { mapActions } from "vuex";
 
 export default {
-  name: "transition-example-2",
+  name: "Draggable",
   props: {
     list: Array,
   },
