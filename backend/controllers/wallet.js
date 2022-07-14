@@ -1,4 +1,5 @@
 import Wallet from "../db_interact/wallet.js";
+import Debtor from "../db_interact/debtor.js";
 import User from "../db_interact/user.js";
 
 export const get_wallet = async (req, res, next) => {
