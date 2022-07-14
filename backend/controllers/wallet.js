@@ -171,7 +171,7 @@ export const search_record = async (req, res, next) => {
                     "record_amount": results[1][i].record_amount,
                     "record_type": results[1][i].record_type,
                     "record_date": results[1][i].record_date,
-                    "record_debtors": []
+                    "record_debtors": [],
                     "record_created_time": results[1][i].record_created_time,
                     "record_updated_time": results[1][i].record_updated_time
                 }

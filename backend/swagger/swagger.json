@@ -1,1104 +1,1658 @@
-openapi: 3.0.0
-info:
-  title: Wallet
-  description: wallet api socumention
-  version: 1.0.0
-servers:
-  - url: http://localhost:{port}/api
-    description: Developement
-    variables:
-      port:
-        default: '59001'
-  - url: https://wallet.andyjjrt.cc/api
-    description: Stable
-security:
-  - login: []
-paths:
-  /:
-    get:
-      description: Test if the server is alive
-      tags:
-        - default
-      security: []
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/API'
-              example:
-                success: true
-                message: hello from GDSC WALLET
-                data: {}
-                
-  /user/signup:
-    post:
-      summary: Creates a user.
-      tags:
-        - user
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                nickname:
-                  type: string
-      responses:
-        '201':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/API'
-              example:
-                success: true
-                message: 使用者註冊成功
-                data: {}
-        '400':
-          description: Failed
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/API'
-              example:
-                success: false
-                message: 使用者註冊失敗 error:...
-                data: {}
-                
-  /user/profile:
-    get:
-      summary: Get user's profile.
-      description: get profile
-      tags:
-        - user
-      security:
-        - login: []
-      parameters:
-        - in: query
-          name: time_choosen
-          schema:
-            type: string
-          description: time_choosen (not necessary)
-      responses:
-        '201':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserProfile'
-              example:
-                success: true
-                message: 取得使用者資料成功
-                data: {
-                  user_id: 'user_12345',
-                  username: 'royshao',
-                  nickname: 'roy',
-                  selected_wallet_id: 'wallet_12345',
-                  wallets: [],
-                  debtors: []
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Wallet",
+    "description": "wallet api socumention",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:{port}/api",
+      "description": "Developement",
+      "variables": {
+        "port": {
+          "default": "59001"
+        }
+      }
+    },
+    {
+      "url": "https://wallet.andyjjrt.cc/api",
+      "description": "Stable"
+    }
+  ],
+  "security": [
+    {
+      "login": []
+    }
+  ],
+  "paths": {
+    "/": {
+      "get": {
+        "description": "Test if the server is alive",
+        "tags": [
+          "default"
+        ],
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/API"
+                },
+                "example": {
+                  "success": true,
+                  "message": "hello from GDSC WALLET",
+                  "data": {}
                 }
-        '400':
-            description: Failed
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/API'
-                example:
-                  success: false
-                  message: 取得使用者資料失敗 error:...
-                  data: {}
-                  
-  /wallet:
-    get:
-      summary: Get a wallet.
-      description: get wallet
-      tags:
-        - wallet
-      security:
-        - login: []
-      parameters:
-        - in: query
-          name: wallet_id
-          schema:
-            type: string
-          description: wallet id
-        - in: query
-          name: time_choosen
-          schema:
-            type: string
-          description: needed and is supposed current time
-      responses:
-        '201':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Wallet'
-              example:
-                success: true,
-                message: 取得wallet資料成功
-                data: {
-                  wallet_id: wallet_12345,
-                  wallet_name: roy's wallet,
-                  wallet_total: 100,
-                  wallet_description: my wallet,
-                  record_num: 1,
-                  records: [],
-                  tags: []
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/signup": {
+      "post": {
+        "summary": "Creates a user.",
+        "tags": [
+          "user"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "nickname": {
+                    "type": "string"
+                  }
                 }
-        '400':
-          description: Failed
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/API'
-              example:
-                success: false
-                message: 取得wallet資料失敗 error:...
-                data: {}
-                
-  /wallet/create:
-    post:
-      summary: Creates a wallet.
-      tags:
-        - wallet
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                wallet_name:
-                  type: string
-                wallet_description:
-                  type: string
-      responses:
-        '201':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/API'
-              example:
-                success: true
-                message: 新增wallet成功
-                data: {}
-        '400':
-          description: Failed
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/API'
-              example:
-                success: false
-                message: 新增wallet失敗 error:...
-                data: {}
-  
-  /wallet/update:
-    post:
-      summary: Updates a wallet.
-      tags:
-        - wallet
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                wallet_id:
-                  type: string
-                wallet_name:
-                  type: string
-                wallet_description:
-                  type: string
-      responses:
-        '201':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/API'
-              example:
-                success: true
-                message: 更新wallet成功
-                data: {}
-        '400':
-          description: Failed
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/API'
-              example:
-                success: false
-                message: 更新wallet失敗 error:...
-                data: {}
-  
-  /wallet/delete:
-    post:
-      summary: Deletes a wallet.
-      tags:
-        - wallet
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                wallet_id:
-                  type: string
-      responses:
-        '201':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/API'
-              example:
-                success: true
-                message: 刪除wallet成功
-                data: {}
-        '400':
-          description: Failed
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/API'
-              example:
-                success: false
-                message: 刪除wallet失敗 error:...
-                data: {}
-                
-  /wallet/search:
-    get:
-      summary: Get specific records.
-      description: get specific records
-      tags:
-        - wallet
-      security:
-        - login: []
-      parameters:
-        - in: query
-          name: wallet_id
-          schema:
-            type: string
-          description: wallet id
-        - in: query
-          name: search_str
-          schema:
-            type: string
-          description: search string
-      responses:
-        '201':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/WalletSearch'
-              example:
-                success: true
-                message: 搜尋record資料成功
-                data: [
-                  {
-                    record_id: "",
-                    wallet_record_tag_id: "",
-                    record_ordinary: 1,
-                    record_name: "",
-                    record_description: "",
-                    record_amount: 100,
-                    record_type: "",
-                    record_date: "",
-                    record_debtors: [
-                      {
-                        debtor_id: "",
-                        debtor_name: "",
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/API"
+                },
+                "example": {
+                  "success": true,
+                  "message": "使用者註冊成功",
+                  "data": {}
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/API"
+                },
+                "example": {
+                  "success": false,
+                  "message": "使用者註冊失敗 error:...",
+                  "data": {}
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/profile": {
+      "get": {
+        "summary": "Get user's profile.",
+        "description": "get profile",
+        "tags": [
+          "user"
+        ],
+        "security": [
+          {
+            "login": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "time_choosen",
+            "schema": {
+              "type": "string"
+            },
+            "description": "time_choosen (not necessary)"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserProfile"
+                },
+                "example": {
+                  "success": true,
+                  "message": "取得使用者資料成功",
+                  "data": {
+                    "user_id": "user_12345",
+                    "username": "royshao",
+                    "nickname": "roy",
+                    "selected_wallet_id": "wallet_12345",
+                    "wallets": [],
+                    "debtors": []
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/API"
+                },
+                "example": {
+                  "success": false,
+                  "message": "取得使用者資料失敗 error:...",
+                  "data": {}
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/wallet": {
+      "get": {
+        "summary": "Get a wallet.",
+        "description": "get wallet",
+        "tags": [
+          "wallet"
+        ],
+        "security": [
+          {
+            "login": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "wallet_id",
+            "schema": {
+              "type": "string"
+            },
+            "description": "wallet id"
+          },
+          {
+            "in": "query",
+            "name": "time_choosen",
+            "schema": {
+              "type": "string"
+            },
+            "description": "needed and is supposed current time"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Wallet"
+                },
+                "example": {
+                  "success": "true,",
+                  "message": "取得wallet資料成功",
+                  "data": {
+                    "wallet_id": "wallet_12345",
+                    "wallet_name": "roy's wallet",
+                    "wallet_total": 100,
+                    "wallet_description": "my wallet",
+                    "record_num": 1,
+                    "records": [],
+                    "tags": []
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/API"
+                },
+                "example": {
+                  "success": false,
+                  "message": "取得wallet資料失敗 error:...",
+                  "data": {}
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/wallet/create": {
+      "post": {
+        "summary": "Creates a wallet.",
+        "tags": [
+          "wallet"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "wallet_name": {
+                    "type": "string"
+                  },
+                  "wallet_description": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/API"
+                },
+                "example": {
+                  "success": true,
+                  "message": "新增wallet成功",
+                  "data": {}
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/API"
+                },
+                "example": {
+                  "success": false,
+                  "message": "新增wallet失敗 error:...",
+                  "data": {}
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/wallet/update": {
+      "post": {
+        "summary": "Updates a wallet.",
+        "tags": [
+          "wallet"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "wallet_id": {
+                    "type": "string"
+                  },
+                  "wallet_name": {
+                    "type": "string"
+                  },
+                  "wallet_description": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/API"
+                },
+                "example": {
+                  "success": true,
+                  "message": "更新wallet成功",
+                  "data": {}
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/API"
+                },
+                "example": {
+                  "success": false,
+                  "message": "更新wallet失敗 error:...",
+                  "data": {}
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/wallet/delete": {
+      "post": {
+        "summary": "Deletes a wallet.",
+        "tags": [
+          "wallet"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "wallet_id": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/API"
+                },
+                "example": {
+                  "success": true,
+                  "message": "刪除wallet成功",
+                  "data": {}
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/API"
+                },
+                "example": {
+                  "success": false,
+                  "message": "刪除wallet失敗 error:...",
+                  "data": {}
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/wallet/search": {
+      "get": {
+        "summary": "Get specific records.",
+        "description": "get specific records",
+        "tags": [
+          "wallet"
+        ],
+        "security": [
+          {
+            "login": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "wallet_id",
+            "schema": {
+              "type": "string"
+            },
+            "description": "wallet id"
+          },
+          {
+            "in": "query",
+            "name": "search_str",
+            "schema": {
+              "type": "string"
+            },
+            "description": "search string"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WalletSearch"
+                },
+                "example": {
+                  "success": true,
+                  "message": "搜尋record資料成功",
+                  "data": [
+                    {
+                      "record_id": "",
+                      "wallet_record_tag_id": "",
+                      "record_ordinary": 1,
+                      "record_name": "",
+                      "record_description": "",
+                      "record_amount": 100,
+                      "record_type": "",
+                      "record_date": "",
+                      "record_debtors": [
+                        {
+                          "debtor_id": "",
+                          "debtor_name": ""
+                        }
+                      ],
+                      "record_created_time": "",
+                      "record_updated_time": ""
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/record": {
+      "get": {
+        "summary": "Get a record.",
+        "description": "get record",
+        "tags": [
+          "record"
+        ],
+        "security": [
+          {
+            "login": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "record_id",
+            "schema": {
+              "type": "string"
+            },
+            "description": "record id"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Record"
+                },
+                "example": {
+                  "success": true,
+                  "message": "取得record資料成功",
+                  "data": [
+                    {
+                      "record_wallet_id": "wallet_2c36aaad-2d40-48cb-9e36-9d3a841ffb37",
+                      "record_id": "record_0e0d10d0-531b-4f0d-abc2-f157b9f27dfd",
+                      "wallet_record_tag_id": "tag_80d4a691-14bd-494c-98e1-8187a669e0d2",
+                      "record_ordinary": "",
+                      "record_name": "Some name",
+                      "record_description": "Some description",
+                      "record_amount": "100",
+                      "record_type": "income",
+                      "record_date": "1648912357",
+                      "record_debtors": [
+                        {
+                          "debtor_id": "debtor_12345",
+                          "debtor_name": "well"
+                        }
+                      ],
+                      "record_created_time": "1648912357",
+                      "record_updated_time": "1648912357"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/API"
+                },
+                "example": {
+                  "success": false,
+                  "message": "取得record資料失敗 error:...",
+                  "data": {}
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/record/create": {
+      "post": {
+        "summary": "Creates a record.",
+        "description": "Creates a record.",
+        "tags": [
+          "record"
+        ],
+        "security": [
+          {
+            "login": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RecordCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/API"
+                },
+                "example": {
+                  "success": true,
+                  "message": "新增record資料成功",
+                  "data": {}
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/API"
+                },
+                "example": {
+                  "success": false,
+                  "message": "新增record資料失敗 error:...",
+                  "data": {}
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/record/edit": {
+      "post": {
+        "summary": "Updates a record.",
+        "description": "Updates a record.",
+        "tags": [
+          "record"
+        ],
+        "security": [
+          {
+            "login": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RecordEdit"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/API"
+                },
+                "example": {
+                  "success": true,
+                  "message": "更新record資料成功",
+                  "data": {}
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/API"
+                },
+                "example": {
+                  "success": false,
+                  "message": "更新record資料失敗 error:...",
+                  "data": {}
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/record/delete": {
+      "post": {
+        "summary": "Deletes a record.",
+        "description": "Deletes a record.",
+        "tags": [
+          "record"
+        ],
+        "security": [
+          {
+            "login": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "record_id": {
+                    "type": "string",
+                    "default": ""
+                  },
+                  "record_wallet_id": {
+                    "type": "string"
+                  },
+                  "record_amount": {
+                    "type": "number"
+                  },
+                  "record_debtors": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "debtor_id": {
+                          "type": "string"
+                        }
                       }
-                    ],
-                    record_created_time: "",
-                    record_updated_time: ""
-                  }  
-                ]
-  /record:
-    get:
-      summary: Get a record.
-      description: get record
-      tags:
-        - record
-      security:
-        - login: []
-      parameters:
-        - in: query
-          name: record_id
-          schema:
-            type: string
-          description: record id
-      responses:
-        '201':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Record'
-              example:
-                success: true
-                message: 取得record資料成功
-                data:
-                  - record_wallet_id: wallet_2c36aaad-2d40-48cb-9e36-9d3a841ffb37
-                    record_id: record_0e0d10d0-531b-4f0d-abc2-f157b9f27dfd
-                    wallet_record_tag_id: tag_80d4a691-14bd-494c-98e1-8187a669e0d2
-                    record_ordinary: ''
-                    record_name: Some name
-                    record_description: Some description
-                    record_amount: '100'
-                    record_type: income
-                    record_date: '1648912357'
-                    record_debtors: [
-                      {
-                        debtor_id: debtor_12345,
-                        debtor_name: well
-                      }  
-                    ]
-                    record_created_time: '1648912357'
-                    record_updated_time: '1648912357'
-        '400':
-          description: Failed
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/API'
-              example:
-                success: false
-                message: 取得record資料失敗 error:...
-                data: {}
-                
-  /record/create:
-    post:
-      summary: Creates a record.
-      description: Creates a record.
-      tags:
-        - record
-      security:
-        - login: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/RecordCreate'
-      responses:
-        '201':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/API'
-              example:
-                success: true
-                message: 新增record資料成功
-                data: {}
-        '400':
-          description: Failed
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/API'
-              example:
-                success: false
-                message: 新增record資料失敗 error:...
-                data: {}
-  /record/edit:
-    post:
-      summary: Updates a record.
-      description: Updates a record.
-      tags:
-        - record
-      security:
-        - login: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/RecordEdit'
-      responses:
-        '201':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/API'
-              example:
-                success: true
-                message: 更新record資料成功
-                data: {}
-        '400':
-          description: Failed
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/API'
-              example:
-                success: false
-                message: 更新record資料失敗 error:...
-                data: {}
-  /record/delete:
-    post:
-      summary: Deletes a record.
-      description: Deletes a record.
-      tags:
-        - record
-      security:
-        - login: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                record_id:
-                  type: string
-                  default: ''
-                record_wallet_id:
-                  type: string
-                record_amount:
-                  type: number
-                record_debtors:
-                  type: array
-                  items:
-                    type: object
-                    properties:
-                      debtor_id:
-                        type: string
-      responses:
-        '201':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/API'
-              example:
-                success: true
-                message: 刪除record資料成功
-                data: {}
-        '400':
-          description: Failed
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/API'
-              example:
-                success: false
-                message: 刪除record資料失敗 error:...
-                data: {}
-  /tag:
-    get:
-      summary: Get a tag.
-      description: get tag
-      tags:
-        - tag
-      security:
-        - login: []
-      parameters:
-        - in: query
-          name: tag_id
-          schema:
-            type: string
-          description: tag id
-      responses:
-        '201':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Tag'
-              example:
-                success: true
-                message: 取得tag資料成功
-                data: [
-                  {
-                    tag_id: tag_12345,
-                    tag_wallet_id: wallet_12345,
-                    tag_name: taggg,
-                    tag_ordinary: 1,
-                    tag_type: work,
-                    tag_created_time: "",
-                    tag_updated_time: ""
-                  }  
-                ]
-        '400':
-          description: Failed
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/API'
-              example:
-                success: false
-                message: 取得tag資料失敗 error:...
-                data: {}
-  /tag/create:
-    post:
-      summary: Creates a tag.
-      description: creates a tag
-      tags:
-        - tag
-      security:
-        - login: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/TagCreate'
-      responses:
-        '201':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/API'
-              example:
-                success: true
-                message: 新增tag資料成功
-                data: {}
-        '400':
-          description: Failed
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/API'
-              example:
-                success: false
-                message: 新增tag資料失敗 error:...
-                data: {}
-  /tag/edit:
-    post:
-      summary: Updates a tag.
-      description: updates a tag
-      tags:
-        - tag
-      security:
-        - login: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/TagEdit'
-      responses:
-        '201':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/API'
-              example:
-                success: true
-                message: 更新tag資料成功
-                data: {}
-        '400':
-          description: Failed
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/API'
-              example:
-                success: false
-                message: 更新tag資料失敗 error:...
-                data: {}
-  /tag/delete:
-    post:
-      summary: Deletes a tag.
-      description: deletes a tag
-      tags:
-        - tag
-      security:
-        - login: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                tag_id:
-                  type: string
-                  default: ''
-      responses:
-        '201':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/API'
-              example:
-                success: true
-                message: 刪除tag資料成功
-                data: {}
-        '400':
-          description: Failed
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/API'
-              example:
-                success: false
-                message: 刪除tag資料失敗 error:...
-                data: {}
-components:
-  securitySchemes:
-    login:
-      type: oauth2
-      description: >-
-        This API uses OAuth 2 with the implicit grant flow. [More
-        info](https://api.example.com/docs/auth)
-      flows:
-        implicit:
-          authorizationUrl: /oauth/google/login
-          scopes: {}
-          
-  responses:
-    DefaultApiResponse:
-      description: The specified resource was not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/API'
-            
-  schemas:
-    API:
-      type: object
-      properties:
-        success:
-          type: boolean
-        message:
-          type: string
-        data:
-          type: object
-          
-    API_array:
-      type: object
-      properties:
-        success:
-          type: boolean
-        message:
-          type: string
-        data:
-          type: array
-          items:
-            type: object
-            
-    UserProfile:
-      type: object
-      properties:
-        success:
-          type: boolean
-        message:
-          type: string
-        data:
-          type: object
-          properties:
-            user_id:
-              type: string
-            username:
-              type: string
-            nickname:
-              type: string
-            select_wallet_id:
-              type: string
-            wallets:
-              type: array
-              items:
-                type: object
-                properties:
-                  wallet_id:
-                    type: string
-                  wallet_name:
-                    type: string
-                  wallet_total:
-                    type: number
-                  wallet_description:
-                    type: string
-                  selected:
-                    type: boolean
-                  record_num:
-                    type: number
-                  records:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        record_id:
-                          type: string
-                        wallet_record_tag_id:
-                          type: string
-                        record_ordinary:
-                          type: number
-                        record_name:
-                          type: string
-                        record_description:
-                          type: string
-                        record_amount:
-                          type: number
-                        record_type:
-                          type: string
-                        record_date:
-                          type: string
-                        record_debtors:
-                          type: array
-                          items:
-                            type: object
-                            properties:
-                              debtor_id:
-                                type: string
-                              debtor_name:
-                                type: string
-                        record_created_time:
-                          type: string
-                        record_updated_time:
-                          type: string
-                  tags:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        tag_id:
-                          type: string
-                        tag_wallet_id:
-                          type: string
-                        tag_ordinary:
-                          type: number
-                        tag_name:
-                          type: string
-                        tag_type:
-                          type: string
-                        tag_created_time:
-                          type: string
-                        tag_updated_time:
-                          type: string
-                        tag_color:
-                          type: string
-            
-            debtors:
-              type: array
-              items:
-                type: object
-                properties:
-                  debtor_id:
-                    type: string
-                  debtor_user_id:
-                    type: string
-                  debtor_name:
-                    type: string
-                  debtor_amount:
-                    type: number
-                  debtor_created_time:
-                    type: string
-                  debtor_updated_time:
-                    type: string
-    Wallet:
-      type: object
-      properties:
-        success:
-          type: boolean
-        message:
-          type: string
-        data:
-          type: object
-          properties:
-            wallet_id:
-              type: string
-            wallet_name:
-              type: string
-            wallet_total:
-              type: number
-            wallet_description:
-              type: string
-            record_num:
-              type: number
-            records:
-              type: array
-              items:
-                type: object
-                properties:
-                  record_id:
-                    type: string
-                  wallet_record_tag_id:
-                    type: string
-                  record_ordinary:
-                    type: number
-                  record_name:
-                    type: string
-                  record_description:
-                    type: string
-                  record_amount:
-                    type: number
-                  record_type:
-                    type: string
-                  record_date:
-                    type: string
-                  record_debtors:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        debtor_id:
-                          type: string
-                        debtor_name:
-                          type: string
-                  record_created_time:
-                    type: string
-                  record_updated_time:
-                    type: string
-            tags:
-              type: array
-              items:
-                type: object
-                properties:
-                  tag_id:
-                    type: string
-                  tag_wallet_id:
-                    type: string
-                  tag_ordinary:
-                    type: number
-                  tag_name:
-                    type: string
-                  tag_type:
-                    type: string
-                  tag_created_time:
-                    type: string
-                  tag_updated_time:
-                    type: string
-                  tag_color:
-                    type: string
-                    
-    WalletSearch:
-      type: object
-      properties:
-        success:
-          type: boolean
-        message:
-          type: string
-        data:
-          type: array
-          items:
-            type: object
-            properties:
-              record_wallet_id:
-                type: string
-              record_id:
-                type: string
-              wallet_record_tag_id:
-                type: string
-              record_ordinary:
-                type: string
-              record_name:
-                type: string
-              record_description:
-                type: string
-              record_amount:
-                type: number
-              record_type:
-                type: string
-              record_date:
-                type: string
-              record_debtors:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    debtor_id:
-                      type: string
-                    debtor_name:
-                      type: string
-              record_created_time:
-                type: string
-              record_updated_time:
-                type: string
-              
-    Record:
-      type: object
-      properties:
-        success:
-          type: boolean
-        message:
-          type: string
-        data:
-          type: object
-          properties:
-            record_wallet_id:
-              type: string
-            record_id:
-              type: string
-            wallet_record_tag_id:
-              type: string
-            record_ordinary:
-              type: string
-            record_name:
-              type: string
-            record_description:
-              type: string
-            record_amount:
-              type: number
-            record_type:
-              type: string
-            record_date:
-              type: string
-            record_debtors:
-              type: array
-              items:
-                type: object
-                properties:
-                  debtor_id:
-                    type: string
-                  debtor_name:
-                    type: string
-            record_created_time:
-              type: string
-            record_updated_time:
-              type: string
-    RecordCreate:
-      type: object
-      properties:
-        wallet_id:
-          type: string
-          default: ''
-        wallet_record_tag_id:
-          type: string
-          default: ''
-        record_ordinary:
-          type: string
-          default: ''
-        record_name:
-          type: string
-          default: ''
-        record_description:
-          type: string
-          default: ''
-        record_amount:
-          type: number
-          default: ''
-        record_type:
-          type: string
-          default: ''
-        record_date:
-          type: string
-          default: ''
-        record_debtors:
-          type: array
-          items:
-            type: object
-            properties:
-              debtor_id:
-                type: string
-    RecordEdit:
-      type: object
-      properties:
-        record_id:
-          type: string
-          default: ''
-        wallet_id:
-          type: string
-          default: ''
-        wallet_record_tag_id:
-          type: string
-          default: ''
-        record_ordinary:
-          type: string
-          default: ''
-        record_name:
-          type: string
-          default: ''
-        record_description:
-          type: string
-          default: ''
-        record_amount:
-          type: string
-          default: ''
-        record_type:
-          type: string
-          default: ''
-        record_date:
-          type: string
-          default: ''
-    Tag:
-      type: object
-      properties:
-        success:
-          type: boolean
-        message:
-          type: string
-        data:
-          type: array
-          items:
-            type: object
-            properties:
-              tag_color:
-                type: string
-                default: ''
-              tag_created_time:
-                type: string
-                default: ''
-              tag_id:
-                type: string
-                default: ''
-              tag_name:
-                type: string
-                default: ''
-              tag_ordinary:
-                type: string
-                default: ''
-              tag_type:
-                type: string
-                default: ''
-              tag_updated_time:
-                type: string
-                default: ''
-              tag_wallet_id:
-                type: string
-                default: ''
-    TagCreate:
-      type: object
-      properties:
-        tag_wallet_id:
-          type: string
-          default: ''
-        tag_ordinary:
-          type: string
-          default: ''
-        tag_name:
-          type: string
-          default: ''
-        tag_type:
-          type: string
-          default: ''
-        tag_color:
-          type: string
-          default: ''
-    TagEdit:
-      type: object
-      properties:
-        tag_id:
-          type: string
-          default: ''
-        tag_ordinary:
-          type: string
-          default: ''
-        tag_name:
-          type: string
-          default: ''
-        tag_type:
-          type: string
-          default: ''
-        tag_color:
-          type: string
-          default: ''
-    TagEditAll:
-      type: array
-      items:
-        $ref: '#/components/schemas/Tag'
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/API"
+                },
+                "example": {
+                  "success": true,
+                  "message": "刪除record資料成功",
+                  "data": {}
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/API"
+                },
+                "example": {
+                  "success": false,
+                  "message": "刪除record資料失敗 error:...",
+                  "data": {}
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tag": {
+      "get": {
+        "summary": "Get a tag.",
+        "description": "get tag",
+        "tags": [
+          "tag"
+        ],
+        "security": [
+          {
+            "login": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "tag_id",
+            "schema": {
+              "type": "string"
+            },
+            "description": "tag id"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Tag"
+                },
+                "example": {
+                  "success": true,
+                  "message": "取得tag資料成功",
+                  "data": [
+                    {
+                      "tag_id": "tag_12345",
+                      "tag_wallet_id": "wallet_12345",
+                      "tag_name": "taggg",
+                      "tag_ordinary": 1,
+                      "tag_type": "work",
+                      "tag_created_time": "",
+                      "tag_updated_time": ""
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/API"
+                },
+                "example": {
+                  "success": false,
+                  "message": "取得tag資料失敗 error:...",
+                  "data": {}
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tag/create": {
+      "post": {
+        "summary": "Creates a tag.",
+        "description": "creates a tag",
+        "tags": [
+          "tag"
+        ],
+        "security": [
+          {
+            "login": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TagCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/API"
+                },
+                "example": {
+                  "success": true,
+                  "message": "新增tag資料成功",
+                  "data": {}
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/API"
+                },
+                "example": {
+                  "success": false,
+                  "message": "新增tag資料失敗 error:...",
+                  "data": {}
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tag/edit": {
+      "post": {
+        "summary": "Updates a tag.",
+        "description": "updates a tag",
+        "tags": [
+          "tag"
+        ],
+        "security": [
+          {
+            "login": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TagEdit"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/API"
+                },
+                "example": {
+                  "success": true,
+                  "message": "更新tag資料成功",
+                  "data": {}
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/API"
+                },
+                "example": {
+                  "success": false,
+                  "message": "更新tag資料失敗 error:...",
+                  "data": {}
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tag/delete": {
+      "post": {
+        "summary": "Deletes a tag.",
+        "description": "deletes a tag",
+        "tags": [
+          "tag"
+        ],
+        "security": [
+          {
+            "login": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "tag_id": {
+                    "type": "string",
+                    "default": ""
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/API"
+                },
+                "example": {
+                  "success": true,
+                  "message": "刪除tag資料成功",
+                  "data": {}
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/API"
+                },
+                "example": {
+                  "success": false,
+                  "message": "刪除tag資料失敗 error:...",
+                  "data": {}
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "login": {
+        "type": "oauth2",
+        "description": "This API uses OAuth 2 with the implicit grant flow. [More info](https://api.example.com/docs/auth)",
+        "flows": {
+          "implicit": {
+            "authorizationUrl": "/oauth/google/login",
+            "scopes": {}
+          }
+        }
+      }
+    },
+    "responses": {
+      "DefaultApiResponse": {
+        "description": "The specified resource was not found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/API"
+            }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "API": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object"
+          }
+        }
+      },
+      "API_array": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          }
+        }
+      },
+      "UserProfile": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "user_id": {
+                "type": "string"
+              },
+              "username": {
+                "type": "string"
+              },
+              "nickname": {
+                "type": "string"
+              },
+              "select_wallet_id": {
+                "type": "string"
+              },
+              "wallets": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "wallet_id": {
+                      "type": "string"
+                    },
+                    "wallet_name": {
+                      "type": "string"
+                    },
+                    "wallet_total": {
+                      "type": "number"
+                    },
+                    "wallet_description": {
+                      "type": "string"
+                    },
+                    "selected": {
+                      "type": "boolean"
+                    },
+                    "record_num": {
+                      "type": "number"
+                    },
+                    "records": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "record_id": {
+                            "type": "string"
+                          },
+                          "wallet_record_tag_id": {
+                            "type": "string"
+                          },
+                          "record_ordinary": {
+                            "type": "number"
+                          },
+                          "record_name": {
+                            "type": "string"
+                          },
+                          "record_description": {
+                            "type": "string"
+                          },
+                          "record_amount": {
+                            "type": "number"
+                          },
+                          "record_type": {
+                            "type": "string"
+                          },
+                          "record_date": {
+                            "type": "string"
+                          },
+                          "record_debtors": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "debtor_id": {
+                                  "type": "string"
+                                },
+                                "debtor_name": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          },
+                          "record_created_time": {
+                            "type": "string"
+                          },
+                          "record_updated_time": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    },
+                    "tags": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "tag_id": {
+                            "type": "string"
+                          },
+                          "tag_wallet_id": {
+                            "type": "string"
+                          },
+                          "tag_ordinary": {
+                            "type": "number"
+                          },
+                          "tag_name": {
+                            "type": "string"
+                          },
+                          "tag_type": {
+                            "type": "string"
+                          },
+                          "tag_created_time": {
+                            "type": "string"
+                          },
+                          "tag_updated_time": {
+                            "type": "string"
+                          },
+                          "tag_color": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "debtors": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "debtor_id": {
+                      "type": "string"
+                    },
+                    "debtor_user_id": {
+                      "type": "string"
+                    },
+                    "debtor_name": {
+                      "type": "string"
+                    },
+                    "debtor_amount": {
+                      "type": "number"
+                    },
+                    "debtor_created_time": {
+                      "type": "string"
+                    },
+                    "debtor_updated_time": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "Wallet": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "wallet_id": {
+                "type": "string"
+              },
+              "wallet_name": {
+                "type": "string"
+              },
+              "wallet_total": {
+                "type": "number"
+              },
+              "wallet_description": {
+                "type": "string"
+              },
+              "record_num": {
+                "type": "number"
+              },
+              "records": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "record_id": {
+                      "type": "string"
+                    },
+                    "wallet_record_tag_id": {
+                      "type": "string"
+                    },
+                    "record_ordinary": {
+                      "type": "number"
+                    },
+                    "record_name": {
+                      "type": "string"
+                    },
+                    "record_description": {
+                      "type": "string"
+                    },
+                    "record_amount": {
+                      "type": "number"
+                    },
+                    "record_type": {
+                      "type": "string"
+                    },
+                    "record_date": {
+                      "type": "string"
+                    },
+                    "record_debtors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "debtor_id": {
+                            "type": "string"
+                          },
+                          "debtor_name": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    },
+                    "record_created_time": {
+                      "type": "string"
+                    },
+                    "record_updated_time": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "tags": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "tag_id": {
+                      "type": "string"
+                    },
+                    "tag_wallet_id": {
+                      "type": "string"
+                    },
+                    "tag_ordinary": {
+                      "type": "number"
+                    },
+                    "tag_name": {
+                      "type": "string"
+                    },
+                    "tag_type": {
+                      "type": "string"
+                    },
+                    "tag_created_time": {
+                      "type": "string"
+                    },
+                    "tag_updated_time": {
+                      "type": "string"
+                    },
+                    "tag_color": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "WalletSearch": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "record_wallet_id": {
+                  "type": "string"
+                },
+                "record_id": {
+                  "type": "string"
+                },
+                "wallet_record_tag_id": {
+                  "type": "string"
+                },
+                "record_ordinary": {
+                  "type": "string"
+                },
+                "record_name": {
+                  "type": "string"
+                },
+                "record_description": {
+                  "type": "string"
+                },
+                "record_amount": {
+                  "type": "number"
+                },
+                "record_type": {
+                  "type": "string"
+                },
+                "record_date": {
+                  "type": "string"
+                },
+                "record_debtors": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "debtor_id": {
+                        "type": "string"
+                      },
+                      "debtor_name": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "record_created_time": {
+                  "type": "string"
+                },
+                "record_updated_time": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "Record": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "record_wallet_id": {
+                "type": "string"
+              },
+              "record_id": {
+                "type": "string"
+              },
+              "wallet_record_tag_id": {
+                "type": "string"
+              },
+              "record_ordinary": {
+                "type": "string"
+              },
+              "record_name": {
+                "type": "string"
+              },
+              "record_description": {
+                "type": "string"
+              },
+              "record_amount": {
+                "type": "number"
+              },
+              "record_type": {
+                "type": "string"
+              },
+              "record_date": {
+                "type": "string"
+              },
+              "record_debtors": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "debtor_id": {
+                      "type": "string"
+                    },
+                    "debtor_name": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "record_created_time": {
+                "type": "string"
+              },
+              "record_updated_time": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "RecordCreate": {
+        "type": "object",
+        "properties": {
+          "wallet_id": {
+            "type": "string",
+            "default": ""
+          },
+          "wallet_record_tag_id": {
+            "type": "string",
+            "default": ""
+          },
+          "record_ordinary": {
+            "type": "string",
+            "default": ""
+          },
+          "record_name": {
+            "type": "string",
+            "default": ""
+          },
+          "record_description": {
+            "type": "string",
+            "default": ""
+          },
+          "record_amount": {
+            "type": "number",
+            "default": ""
+          },
+          "record_type": {
+            "type": "string",
+            "default": ""
+          },
+          "record_date": {
+            "type": "string",
+            "default": ""
+          },
+          "record_debtors": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "debtor_id": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "RecordEdit": {
+        "type": "object",
+        "properties": {
+          "record_id": {
+            "type": "string",
+            "default": ""
+          },
+          "wallet_id": {
+            "type": "string",
+            "default": ""
+          },
+          "wallet_record_tag_id": {
+            "type": "string",
+            "default": ""
+          },
+          "record_ordinary": {
+            "type": "string",
+            "default": ""
+          },
+          "record_name": {
+            "type": "string",
+            "default": ""
+          },
+          "record_description": {
+            "type": "string",
+            "default": ""
+          },
+          "record_amount": {
+            "type": "string",
+            "default": ""
+          },
+          "record_type": {
+            "type": "string",
+            "default": ""
+          },
+          "record_date": {
+            "type": "string",
+            "default": ""
+          }
+        }
+      },
+      "Tag": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "tag_color": {
+                  "type": "string",
+                  "default": ""
+                },
+                "tag_created_time": {
+                  "type": "string",
+                  "default": ""
+                },
+                "tag_id": {
+                  "type": "string",
+                  "default": ""
+                },
+                "tag_name": {
+                  "type": "string",
+                  "default": ""
+                },
+                "tag_ordinary": {
+                  "type": "string",
+                  "default": ""
+                },
+                "tag_type": {
+                  "type": "string",
+                  "default": ""
+                },
+                "tag_updated_time": {
+                  "type": "string",
+                  "default": ""
+                },
+                "tag_wallet_id": {
+                  "type": "string",
+                  "default": ""
+                }
+              }
+            }
+          }
+        }
+      },
+      "TagCreate": {
+        "type": "object",
+        "properties": {
+          "tag_wallet_id": {
+            "type": "string",
+            "default": ""
+          },
+          "tag_ordinary": {
+            "type": "string",
+            "default": ""
+          },
+          "tag_name": {
+            "type": "string",
+            "default": ""
+          },
+          "tag_type": {
+            "type": "string",
+            "default": ""
+          },
+          "tag_color": {
+            "type": "string",
+            "default": ""
+          }
+        }
+      },
+      "TagEdit": {
+        "type": "object",
+        "properties": {
+          "tag_id": {
+            "type": "string",
+            "default": ""
+          },
+          "tag_ordinary": {
+            "type": "string",
+            "default": ""
+          },
+          "tag_name": {
+            "type": "string",
+            "default": ""
+          },
+          "tag_type": {
+            "type": "string",
+            "default": ""
+          },
+          "tag_color": {
+            "type": "string",
+            "default": ""
+          }
+        }
+      },
+      "TagEditAll": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Tag"
+        }
+      }
+    }
+  }
+}

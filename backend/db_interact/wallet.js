@@ -36,7 +36,7 @@ const insert_wallet = async (user_id, wallet_name, wallet_description) => {
         var wallet_id = 'wallet_' + uuid();
         var name = ["早餐","午餐","晚餐","飲料","宵夜","交通","日用品","其他","工作","現金","轉帳","其他"];
         var type = ["expense","expense","expense","expense","expense","expense","expense","expense","income","income","income","income"];
-        var color = ["#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE"];
+        var color = ["#E6746A","#E98770","#EEA26E","#F6C177","#FFF584","#A6CE83","#61B98B","#5CBDB9","#5C7FB3","#525D9A","#79629C","#B173A3"];
         var query_tags = function () {
             var values = [];
             values.push(wallet_id, user_id, 0, wallet_name, 0, wallet_description, user_id);
