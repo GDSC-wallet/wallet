@@ -3,14 +3,10 @@ import ajax from "../api"
 const auth = {
   namespaced: true,
   state: {
-    authToken: "",
     profile: null,
     isAuthenticated: false,
   },
   mutations: {
-    setAuthToken(state, authToken) {
-      state.authToken = authToken;
-    },
     setProfile(state, profile) {
       state.profile = profile;
     },
@@ -21,7 +17,6 @@ const auth = {
       state.isAuthenticated = false;
     },
     logout(state) {
-      state.authToken = "";
       state.profile = {};
       state.isAuthenticated = false;
     }
@@ -30,7 +25,6 @@ const auth = {
     login({ commit, dispatch }) {
       commit("logout");
       commit("setProfile", null);
-      commit("setAuthToken", localStorage.getItem("authToken"));
       dispatch("getProfile")
     },
     async getProfile({ commit, rootGetters, dispatch }) {
@@ -59,13 +53,9 @@ const auth = {
       });
     },
     async logout({ commit }) {
-      localStorage.clear("authToken");
-      commit("logout");
-      /*
-      ajax("/api/user/logout", "post", {data: {nickname: nickname}}).then(() => {
-          dispatch("login")
+      ajax("/oauth/logout", "get").then(() => {
+        commit("logout");
       })
-      */
     }
   },
   getters: {
