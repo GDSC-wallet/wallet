@@ -170,6 +170,314 @@
         }
       }
     },
+    "/debtor": {
+      "get": {
+        "summary": "Get debtors of a user",
+        "description": "get debtors of a user",
+        "tags": [
+          "debtor"
+        ],
+        "security": [
+          {
+            "login": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "none",
+            "schema": {
+              "type": "string"
+            },
+            "description": "this api needs user_id (get from req.session.passport.user.user_id)"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Debtor"
+                },
+                "example": {
+                  "success": "true,",
+                  "message": "取得使用者所有債務人資料成功",
+                  "data": [
+                    {
+                      "debtor_id": "debtor_12345",
+                      "debtor_user_id": "user_12345",
+                      "debtor_name": "",
+                      "debtor_amount": 0,
+                      "debtor_created_time": "",
+                      "debtor_updated_time": ""
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/API"
+                },
+                "example": {
+                  "success": false,
+                  "message": "取得使用者所有債務人資料失敗 error:...",
+                  "data": {}
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/debtor/debtor_records": {
+      "get": {
+        "summary": "Get a debtor's records",
+        "description": "get a debtor's records",
+        "tags": [
+          "debtor"
+        ],
+        "security": [
+          {
+            "login": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "debtor_id",
+            "schema": {
+              "type": "string"
+            },
+            "description": "debtor id"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WalletSearch"
+                },
+                "example": {
+                  "success": true,
+                  "message": "取得債務人帳目資料成功",
+                  "data": [
+                    {
+                      "record_id": "",
+                      "wallet_record_tag_id": "",
+                      "record_ordinary": 1,
+                      "record_name": "",
+                      "record_description": "",
+                      "record_amount": 100,
+                      "record_type": "",
+                      "record_date": "",
+                      "record_debtors": [
+                        {
+                          "debtor_id": "",
+                          "debtor_name": ""
+                        }
+                      ],
+                      "record_created_time": "",
+                      "record_updated_time": ""
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/API"
+                },
+                "example": {
+                  "success": false,
+                  "message": "取得債務人帳目資料失敗 error:...",
+                  "data": {}
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/debtor/create": {
+      "post": {
+        "summary": "Creates a debtor.",
+        "tags": [
+          "debtor"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "debtor_name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/API"
+                },
+                "example": {
+                  "success": true,
+                  "message": "新增debtor成功",
+                  "data": {}
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/API"
+                },
+                "example": {
+                  "success": false,
+                  "message": "新增debtor失敗 error:...",
+                  "data": {}
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/debtor/edit": {
+      "post": {
+        "summary": "Updates a debtor.",
+        "tags": [
+          "debtor"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "debtor_id": {
+                    "type": "string"
+                  },
+                  "debtor_name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/API"
+                },
+                "example": {
+                  "success": true,
+                  "message": "更新debtor成功",
+                  "data": {}
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/API"
+                },
+                "example": {
+                  "success": false,
+                  "message": "更新debtor失敗 error:...",
+                  "data": {}
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/debtor/delete": {
+      "post": {
+        "summary": "Deletes a debtor.",
+        "tags": [
+          "debtor"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "debtor_id": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/API"
+                },
+                "example": {
+                  "success": true,
+                  "message": "刪除debtor成功",
+                  "data": {}
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/API"
+                },
+                "example": {
+                  "success": false,
+                  "message": "刪除debtor失敗 error:...",
+                  "data": {}
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/wallet": {
       "get": {
         "summary": "Get a wallet.",
@@ -480,6 +788,21 @@
                 }
               }
             }
+          },
+          "400": {
+            "description": "Failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/API"
+                },
+                "example": {
+                  "success": false,
+                  "message": "搜尋record資料失敗 error:...",
+                  "data": {}
+                }
+              }
+            }
           }
         }
       }
@@ -743,6 +1066,90 @@
                 "example": {
                   "success": false,
                   "message": "刪除record資料失敗 error:...",
+                  "data": {}
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/record/month": {
+      "get": {
+        "summary": "Get records of a specific month",
+        "description": "get records of a specific month",
+        "tags": [
+          "record"
+        ],
+        "security": [
+          {
+            "login": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "wallet_id",
+            "schema": {
+              "type": "string"
+            },
+            "description": "wallet id"
+          },
+          {
+            "in": "query",
+            "name": "time_choosen",
+            "schema": {
+              "type": "string"
+            },
+            "description": "any date of appointed year and month"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "OK",
+            "content": {
+              "appilication/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecordMonth"
+                },
+                "example": {
+                  "success": true,
+                  "message": "取得指定月份records資料成功",
+                  "data": [
+                    {
+                      "record_wallet_id": "wallet_2c36aaad-2d40-48cb-9e36-9d3a841ffb37",
+                      "record_id": "record_0e0d10d0-531b-4f0d-abc2-f157b9f27dfd",
+                      "wallet_record_tag_id": "tag_80d4a691-14bd-494c-98e1-8187a669e0d2",
+                      "record_ordinary": "",
+                      "record_name": "Some name",
+                      "record_description": "Some description",
+                      "record_amount": "100",
+                      "record_type": "income",
+                      "record_date": "1648912357",
+                      "record_debtors": [
+                        {
+                          "debtor_id": "debtor_12345",
+                          "debtor_name": "well"
+                        }
+                      ],
+                      "record_created_time": "1648912357",
+                      "record_updated_time": "1648912357"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/API"
+                },
+                "example": {
+                  "success": false,
+                  "message": "取得指定月份records資料失敗 error:...",
                   "data": {}
                 }
               }
@@ -1213,6 +1620,43 @@
           }
         }
       },
+      "Debtor": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "debtor_id": {
+                  "type": "string"
+                },
+                "debtor_user_id": {
+                  "type": "string"
+                },
+                "debtor_name": {
+                  "type": "string"
+                },
+                "debtor_amount": {
+                  "type": "number"
+                },
+                "debtor_created_time": {
+                  "type": "string"
+                },
+                "debtor_updated_time": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
       "Wallet": {
         "type": "object",
         "properties": {
@@ -1452,6 +1896,72 @@
               },
               "record_updated_time": {
                 "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "RecordMonth": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "record_wallet_id": {
+                  "type": "string"
+                },
+                "record_id": {
+                  "type": "string"
+                },
+                "wallet_record_tag_id": {
+                  "type": "string"
+                },
+                "record_ordinary": {
+                  "type": "string"
+                },
+                "record_name": {
+                  "type": "string"
+                },
+                "record_description": {
+                  "type": "string"
+                },
+                "record_amount": {
+                  "type": "number"
+                },
+                "record_type": {
+                  "type": "string"
+                },
+                "record_date": {
+                  "type": "string"
+                },
+                "record_debtors": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "debtor_id": {
+                        "type": "string"
+                      },
+                      "debtor_name": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "record_created_time": {
+                  "type": "string"
+                },
+                "record_updated_time": {
+                  "type": "string"
+                }
               }
             }
           }

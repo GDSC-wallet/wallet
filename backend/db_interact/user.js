@@ -99,12 +99,12 @@ const insert_user = async (id, channel, channel_id, email, username, nickname) =
         var color = ["#E6746A","#E98770","#EEA26E","#F6C177","#FFF584","#A6CE83","#61B98B","#5CBDB9","#5C7FB3","#525D9A","#79629C","#B173A3"];
         var query_tags = function () {
             var values = [];
-            values.push(id, channel, channel_id, email, username, nickname, wallet_id, id, 1, wallet_name, 0, wallet_description);
+            values.push(id, channel, channel_id, pool.escape(email), username, pool.escape(nickname), wallet_id, id, 1, pool.escape(wallet_name), 0, pool.escape(wallet_description));
             for(var i = 0; i < 12; ++i) {
                 values.push("tag_" + uuid());
                 values.push(wallet_id);
                 values.push(i+1);
-                values.push(name[i]);
+                values.push(pool.escape(name[i]));
                 values.push(type[i]);
                 values.push(color[i]);
             }
@@ -147,7 +147,7 @@ const update_user = async (id, nickname) => {
                 print_error(err);
                 reject(err);
             } else {
-                await conn.query(sql, [nickname, id], (err, results, fields) => {
+                await conn.query(sql, [pool.escape(nickname), id], (err, results, fields) => {
                     if(err) {
                         print_error(err);
                         reject(err);

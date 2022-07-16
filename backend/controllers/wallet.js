@@ -16,9 +16,9 @@ export const get_wallet = async (req, res, next) => {
                 "message": "取得wallet資料成功",
                 "data": {
                     "wallet_id": results[1][0].wallet_id,
-                    "wallet_name": results[1][0].wallet_name,
+                    "wallet_name": results[1][0].wallet_name.slice(1, results[1][0].wallet_name.length-1),
                     "wallet_total": results[1][0].wallet_total,
-                    "wallet_description": results[1][0].wallet_description,
+                    "wallet_description": results[1][0].wallet_description.slice(1, results[1][0].wallet_description.length-1),
                     "record_num": results[1][0].record_num,
                     "records": [],
                     "tags": []
@@ -31,8 +31,8 @@ export const get_wallet = async (req, res, next) => {
                     "record_id": results[1][i].record_id,
                     "wallet_record_tag_id": results[1][i].wallet_record_tag_id,
                     "record_ordinary": results[1][i].record_ordinary,
-                    "record_name": results[1][i].record_name,
-                    "record_description": results[1][i].record_description,
+                    "record_name": results[1][i].record_name.slice(1, results[1][i].record_name.length-1),
+                    "record_description": results[1][i].record_description.slice(1, results[1][i].record_description.length-1),
                     "record_amount": results[1][i].record_amount,
                     "record_type": results[1][i].record_type,
                     "record_date": results[1][i].record_date,
@@ -74,7 +74,7 @@ export const get_wallet = async (req, res, next) => {
                             tag_id: results[i].tag_id,
                             tag_wallet_id: results[i].tag_wallet_id,
                             tag_ordinary: results[i].tag_ordinary,
-                            tag_name: results[i].tag_name,
+                            tag_name: results[i].tag_name.slice(1, results[i].tag_name.length-1),
                             tag_type: results[i].tag_type,
                             tag_created_time: results[i].tag_created_time,
                             tag_updated_time: results[i].tag_updated_time,
@@ -166,8 +166,8 @@ export const search_record = async (req, res, next) => {
                     "record_id": results[1][i].record_id,
                     "wallet_record_tag_id": results[1][i].wallet_record_tag_id,
                     "record_ordinary": results[1][i].record_ordinary,
-                    "record_name": results[1][i].record_name,
-                    "record_description": results[1][i].record_description,
+                    "record_name": results[1][i].record_name.slice(1, results[1][i].record_name.length-1),
+                    "record_description": results[1][i].record_description.slice(1, results[1][i].record_description.length-1),
                     "record_amount": results[1][i].record_amount,
                     "record_type": results[1][i].record_type,
                     "record_date": results[1][i].record_date,
@@ -181,7 +181,7 @@ export const search_record = async (req, res, next) => {
                             for(var i = 0; i < result.length; ++i) {
                                 var record_debtor_obj = {
                                     debtor_id: result[i].debtor_id,
-                                    debtor_name: result[i].debtor_name
+                                    debtor_name: result[i].debtor_name.slice(1, result[i].debtor_name.length-1)
                                 }
                                 results.record_debtors.push(record_debtor_obj);
                             }
