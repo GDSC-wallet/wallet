@@ -1,9 +1,10 @@
 <template>
   <v-dialog v-model="open" max-width="500" scrollable>
     <v-card>
-      <bc value="/NTU8N9X">
-        Show this if the rendering fails.
+      <bc value="">
+        尚未設定載具條碼
       </bc>
+      
     </v-card>
   </v-dialog>
 
@@ -14,7 +15,7 @@ import VueBarcode from 'vue-barcode';
 import { mapActions, mapGetters } from "vuex";
 
 export default {
-  name: "Barcode",
+  name: "BarcodeModal",
   data() {
     return {
     };

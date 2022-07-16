@@ -41,7 +41,7 @@
       <v-container style="height: 100%" fluid>
         <router-view />
       </v-container>
-      <Barcode />
+      <BarcodeModal />
       <RecordModal />
       <v-btn v-if="isLoggedin" color="primary" bottom right fab fixed @click="openRecordModal">
         <v-icon>mdi-plus</v-icon>
@@ -54,7 +54,7 @@
 import { mapGetters, mapActions } from "vuex";
 import Wallets from "./components/Wallet/Main.vue";
 import RecordModal from "./components/RecordModal/Main.vue";
-import Barcode from "./components/Barcode/Main.vue";
+import BarcodeModal from "./components/BarcodeModal/Main.vue";
 
 export default {
   name: "App",
@@ -67,7 +67,7 @@ export default {
   components: {
     RecordModal: RecordModal,
     Wallets: Wallets,
-    Barcode: Barcode,
+    BarcodeModal: BarcodeModal,
   },
   mounted() {
     this.login();
