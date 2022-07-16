@@ -40,7 +40,7 @@
 import { mapGetters, mapActions } from "vuex";
 
 export default {
-  name: "TagModal",
+  name: "EditTagModal",
   props: {
     open: Boolean,
     mode: String,
