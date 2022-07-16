@@ -7,7 +7,7 @@
           <v-toolbar-title @click="navigate" class="nav-title">Wallet</v-toolbar-title>
         </router-link>
         <v-spacer />
-        <v-btn icon>
+        <v-btn icon @click="openBarcode">
           <v-icon>mdi-barcode-scan</v-icon>
         </v-btn>
         <v-btn icon to="/statics">
@@ -41,6 +41,7 @@
       <v-container style="height: 100%" fluid>
         <router-view />
       </v-container>
+      <Barcode />
       <RecordModal />
       <v-btn v-if="isLoggedin" color="primary" bottom right fab fixed @click="openRecordModal">
         <v-icon>mdi-plus</v-icon>
@@ -53,6 +54,7 @@
 import { mapGetters, mapActions } from "vuex";
 import Wallets from "./components/Wallet/Main.vue";
 import RecordModal from "./components/RecordModal/Main.vue";
+import Barcode from "./components/Barcode/Main.vue";
 
 export default {
   name: "App",
@@ -65,6 +67,7 @@ export default {
   components: {
     RecordModal: RecordModal,
     Wallets: Wallets,
+    Barcode: Barcode,
   },
   mounted() {
     this.login();
@@ -75,10 +78,15 @@ export default {
       logout: "auth/logout",
       openModal: "record/openModal",
       switchCreateMode: "record/createMode",
+      showBarcode: "barcode/openModal",
     }),
     openRecordModal() {
       this.openModal();
       this.switchCreateMode();
+    },
+    openBarcode() {
+      console.log("triggered");
+      this.showBarcode();
     },
   },
   computed: {
