@@ -10,6 +10,7 @@ const secret = process.env.SECRET;
 const auth = async (req, res, next) => {
 
   try {
+    console.log(req);
     res.user = req.session.passport.user
     const expTime = req.session.cookie._expires
     if(expTime < new Date().toISOString()) throw new Error();

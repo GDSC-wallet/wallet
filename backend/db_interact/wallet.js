@@ -36,15 +36,15 @@ const insert_wallet = async (user_id, wallet_name, wallet_description) => {
         var wallet_id = 'wallet_' + uuid();
         var name = ["早餐","午餐","晚餐","飲料","宵夜","交通","日用品","其他","工作","現金","轉帳","其他"];
         var type = ["expense","expense","expense","expense","expense","expense","expense","expense","income","income","income","income"];
-        var color = ["#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE","#BEBEBE"];
+        var color = ["#E6746A","#E98770","#EEA26E","#F6C177","#FFF584","#A6CE83","#61B98B","#5CBDB9","#5C7FB3","#525D9A","#79629C","#B173A3"];
         var query_tags = function () {
             var values = [];
-            values.push(wallet_id, user_id, 0, wallet_name, 0, wallet_description, user_id);
+            values.push(wallet_id, user_id, 0, pool.escape(wallet_name), 0, pool.escape(wallet_description), user_id);
             for(var i = 0; i < 12; ++i) {
                 values.push("tag_" + uuid());
                 values.push(wallet_id);
                 values.push(i+1);
-                values.push(name[i]);
+                values.push(pool.escape(name[i]));
                 values.push(type[i]);
                 values.push(color[i]);
             }
@@ -87,7 +87,7 @@ const update_wallet = async (wallet_id, wallet_name, wallet_description) => {
                 print_error(err);
                 reject(err);
             } else {
-                await conn.query(sql, [wallet_name, wallet_description, wallet_id], (err, results, fields) => {
+                await conn.query(sql, [conn.escape(wallet_name), conn.escape(wallet_description), wallet_id], (err, results, fields) => {
                     if(err) {
                         print_error(err);
                         reject(err);
@@ -140,7 +140,8 @@ const delete_wallet = async (user_id, wallet_id) => {
 const search_record = async (wallet_id, search_str) => {
     return new Promise( async (resolve, reject) => {
         // 搜尋record
-        var sql = `START TRANSACTION; SELECT * FROM wallet_record WHERE record_wallet_id = ? AND record_name REGEXP '${search_str}'; COMMIT`;
+        search_str = conn.escape(search_str);
+        var sql = `START TRANSACTION; SELECT * FROM wallet_record WHERE record_wallet_id = ? AND record_name REGEXP ${search_str}; COMMIT`;
         pool.getConnection( async (err, conn) => {
             if(err) {
                 print_error(err);

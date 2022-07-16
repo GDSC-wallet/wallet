@@ -7,10 +7,10 @@ const router = express.Router();
 
 router.get("/", auth, get_all_debtors);
 router.get("/debtor_records", auth, get_debtor_records);
-router.post("/insert", auth, insert_debtor, insert_debtor_response);
+router.post("/create", auth, insert_debtor, insert_debtor_response);
 //router.post("/insert_record", auth, insert_debtor_record, insert_debtor_record_response);
 //router.post("/delete_record", auth, delete_debtor_record, delete_debtor_record_response);
-router.post("/update", auth, update_debtor, update_debtor_response);
+router.post("/edit", auth, update_debtor, update_debtor_response);
 router.post("/delete", auth, delete_debtor, delete_debtor_response);
 
 export default router;

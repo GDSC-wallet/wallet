@@ -25,6 +25,28 @@ const get_record = (record_id) => {
     });
 };
 
+const get_month_records = (wallet_id, time_choosen) => {
+    return new Promise( async (resolve, reject) => {
+        var sql = "SELECT * FROM wallet_record WHERE YEAR(record_date) = YEAR(?) AND MONTH(record_date) = MONTH(?) AND record_wallet_id = ?"
+        pool.getConnection( async (err, conn) => {
+            if(err) {
+                print_error(err);
+                reject(err);
+            } else {
+                await conn.query(sql, [time_choosen, time_choosen, wallet_id], (err, results, fields) => {
+                    if(err) {
+                        print_error(err);
+                        reject(err);
+                    } else {
+                        conn.release();
+                        resolve(results);
+                    }
+                })
+            }
+        })
+    })
+}
+
 const insert_record = async (record_id, record_wallet_id, wallet_record_tag_id, record_ordinary, record_name, record_description, record_amount, record_type, record_date) => {
     return new Promise( async (resolve, reject) => {
         var sql = "START TRANSACTION; INSERT INTO wallet_record(record_id, record_wallet_id, wallet_record_tag_id, record_ordinary, record_name, record_description, record_amount, record_type, record_date, record_created_time, record_updated_time) VALUE(?,?,?,?,?,?,?,?,?,NOW(),NOW()); UPDATE wallet SET record_num = record_num + 1 WHERE wallet_id = ?; UPDATE wallet SET wallet_total = wallet_total + ? WHERE wallet_id = ?; COMMIT";
@@ -33,7 +55,7 @@ const insert_record = async (record_id, record_wallet_id, wallet_record_tag_id, 
                 print_error(err);
                 reject(err);
             } else {
-                await conn.query(sql, [record_id, record_wallet_id, wallet_record_tag_id, record_ordinary, record_name, record_description, record_amount, record_type, record_date, record_wallet_id, record_amount, record_wallet_id], (err, results, fields) => {
+                await conn.query(sql, [record_id, record_wallet_id, wallet_record_tag_id, record_ordinary, conn.escape(record_name), conn.escape(record_description), record_amount, record_type, record_date, record_wallet_id, record_amount, record_wallet_id], (err, results, fields) => {
                     if(err) {
                         print_error(err);
                         reject(err);
@@ -56,7 +78,7 @@ const update_record = async (record_id, record_wallet_id, wallet_record_tag_id, 
                 print_error(err);
                 reject(err);
             } else {
-                await conn.query(sql, [wallet_record_tag_id, record_ordinary, record_name, record_description, record_amount, record_type, record_date, record_id, record_amount_diff, record_wallet_id], (err, results, fields) => {
+                await conn.query(sql, [wallet_record_tag_id, record_ordinary, conn.escape(record_name), conn.escape(record_description), record_amount, record_type, record_date, record_id, record_amount_diff, record_wallet_id], (err, results, fields) => {
                     if(err) {
                         print_error(err);
                         reject(err);
@@ -80,7 +102,7 @@ const delete_record = async (record_id, record_wallet_id, record_amount) => {
                 print_error(err);
                 reject(err);
             } else {
-                await conn.query(sql, [record_wallet_id, conn.escape(record_amount), record_wallet_id, record_id], (err, results, fields) => {
+                await conn.query(sql, [record_wallet_id, record_amount, record_wallet_id, record_id], (err, results, fields) => {
                     if(err) {
                         print_error(err);
                         reject(err);
@@ -95,4 +117,4 @@ const delete_record = async (record_id, record_wallet_id, record_amount) => {
 };
 
 
-export default { get_record, insert_record, update_record, delete_record };
+export default { get_record, get_month_records, insert_record, update_record, delete_record };

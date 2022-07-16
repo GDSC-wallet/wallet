@@ -36,7 +36,7 @@ const insert_tag = async (tag_wallet_id, tag_ordinary, tag_name, tag_type, tag_c
                 print_error(err);
                 reject(err);
             } else {
-                await conn.query(sql, [tag_id, tag_wallet_id, tag_ordinary, tag_name, tag_type, tag_color], (err, results, fields) => {
+                await conn.query(sql, [tag_id, tag_wallet_id, tag_ordinary, conn.escape(tag_name), tag_type, tag_color], (err, results, fields) => {
                     if(err) {
                         print_error(err);
                         reject(err);
@@ -60,7 +60,7 @@ const update_tag = async (tag_id, tag_ordinary, tag_name, tag_type, tag_color) =
                 print_error(err);
                 reject(err);
             } else {
-                await conn.query(sql, [ tag_ordinary, tag_name, tag_type, tag_color, tag_id], (err, results, fields) => {
+                await conn.query(sql, [ tag_ordinary, conn.escape(tag_name), tag_type, tag_color, tag_id], (err, results, fields) => {
                     if(err) {
                         print_error(err);
                         reject(err);
@@ -83,7 +83,7 @@ const update_all_tag = async (tags) => {
         return(
             [
                 tag.tag_id,
-                tag.tag_name,
+                pool.escape(tag.tag_name),
                 tag.tag_ordinary,
                 tag.tag_type,
                 // tag.tag_updated_time.slice(0,-1),

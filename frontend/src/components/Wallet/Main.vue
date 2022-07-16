@@ -36,7 +36,7 @@ import { mapActions, mapGetters } from "vuex";
 import WalletModal from "./components/WalletModal.vue";
 
 export default {
-  name: "Wallets",
+  name: "Wallet",
   data() {
     return {
       walletDialogOpen: false,

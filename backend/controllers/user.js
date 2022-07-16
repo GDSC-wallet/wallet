@@ -142,7 +142,7 @@ export const getUserProfile = async (req, res, next) => {
                 data: {
                     user_id: results[0].id,
                     username: results[0].username,
-                    nickname: results[0].nickname,
+                    nickname: results[0].nickname.slice(1, results[0].nickname.length-1),
                     selected_wallet_id: selected_wallet,
                     wallets: [],
                     debtors: []
@@ -154,9 +154,9 @@ export const getUserProfile = async (req, res, next) => {
                 // construct a wallet object
                 var wallet_obj = {
                     "wallet_id": results[i].wallet_id,
-                    "wallet_name": results[i].wallet_name,
+                    "wallet_name": results[i].wallet_name.slice(1, results[i].wallet_name.length-1),
                     "wallet_total": results[i].wallet_total,
-                    "wallet_description": results[i].wallet_description,
+                    "wallet_description": results[i].wallet_description.slice(1, results[i].wallet_description.length-1),
                     "selected": results[i].selected,
                     "record_num": results[i].record_num,
                     "records": [],
@@ -174,11 +174,12 @@ export const getUserProfile = async (req, res, next) => {
                             record_id: results[i+j].record_id,
                             wallet_record_tag_id: results[i+j].wallet_record_tag_id,
                             record_ordinary: results[i+j].record_ordinary,
-                            record_name: results[i+j].record_name,
-                            record_description: results[i+j].record_description,  //
-                            record_amount: results[i+j].record_amount,    //
-                            record_type: results[i+j].record_type,    //
-                            record_date: results[i+j].record_date,    //
+                            record_name: results[i+j].record_name.slice(1, results[i+j].record_name.length-1),
+                            record_description: results[i+j].record_description.slice(1, results[i+j].record_description.length-1),
+                            record_amount: results[i+j].record_amount,
+                            record_type: results[i+j].record_type,
+                            record_date: results[i+j].record_date,
+                            record_debtors: [],
                             record_created_time: results[i+j].record_created_time,
                             record_updated_time: results[i+j].record_updated_time,
                         }
@@ -189,7 +190,7 @@ export const getUserProfile = async (req, res, next) => {
                                     for(var i = 0; i < result.length; ++i) {
                                         var record_debtor_obj = {
                                             debtor_id: result[i].debtor_id,
-                                            debtor_name: result[i].debtor_name
+                                            debtor_name: result[i].debtor_name.slice(1, result[i].debtor_name.length-1)
                                         }
                                         record_obj.record_debtors.push(record_debtor_obj);
                                     }
@@ -215,7 +216,7 @@ export const getUserProfile = async (req, res, next) => {
                                     tag_id: results[i].tag_id,
                                     tag_wallet_id: results[i].tag_wallet_id,
                                     tag_ordinary: results[i].tag_ordinary,
-                                    tag_name: results[i].tag_name,
+                                    tag_name: results[i].tag_name.slice(1, results[i].tag_name.length-1),
                                     tag_type: results[i].tag_type,
                                     tag_created_time: results[i].tag_created_time,
                                     tag_updated_time: results[i].tag_updated_time,
@@ -250,7 +251,7 @@ export const getUserProfile = async (req, res, next) => {
                         var debtor_obj = {
                             debtor_id: results[i].debtor_id,
                             debtor_user_id: results[i].debtor_user_id,
-                            debtor_name: results[i].debtor_name,
+                            debtor_name: results[i].debtor_name.slice(1, results[i].debtor_name.length-1),
                             debtor_amount: results[i].debtor_amount,
                             debtor_created_time: results[i].debtor_created_time,
                             debtor_updated_time: results[i].debtor_updated_time

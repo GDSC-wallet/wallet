@@ -3,11 +3,14 @@
     <template v-if="isLoggedin">
       <v-app-bar color="deep-purple accent-4" dark app :hide-on-scroll="false">
         <v-app-bar-nav-icon @click="drawer = true" />
+        <router-link to="/" custom v-slot="{ navigate }">
+          <v-toolbar-title @click="navigate" class="nav-title">Wallet</v-toolbar-title>
+        </router-link>
         <v-spacer />
         <v-btn icon @click="openBarcode">
           <v-icon>mdi-barcode-scan</v-icon>
         </v-btn>
-        <v-btn icon>
+        <v-btn icon to="/statics">
           <v-icon>mdi-chart-arc</v-icon>
         </v-btn>
       </v-app-bar>
@@ -118,5 +121,9 @@ export default {
 
 .v-tab::before {
   background-color: transparent !important;
+}
+
+.nav-title {
+  cursor: pointer;
 }
 </style>

@@ -2,10 +2,10 @@
   <v-sheet>
     <v-row>
       <v-col cols="12" sm="6">
-        <Calendar class="pa-1" />
+        <Calendar class="px-1" />
       </v-col>
       <v-col cols="12" sm="6">
-        <v-expansion-panels accordion class="pa-1">
+        <v-expansion-panels accordion class="px-1">
           <v-expansion-panel v-for="record in getTodaysRecords" :key="record.record_id">
             <v-expansion-panel-header>
               <div class="d-flex align-center">

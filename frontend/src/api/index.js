@@ -15,14 +15,13 @@ axios.defaults.headers.post["Content-Type"] = "application/json"
 */
 
 const ajax = (url, method, options) => {
-  var AUTH_TOKEN = "Bearer " + (localStorage.getItem("authToken") ? localStorage.getItem("authToken") : "");
   if (options !== undefined) {
     var { params = {}, data = {} } = options
   } else {
     params = data = null
   }
   return new Promise((resolve, reject) => {
-    axios({ url, method, params, data, headers: { 'Authorization': AUTH_TOKEN } }).then(res => {
+    axios({ url, method, params, data }).then(res => {
       resolve(res)
     }, res => {
       reject(res)

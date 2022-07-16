@@ -55,7 +55,7 @@ import TagModal from "./components/TagModal.vue";
 import { mapGetters, mapActions } from "vuex";
 
 export default {
-  name: "RecordDialog",
+  name: "TagModal",
   props: {
     open: Boolean,
   },
