@@ -4,7 +4,7 @@
       <v-app-bar color="deep-purple accent-4" dark app :hide-on-scroll="false">
         <v-app-bar-nav-icon @click="drawer = true" />
         <v-spacer />
-        <v-btn icon>
+        <v-btn icon @click="openBarcode">
           <v-icon>mdi-barcode-scan</v-icon>
         </v-btn>
         <v-btn icon>
@@ -38,16 +38,9 @@
       <v-container style="height: 100%" fluid>
         <router-view />
       </v-container>
+      <Barcode />
       <RecordModal />
-      <v-btn
-        v-if="isLoggedin"
-        color="primary"
-        bottom
-        right
-        fab
-        fixed
-        @click="openRecordModal"
-      >
+      <v-btn v-if="isLoggedin" color="primary" bottom right fab fixed @click="openRecordModal">
         <v-icon>mdi-plus</v-icon>
       </v-btn>
     </v-main>
@@ -58,6 +51,7 @@
 import { mapGetters, mapActions } from "vuex";
 import Wallets from "./components/Wallet/Main.vue";
 import RecordModal from "./components/RecordModal/Main.vue";
+import Barcode from "./components/Barcode/Main.vue";
 
 export default {
   name: "App",
@@ -70,6 +64,7 @@ export default {
   components: {
     RecordModal: RecordModal,
     Wallets: Wallets,
+    Barcode: Barcode,
   },
   mounted() {
     this.login();
@@ -80,10 +75,15 @@ export default {
       logout: "auth/logout",
       openModal: "record/openModal",
       switchCreateMode: "record/createMode",
+      showBarcode: "barcode/openModal",
     }),
     openRecordModal() {
       this.openModal();
       this.switchCreateMode();
+    },
+    openBarcode() {
+      console.log("triggered");
+      this.showBarcode();
     },
   },
   computed: {

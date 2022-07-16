@@ -60,12 +60,9 @@ const auth = {
     },
     async logout({ commit }) {
       localStorage.clear("authToken");
-      commit("logout");
-      /*
-      ajax("/api/user/logout", "post", {data: {nickname: nickname}}).then(() => {
-          dispatch("login")
+      ajax("/oauth/logout", "get").then(() => {
+        commit("logout");
       })
-      */
     }
   },
   getters: {
