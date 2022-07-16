@@ -32,7 +32,7 @@ services:
     container_name: frontend
     build: frontend
     volumes:
-      - frontend:/app/dist
+      - dist:/app/dist
   service:
     container_name: service
     build: service
@@ -42,7 +42,7 @@ services:
     ports:
       - ${SERVER_PORT}:80
     volumes:
-      - frontend:/frontend
+      - dist:/frontend
 volumes:
-  frontend:
+  dist:
 #  wallet-data:
