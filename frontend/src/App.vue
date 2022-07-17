@@ -1,18 +1,25 @@
 <template>
   <v-app>
     <template v-if="isLoggedin">
-      <v-app-bar color="deep-purple accent-4" dark app :hide-on-scroll="false">
+      <v-app-bar color="primary" dark app :hide-on-scroll="false">
         <v-app-bar-nav-icon @click="drawer = true" />
         <router-link to="/" custom v-slot="{ navigate }">
           <v-toolbar-title @click="navigate" class="nav-title">Wallet</v-toolbar-title>
         </router-link>
         <v-spacer />
+        <Search />
         <v-btn icon @click="openBarcode">
           <v-icon>mdi-barcode-scan</v-icon>
         </v-btn>
-        <v-btn icon to="/statics">
-          <v-icon>mdi-chart-arc</v-icon>
-        </v-btn>
+        <template>
+          <v-btn icon to="/statics" v-if="$route.name == 'Home'">
+            <v-icon>mdi-chart-arc</v-icon>
+          </v-btn>
+          <v-btn icon to="/" v-if="$route.name == 'Statics'">
+            <v-icon>mdi-home</v-icon>
+          </v-btn>
+        </template>
+
       </v-app-bar>
       <v-navigation-drawer v-model="drawer" app temporary>
         <template v-slot:prepend>
@@ -41,12 +48,12 @@
       <v-container style="height: 100%" fluid>
         <router-view />
       </v-container>
-      <Barcode />
-      <RecordModal />
       <v-btn v-if="isLoggedin" color="primary" bottom right fab fixed @click="openRecordModal">
         <v-icon>mdi-plus</v-icon>
       </v-btn>
     </v-main>
+    <Barcode />
+    <RecordModal />
   </v-app>
 </template>
 
@@ -55,6 +62,7 @@ import { mapGetters, mapActions } from "vuex";
 import Wallets from "./components/Wallet/Main.vue";
 import RecordModal from "./components/RecordModal/Main.vue";
 import Barcode from "./components/Barcode/Main.vue";
+import Search from "./components/Search/Main.vue"
 
 export default {
   name: "App",
@@ -68,6 +76,7 @@ export default {
     RecordModal: RecordModal,
     Wallets: Wallets,
     Barcode: Barcode,
+    Search: Search
   },
   mounted() {
     this.login();
