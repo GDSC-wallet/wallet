@@ -1,9 +1,6 @@
 <template>
   <v-sheet>
     <v-toolbar flat class="mb-3">
-      <v-btn icon to="/">
-        <v-icon>mdi-home</v-icon>
-      </v-btn>
       <v-toolbar-title>設定</v-toolbar-title>
     </v-toolbar>
     <v-row>
