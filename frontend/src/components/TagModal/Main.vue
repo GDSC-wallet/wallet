@@ -39,7 +39,7 @@
         </v-row>
       </v-card-actions>
     </v-card>
-    <TagModal
+    <EditTagModal
       :open="tagModalOpen"
       @handleChange="handleDialogChange"
       :mode="mode"
@@ -51,7 +51,7 @@
 
 <script>
 import DraggableTag from "./components/Draggable.vue";
-import TagModal from "./components/TagModal.vue";
+import EditTagModal from "./components/EditTagModal.vue";
 import { mapGetters, mapActions } from "vuex";
 
 export default {
@@ -71,7 +71,7 @@ export default {
   },
   components: {
     DraggableTag: DraggableTag,
-    TagModal: TagModal,
+    EditTagModal: EditTagModal,
   },
   mounted() {
     this.initialize();
