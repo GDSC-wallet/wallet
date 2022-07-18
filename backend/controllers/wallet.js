@@ -20,11 +20,13 @@ export const get_wallet = async (req, res, next) => {
                     "wallet_total": results[1][0].wallet_total,
                     "wallet_description": results[1][0].wallet_description.slice(1, results[1][0].wallet_description.length-1),
                     "record_num": results[1][0].record_num,
-                    "wallet_barcode": results[1][0].wallet_barcode.slice(1, results[1][0].wallet_barcode.length-1),
                     "records": [],
                     "tags": []
                 }
             };
+            if(results[1][0].wallet_barcode)
+                response['wallet_barcode'] = results[1][0].wallet_barcode.slice(1, results[1][0].wallet_barcode.length-1);
+
             //console.log(results);
             for(var i = 0; i < results[1][0].record_num; ++i) {
                 if(i >= results[1].length) break;

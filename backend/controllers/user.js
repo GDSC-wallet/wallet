@@ -144,11 +144,12 @@ export const getUserProfile = async (req, res, next) => {
                     username: results[0].username,
                     nickname: results[0].nickname.slice(1, results[0].nickname.length-1),
                     selected_wallet_id: selected_wallet,
-                    barcode: results[0].barcode.slice(1, results[0].barcode.length-1),
                     wallets: [],
                     debtors: []
                 }
             };
+            if(results[0].barcode)
+                Data.data['barcode'] = results[0].barcode.slice(1, results[0].barcode.length-1);
 
             // 填寫wallets陣列和wallets陣列中的records陣列
             for(let i = 0; i < results.length;) {
@@ -160,10 +161,12 @@ export const getUserProfile = async (req, res, next) => {
                     "wallet_description": results[i].wallet_description.slice(1, results[i].wallet_description.length-1),
                     "selected": results[i].selected,
                     "record_num": results[i].record_num,
-                    "wallet_barcode": results[i].wallet_barcode.slice(1, results[i].wallet_barcode.length-1),
                     "records": [],
                     "tags": [],
                 };
+                if(results[i].wallet_barcode)
+                    wallet_obj['wallet_barcode'] = results[i].wallet_barcode.slice(1, results[i].wallet_barcode.length-1);
+
                 // construct record and tag array
                 var record_arr = [];
                 var j = 0;
