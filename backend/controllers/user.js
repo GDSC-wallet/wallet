@@ -160,7 +160,7 @@ export const getUserProfile = async (req, res, next) => {
                     "wallet_description": results[i].wallet_description.slice(1, results[i].wallet_description.length-1),
                     "selected": results[i].selected,
                     "record_num": results[i].record_num,
-                    "wallet_barcode": results[i].wallet_barcode,
+                    "wallet_barcode": results[i].wallet_barcode.slice(1, results[i].wallet_barcode.length-1),
                     "records": [],
                     "tags": [],
                 };
