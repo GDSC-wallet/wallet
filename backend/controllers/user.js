@@ -45,13 +45,13 @@ export const signUp = async (req, res, next) => {
     try{
         // 從 req.session.passport.user 取得 jwt decode 的資料，不進行二次解密
         const {channel,channel_id,email,username,user_id} = req.session?.passport?.user;
-        const { nickname } = req.body;
+        const { nickname, barcode } = req.body;
 
         if(nickname===undefined||nickname===null||nickname==="") {
             res.status(400).json({success:false,message:"nickname is required.",data:{}});
         }
         //註冊使用者到資料庫
-        await User.insert_user(user_id, channel, channel_id, email, username, nickname)
+        await User.insert_user(user_id, channel, channel_id, email, username, nickname, barcode)
             .then(result => {
                 next(result);
             })
@@ -144,6 +144,7 @@ export const getUserProfile = async (req, res, next) => {
                     username: results[0].username,
                     nickname: results[0].nickname.slice(1, results[0].nickname.length-1),
                     selected_wallet_id: selected_wallet,
+                    barcode: results[0].barcode.slice(1, results[0].barcode.length-1),
                     wallets: [],
                     debtors: []
                 }
@@ -159,6 +160,7 @@ export const getUserProfile = async (req, res, next) => {
                     "wallet_description": results[i].wallet_description.slice(1, results[i].wallet_description.length-1),
                     "selected": results[i].selected,
                     "record_num": results[i].record_num,
+                    "wallet_barcode": results[i].wallet_barcode,
                     "records": [],
                     "tags": [],
                 };
@@ -282,3 +284,17 @@ export const getUserProfile = async (req, res, next) => {
             res.status(400).json(response);
         });
 };
+
+export const update_user = async (req, res, next) => {
+
+    const { nickname, barcode } = req.body;
+    const id = req.user?.user_id;
+
+    await User.update_user(id, nickname, barcode)
+        .then(result => {
+            next(result);
+        })
+        .catch(err => {
+            next(err);
+        })
+}
