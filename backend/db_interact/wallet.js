@@ -67,7 +67,7 @@ const insert_wallet = async (user_id, wallet_name, wallet_description) => {
                         print_error(err);
                         reject(err);
                     } else {
-                        console.log("wallet inserted successfully.");
+                        conn.release();
                         resolve();
                     }
                 });
