@@ -26,6 +26,11 @@
               prepend-icon="mdi-message-text"
               v-model="data.wallet_description"
             />
+            <v-text-field
+              label="載具條碼"
+              prepend-icon="mdi-barcode-scan"
+              v-model="data.wallet_description"
+            />
           </v-container>
           <v-card-actions>
             <v-row justify="end">

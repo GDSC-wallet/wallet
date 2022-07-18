@@ -4,7 +4,7 @@
       <bc value="">
         尚未設定載具條碼
       </bc>
-      
+      <v-btn @click="closeBacodeModal" block class="my-2" to="/setting"> Setting </v-btn>
     </v-card>
   </v-dialog>
 
@@ -27,6 +27,9 @@ export default {
     ...mapActions({
       closeModal: "barcode/closeModal",
     }),
+    closeBacodeModal() {
+      this.closeModal();
+    },
   },
   computed: {
     ...mapGetters({

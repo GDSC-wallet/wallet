@@ -85,7 +85,6 @@ export default {
       this.switchCreateMode();
     },
     openBarcode() {
-      console.log("triggered");
       this.showBarcode();
     },
   },

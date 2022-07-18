@@ -12,6 +12,9 @@
         <v-card class="mx-1">
           <v-card-title>{{ basicInformation.nickname }}</v-card-title>
           <v-card-subtitle>{{ basicInformation.username }}</v-card-subtitle>
+          <v-card-subtitle>載具:***
+            <!-- {{basicInformatoin.carrier}}-->
+          </v-card-subtitle>
         </v-card>
       </v-col>
       <v-col cols="12">
@@ -22,37 +25,29 @@
             <span>${{ getWalletInfo.wallet_total }}</span>
           </v-card-title>
           <v-card-subtitle>{{
-            getWalletInfo.wallet_description
+              getWalletInfo.wallet_description
           }}</v-card-subtitle>
+          <v-card-subtitle>載具:***
+            <!-- {{getWalletInfo.wallet_carrier}}-->
+          </v-card-subtitle>
           <v-container>
             <v-row dense>
               <v-col cols="4">
                 <v-btn block @click="handleDialogChange(true)">編輯標籤</v-btn>
               </v-col>
               <v-col cols="4">
-                <v-btn color="info" block @click="editModal(getWalletInfo)"
-                  >編輯錢包</v-btn
-                >
+                <v-btn color="info" block @click="editModal(getWalletInfo)">編輯錢包</v-btn>
               </v-col>
               <v-col cols="4">
-                <v-btn
-                  color="error"
-                  block
-                  @click="deleteWallet(getWalletInfo.wallet_id)"
-                  >刪除錢包</v-btn
-                >
+                <v-btn color="error" block @click="deleteWallet(getWalletInfo.wallet_id)">刪除錢包</v-btn>
               </v-col>
             </v-row>
           </v-container>
         </v-card>
       </v-col>
     </v-row>
-    <WalletModal
-      mode="edit"
-      :open="walletDialogOpen"
-      :editingWallet="edittingWallet"
-      @handleDialogChange="handleWalletDialogChange"
-    />
+    <WalletModal mode="edit" :open="walletDialogOpen" :editingWallet="edittingWallet"
+      @handleDialogChange="handleWalletDialogChange" />
     <TagModal :open="tagDialogOpen" @handleChange="handleDialogChange" />
   </v-sheet>
 </template>
@@ -75,7 +70,7 @@ export default {
     WalletModal: WalletModal,
     TagModal: TagModal,
   },
-  mounted() {},
+  mounted() { },
   methods: {
     ...mapActions({
       deleteWallet: "wallet/deleteWallet",
