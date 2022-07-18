@@ -52,7 +52,7 @@
         <v-icon>mdi-plus</v-icon>
       </v-btn>
     </v-main>
-    <Barcode />
+    <BarcodeModal />
     <RecordModal />
   </v-app>
 </template>
@@ -61,7 +61,7 @@
 import { mapGetters, mapActions } from "vuex";
 import Wallets from "./components/Wallet/Main.vue";
 import RecordModal from "./components/RecordModal/Main.vue";
-import Barcode from "./components/Barcode/Main.vue";
+import BarcodeModal from "./components/BarcodeModal/Main.vue";
 import Search from "./components/Search/Main.vue"
 
 export default {
@@ -75,7 +75,7 @@ export default {
   components: {
     RecordModal: RecordModal,
     Wallets: Wallets,
-    Barcode: Barcode,
+    BarcodeModal: BarcodeModal,
     Search: Search
   },
   mounted() {
