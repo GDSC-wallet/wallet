@@ -24,6 +24,9 @@ export const get_wallet = async (req, res, next) => {
                     "tags": []
                 }
             };
+            if(results[1][0].wallet_barcode)
+                response['wallet_barcode'] = results[1][0].wallet_barcode.slice(1, results[1][0].wallet_barcode.length-1);
+
             //console.log(results);
             for(var i = 0; i < results[1][0].record_num; ++i) {
                 if(i >= results[1].length) break;
@@ -110,12 +113,12 @@ export const get_wallet = async (req, res, next) => {
 
 export const insert_wallet = async (req, res, next) => {
 
-    const { wallet_name, wallet_description } = req.body;
+    const { wallet_name, wallet_description, wallet_barcode } = req.body;
 
     // 從 req.session?.passport?.user 取得 jwt decode 的資料，不進行二次解密
     const user_id = req.session?.passport?.user?.user_id;
 
-    await Wallet.insert_wallet(user_id, wallet_name, wallet_description)
+    await Wallet.insert_wallet(user_id, wallet_name, wallet_description, wallet_barcode)
         .then(result => {
             next(result);
         })
@@ -125,8 +128,8 @@ export const insert_wallet = async (req, res, next) => {
 };
 
 export const update_wallet = async (req, res, next) => {
-    const { wallet_id, wallet_name, wallet_description } = req.body
-    await Wallet.update_wallet(wallet_id, wallet_name, wallet_description)
+    const { wallet_id, wallet_name, wallet_description, wallet_barcode } = req.body
+    await Wallet.update_wallet(wallet_id, wallet_name, wallet_description, wallet_barcode)
         .then(result => {
             next(result);
         })

@@ -8,7 +8,7 @@ function print_error(err) {
 
 const get_wallet = (user_id, wallet_id, time_chosen) => {
     return new Promise(async (resolve, reject) => {
-        var sql = "START TRANSACTION; SELECT wallet_id,wallet_name,wallet_total,wallet_description,record_num,record_id,wallet_record_tag_id,record_ordinary,record_name,record_description,record_amount,record_type,record_date,record_created_time,record_updated_time FROM wallet LEFT JOIN wallet_record ON wallet_record.record_wallet_id=wallet.wallet_id AND record_date BETWEEN date_sub(? ,interval 6 MONTH) AND date_add(? ,interval 6 MONTH) WHERE wallet_id = ? ORDER BY CAST(wallet_record.record_wallet_id AS UNSIGNED); UPDATE wallet SET selected = 0 WHERE selected = 1 AND user_id = ?; UPDATE wallet SET selected = 1 WHERE wallet_id = ?; COMMIT";
+        var sql = "START TRANSACTION; SELECT wallet_id,wallet_name,wallet_total,wallet_description,wallet_barcode,record_num,record_id,wallet_record_tag_id,record_ordinary,record_name,record_description,record_amount,record_type,record_date,record_created_time,record_updated_time FROM wallet LEFT JOIN wallet_record ON wallet_record.record_wallet_id=wallet.wallet_id AND record_date BETWEEN date_sub(? ,interval 6 MONTH) AND date_add(? ,interval 6 MONTH) WHERE wallet_id = ? ORDER BY CAST(wallet_record.record_wallet_id AS UNSIGNED); UPDATE wallet SET selected = 0 WHERE selected = 1 AND user_id = ?; UPDATE wallet SET selected = 1 WHERE wallet_id = ?; COMMIT";
         pool.getConnection(async (err, conn) => {
             if (err) {
                 print_error(err);
@@ -31,7 +31,7 @@ const get_wallet = (user_id, wallet_id, time_chosen) => {
 
 
 // insert wallet不會將新增錢包selected設為1
-const insert_wallet = async (user_id, wallet_name, wallet_description) => {
+const insert_wallet = async (user_id, wallet_name, wallet_description, wallet_barcode) => {
     return new Promise(async (resolve, reject) => {
         var wallet_id = 'wallet_' + uuid();
         var name = ["早餐", "午餐", "晚餐", "飲料", "宵夜", "交通", "日用品", "其他", "工作", "現金", "轉帳", "其他"];
@@ -39,7 +39,7 @@ const insert_wallet = async (user_id, wallet_name, wallet_description) => {
         var color = ["#E6746A", "#E98770", "#EEA26E", "#F6C177", "#FFF584", "#A6CE83", "#61B98B", "#5CBDB9", "#5C7FB3", "#525D9A", "#79629C", "#B173A3"];
         var query_tags = function () {
             var values = [];
-            values.push(wallet_id, user_id, 0, pool.escape(wallet_name), 0, pool.escape(wallet_description), user_id);
+            values.push(wallet_id, user_id, 0, pool.escape(wallet_name), 0, pool.escape(wallet_description), pool.escape(wallet_barcode), user_id);
             for (var i = 0; i < 12; ++i) {
                 values.push("tag_" + uuid());
                 values.push(wallet_id);
@@ -56,7 +56,7 @@ const insert_wallet = async (user_id, wallet_name, wallet_description) => {
             if (i != 11)
                 value_str += ", ";
         }
-        var sql = `START TRANSACTION; INSERT INTO wallet(wallet_id, user_id, selected, wallet_name, wallet_total, wallet_description, wallet_created_time, wallet_updated_time, record_num) VALUE(?,?,?,?,?,?,NOW(),NOW(),0); UPDATE user SET wallet_num = wallet_num + 1 WHERE id = ?; INSERT INTO wallet_record_tag_id(tag_id, tag_wallet_id, tag_ordinary, tag_name, tag_type, tag_created_time, tag_updated_time, tag_color) VALUES ${value_str}; COMMIT;`;
+        var sql = `START TRANSACTION; INSERT INTO wallet(wallet_id, user_id, selected, wallet_name, wallet_total, wallet_description, wallet_created_time, wallet_updated_time, record_num, wallet_barcode) VALUE(?,?,?,?,?,?,NOW(),NOW(),0,?); UPDATE user SET wallet_num = wallet_num + 1 WHERE id = ?; INSERT INTO wallet_record_tag_id(tag_id, tag_wallet_id, tag_ordinary, tag_name, tag_type, tag_created_time, tag_updated_time, tag_color) VALUES ${value_str}; COMMIT;`;
         pool.getConnection(async (err, conn) => {
             if (err) {
                 print_error(err);
@@ -67,7 +67,7 @@ const insert_wallet = async (user_id, wallet_name, wallet_description) => {
                         print_error(err);
                         reject(err);
                     } else {
-                        console.log("wallet inserted successfully.");
+                        conn.release();
                         resolve();
                     }
                 });
@@ -78,16 +78,16 @@ const insert_wallet = async (user_id, wallet_name, wallet_description) => {
 
 
 // wallet_id判斷用
-const update_wallet = async (wallet_id, wallet_name, wallet_description) => {
+const update_wallet = async (wallet_id, wallet_name, wallet_description, wallet_barcode) => {
     console.log({ wallet_id, wallet_name, wallet_description })
     return new Promise(async (resolve, reject) => {
-        var sql = "UPDATE wallet SET wallet_name = ?, wallet_description = ?, wallet_updated_time = NOW() WHERE wallet_id = ?";
+        var sql = "UPDATE wallet SET wallet_name = ?, wallet_description = ?, wallet_barcode = ?, wallet_updated_time = NOW() WHERE wallet_id = ?";
         pool.getConnection(async (err, conn) => {
             if (err) {
                 print_error(err);
                 reject(err);
             } else {
-                await conn.query(sql, [conn.escape(wallet_name), conn.escape(wallet_description), wallet_id], (err, results, fields) => {
+                await conn.query(sql, [conn.escape(wallet_name), conn.escape(wallet_description), conn.escape(wallet_barcode), wallet_id], (err, results, fields) => {
                     if (err) {
                         print_error(err);
                         reject(err);

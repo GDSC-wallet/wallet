@@ -45,13 +45,13 @@ export const signUp = async (req, res, next) => {
     try{
         // 從 req.session.passport.user 取得 jwt decode 的資料，不進行二次解密
         const {channel,channel_id,email,username,user_id} = req.session?.passport?.user;
-        const { nickname } = req.body;
+        const { nickname, barcode } = req.body;
 
         if(nickname===undefined||nickname===null||nickname==="") {
             res.status(400).json({success:false,message:"nickname is required.",data:{}});
         }
         //註冊使用者到資料庫
-        await User.insert_user(user_id, channel, channel_id, email, username, nickname)
+        await User.insert_user(user_id, channel, channel_id, email, username, nickname, barcode)
             .then(result => {
                 next(result);
             })
@@ -148,6 +148,8 @@ export const getUserProfile = async (req, res, next) => {
                     debtors: []
                 }
             };
+            if(results[0].barcode)
+                Data.data['barcode'] = results[0].barcode.slice(1, results[0].barcode.length-1);
 
             // 填寫wallets陣列和wallets陣列中的records陣列
             for(let i = 0; i < results.length;) {
@@ -162,6 +164,9 @@ export const getUserProfile = async (req, res, next) => {
                     "records": [],
                     "tags": [],
                 };
+                if(results[i].wallet_barcode)
+                    wallet_obj['wallet_barcode'] = results[i].wallet_barcode.slice(1, results[i].wallet_barcode.length-1);
+
                 // construct record and tag array
                 var record_arr = [];
                 var j = 0;
@@ -282,3 +287,17 @@ export const getUserProfile = async (req, res, next) => {
             res.status(400).json(response);
         });
 };
+
+export const update_user = async (req, res, next) => {
+
+    const { nickname, barcode } = req.body;
+    const id = req.user?.user_id;
+
+    await User.update_user(id, nickname, barcode)
+        .then(result => {
+            next(result);
+        })
+        .catch(err => {
+            next(err);
+        })
+}

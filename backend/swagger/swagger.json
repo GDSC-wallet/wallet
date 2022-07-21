@@ -67,6 +67,9 @@
                 "properties": {
                   "nickname": {
                     "type": "string"
+                  },
+                  "barcode": {
+                    "type": "string"
                   }
                 }
               }
@@ -99,6 +102,64 @@
                 "example": {
                   "success": false,
                   "message": "使用者註冊失敗 error:...",
+                  "data": {}
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/edit": {
+      "post": {
+        "summary": "Updates a user.",
+        "tags": [
+          "user"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "nickname": {
+                    "type": "string"
+                  },
+                  "barcode": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/API"
+                },
+                "example": {
+                  "success": true,
+                  "message": "使用者資料更新成功",
+                  "data": {}
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/API"
+                },
+                "example": {
+                  "success": false,
+                  "message": "使用者資料更新失敗 error:...",
                   "data": {}
                 }
               }
@@ -145,6 +206,7 @@
                     "username": "royshao",
                     "nickname": "roy",
                     "selected_wallet_id": "wallet_12345",
+                    "barcode": "Yhfl3LUI",
                     "wallets": [],
                     "debtors": []
                   }
@@ -525,6 +587,7 @@
                     "wallet_total": 100,
                     "wallet_description": "my wallet",
                     "record_num": 1,
+                    "wallet_barcode": "IUFL56KB",
                     "records": [],
                     "tags": []
                   }
@@ -567,6 +630,9 @@
                     "type": "string"
                   },
                   "wallet_description": {
+                    "type": "string"
+                  },
+                  "wallet_barcode": {
                     "type": "string"
                   }
                 }
@@ -628,6 +694,9 @@
                     "type": "string"
                   },
                   "wallet_description": {
+                    "type": "string"
+                  },
+                  "wallet_barcode": {
                     "type": "string"
                   }
                 }
@@ -1480,6 +1549,9 @@
               "select_wallet_id": {
                 "type": "string"
               },
+              "barcode": {
+                "type": "string"
+              },
               "wallets": {
                 "type": "array",
                 "items": {
@@ -1502,6 +1574,9 @@
                     },
                     "record_num": {
                       "type": "number"
+                    },
+                    "wallet_barcode": {
+                      "type": "string"
                     },
                     "records": {
                       "type": "array",
@@ -1683,6 +1758,9 @@
               },
               "record_num": {
                 "type": "number"
+              },
+              "wallet_barcode": {
+                "type": "string"
               },
               "records": {
                 "type": "array",
