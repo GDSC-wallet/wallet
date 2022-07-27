@@ -27,11 +27,12 @@ const wallet = {
         console.log(err);
       })
     },
-    async createWallet({ dispatch }, data) {
+    async createWallet({ dispatch, rootGetters }, data) {
       ajax("/api/wallet/create", "post", {
         data: {
           wallet_name: data?.wallet_name,
-          wallet_description: data?.wallet_description
+          wallet_description: data?.wallet_description,
+          wallet_barcode: (!data.wallet_barcode) ? rootGetters["auth/basicinformation"] : data.wallet_barcode
         }
       }).then(() => {
         dispatch("auth/getProfile", null, { root: true })
@@ -44,7 +45,8 @@ const wallet = {
         data: {
           wallet_name: data?.wallet_name,
           wallet_description: data?.wallet_description,
-          wallet_id: data?.wallet_id
+          wallet_id: data?.wallet_id,
+          wallet_barcode: data?.wallet_barcode
         }
       }).then(() => {
         dispatch("auth/getProfile", null, { root: true })
@@ -143,6 +145,7 @@ const wallet = {
         wallet_total: state.wallet.wallet_total,
         wallet_name: state.wallet.wallet_name,
         wallet_description: state.wallet.wallet_description,
+        wallet_barcode: state.wallet.wallet_barcode,
       };
       return {}
     },
@@ -154,7 +157,7 @@ const wallet = {
       if (state.wallet) return state.wallet.tags;
       return []
     },
-  }
+  },
 }
 
 export default wallet;

@@ -9,9 +9,14 @@
         <v-card class="mx-1">
           <v-card-title>{{ basicInformation.nickname }}</v-card-title>
           <v-card-subtitle>{{ basicInformation.username }}</v-card-subtitle>
-          <v-card-subtitle>載具:***
-            <!-- {{basicInformatoin.carrier}}-->
-          </v-card-subtitle>
+          <v-row>
+            <v-spacer></v-spacer>
+            <v-text-field label="載具條碼" :disabled="display" v-model="basicInformation.barcode" />
+            <v-col>
+              <v-icon v-if="display" @click="display = !display">mdi-pencil</v-icon>
+              <v-icon v-if="!display" @click="submitBarcode">mdi-check</v-icon>
+            </v-col>
+          </v-row>
         </v-card>
       </v-col>
       <v-col cols="12">
@@ -24,8 +29,8 @@
           <v-card-subtitle>{{
               getWalletInfo.wallet_description
           }}</v-card-subtitle>
-          <v-card-subtitle>載具:***
-            <!-- {{getWalletInfo.wallet_carrier}}-->
+          <v-card-subtitle>
+            載具:{{ getWalletInfo.wallet_barcode }}
           </v-card-subtitle>
           <v-container>
             <v-row dense>
@@ -61,6 +66,7 @@ export default {
       tagDialogOpen: false,
       walletDialogOpen: false,
       edittingWallet: null,
+      display: true
     };
   },
   components: {
@@ -71,6 +77,7 @@ export default {
   methods: {
     ...mapActions({
       deleteWallet: "wallet/deleteWallet",
+      editProfile: "auth/editProfile"
     }),
     handleDialogChange(value) {
       this.tagDialogOpen = value;
@@ -81,6 +88,10 @@ export default {
     editModal(data) {
       (this.edittingWallet = data), (this.walletDialogOpen = true);
     },
+    submitBarcode() {
+      this.display = !this.display;
+      //update to database NOT yet done
+    }
   },
   computed: {
     ...mapGetters({

@@ -8,9 +8,7 @@
         </router-link>
         <v-spacer />
         <Search />
-        <v-btn icon @click="openBarcode">
-          <v-icon>mdi-barcode-scan</v-icon>
-        </v-btn>
+        <BarcodeModal />
         <template>
           <v-btn icon to="/statics" v-if="$route.name == 'Home'">
             <v-icon>mdi-chart-arc</v-icon>
@@ -52,7 +50,6 @@
         <v-icon>mdi-plus</v-icon>
       </v-btn>
     </v-main>
-    <BarcodeModal />
     <RecordModal />
   </v-app>
 </template>
@@ -87,14 +84,10 @@ export default {
       logout: "auth/logout",
       openModal: "record/openModal",
       switchCreateMode: "record/createMode",
-      showBarcode: "barcode/openModal",
     }),
     openRecordModal() {
       this.openModal();
       this.switchCreateMode();
-    },
-    openBarcode() {
-      this.showBarcode();
     },
   },
   computed: {

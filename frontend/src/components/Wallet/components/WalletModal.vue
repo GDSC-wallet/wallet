@@ -29,7 +29,7 @@
             <v-text-field
               label="載具條碼"
               prepend-icon="mdi-barcode-scan"
-              v-model="data.wallet_description"
+              v-model="data.wallet_barcode"
             />
           </v-container>
           <v-card-actions>
@@ -64,6 +64,7 @@ export default {
         wallet_name: "",
         wallet_description: "",
         wallet_id: "",
+        wallet_barcode: ""
       },
     };
   },
@@ -104,12 +105,14 @@ export default {
             wallet_name: "",
             wallet_description: "",
             wallet_id: "",
+            wallet_barcode: ""
           };
         } else if (this.mode == "edit") {
           this.data = {
             wallet_name: this.editingWallet.wallet_name,
             wallet_description: this.editingWallet.wallet_description,
             wallet_id: this.editingWallet.wallet_id,
+            wallet_barcode: this.editingWallet.wallet_barcode
           };
         }
       }

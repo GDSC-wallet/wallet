@@ -68,7 +68,8 @@ const auth = {
     basicInformation(state) {
       return {
         nickname: state.profile?.nickname,
-        username: state.profile?.username
+        username: state.profile?.username,
+        barcode: state.profile?.barcode
       }
     },
     getUserId(state) {
