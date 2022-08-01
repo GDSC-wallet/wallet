@@ -7,6 +7,7 @@
             :text-color="contrastText(tag(record.wallet_record_tag_id).tag_color)" label small class="mr-2">
             {{ tag(record.wallet_record_tag_id).tag_name }}
           </v-chip>
+          <span v-if="showDate">{{ ezDate(record.record_date) }}: </span>
           <span>{{ record.record_name }}</span>
         </div>
         <template v-slot:actions>
@@ -37,7 +38,8 @@ export default {
   name: "Home",
   props: {
     records: Array,
-    editable: Boolean
+    editable: Boolean,
+    showDate: Boolean
   },
   data() {
     return {};
@@ -65,6 +67,11 @@ export default {
     tag(id) {
       return this.getAllWalletTags.find((tag) => tag.tag_id == id);
     },
+    ezDate(str) {
+      let ret = String();
+      ret = ret.concat(str.slice(5, 10));
+      return ret;
+    }
   },
   computed: {
     ...mapGetters({

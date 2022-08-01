@@ -37,12 +37,12 @@ export default {
     }
   },
   watch: {
-    Options() {
-      this.mychart.options = this.Options
+    options() {
+      this.mychart.options = this.options
       this.mychart.update('none')
     },
-    ChartData() {
-      this.mychart.data = this.ChartData
+    data() {
+      this.mychart.data = this.data
       this.mychart.update('none')
     }
   }
