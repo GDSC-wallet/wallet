@@ -69,11 +69,11 @@ export default {
       if (this.isEmpty) {
         let nullData = {
           labels: ["本月無資料"],
-          datasets: {
+          datasets: [{
             data: [1],
             backgroundColor: ["#5C7FB3"],
             hoverOffset: 4,
-          },
+          }],
         }
         return nullData;
       }
@@ -92,17 +92,19 @@ export default {
       }
     },
     getLabels() {
+      let th = this;
       let ret = this.getAllWalletTags.filter(tag => {
-        return tag.tag_type == this.type
+        return tag.tag_type == th.type
       }).map(item => {
         return item.tag_name
       }).filter((val, id, arr) => {
-        return vm.getData[arr.indexOf(val)] != 0
+        return th.getData[arr.indexOf(val)] != 0
       });
       return ret;
     },
     getColor() {
-      let ret = his.getAllWalletTags.filter(tag => tag.tag_type == this.type)
+      let th = this;
+      let ret = this.getAllWalletTags.filter(tag => tag.tag_type == th.type)
       return ret.map(item => item.tag_color)
     },
     getData() {
