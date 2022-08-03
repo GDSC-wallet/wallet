@@ -128,6 +128,9 @@
                   },
                   "barcode": {
                     "type": "string"
+                  },
+                  "elec_invoice_agree": {
+                    "type": "boolean"
                   }
                 }
               }
@@ -207,6 +210,8 @@
                     "nickname": "roy",
                     "selected_wallet_id": "wallet_12345",
                     "barcode": "Yhfl3LUI",
+                    "elec_invoice_agree": true,
+                    "elec_invoice_agree_time": "2022-08-03 11:40:00",
                     "wallets": [],
                     "debtors": []
                   }
@@ -1550,6 +1555,12 @@
                 "type": "string"
               },
               "barcode": {
+                "type": "string"
+              },
+              "elec_invoice_agree": {
+                "type": "boolean"
+              },
+              "elec_invoice_agree_time": {
                 "type": "string"
               },
               "wallets": {
