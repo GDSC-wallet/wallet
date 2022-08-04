@@ -144,6 +144,8 @@ export const getUserProfile = async (req, res, next) => {
                     username: results[0].username,
                     nickname: results[0].nickname.slice(1, results[0].nickname.length-1),
                     selected_wallet_id: selected_wallet,
+                    elec_invoice_agree: results[0].elec_invoice_agree,
+                    elec_invoice_agree_time: results[0].elec_invoice_agree_time,
                     wallets: [],
                     debtors: []
                 }
@@ -290,10 +292,10 @@ export const getUserProfile = async (req, res, next) => {
 
 export const update_user = async (req, res, next) => {
 
-    const { nickname, barcode } = req.body;
+    const { nickname, barcode, elec_invoice_agree } = req.body;
     const id = req.user?.user_id;
 
-    await User.update_user(id, nickname, barcode)
+    await User.update_user(id, nickname, barcode, elec_invoice_agree)
         .then(result => {
             next(result);
         })

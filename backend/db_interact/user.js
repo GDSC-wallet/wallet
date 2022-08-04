@@ -116,7 +116,7 @@ const insert_user = async (id, channel, channel_id, email, username, nickname, b
             if(i != 11)
                 value_str += ", ";
         }
-        var sql = `START TRANSACTION; INSERT INTO user(id,channel,channel_id,email,username,nickname,created_time,updated_time,wallet_num,barcode) VALUE(?,?,?,?,?,?,NOW(),NOW(),1,?); INSERT INTO wallet(wallet_id, user_id, selected, wallet_name, wallet_total, wallet_description, wallet_created_time, wallet_updated_time, record_num) VALUE(?,?,?,?,?,?,NOW(),NOW(),0); INSERT INTO wallet_record_tag_id(tag_id, tag_wallet_id, tag_ordinary, tag_name, tag_type, tag_created_time, tag_updated_time, tag_color) VALUES ${value_str}; COMMIT`;
+        var sql = `START TRANSACTION; INSERT INTO user(id,channel,channel_id,email,username,nickname,created_time,updated_time,wallet_num,barcode,elec_invoice_agree) VALUE(?,?,?,?,?,?,NOW(),NOW(),1,?,false); INSERT INTO wallet(wallet_id, user_id, selected, wallet_name, wallet_total, wallet_description, wallet_created_time, wallet_updated_time, record_num) VALUE(?,?,?,?,?,?,NOW(),NOW(),0); INSERT INTO wallet_record_tag_id(tag_id, tag_wallet_id, tag_ordinary, tag_name, tag_type, tag_created_time, tag_updated_time, tag_color) VALUES ${value_str}; COMMIT`;
         pool.getConnection( async (err, conn) => {
             if(err) {
                 print_error(err);
@@ -139,15 +139,16 @@ const insert_user = async (id, channel, channel_id, email, username, nickname, b
 
 
 // id判斷用,channel,channel_id不給改
-const update_user = async (id, nickname, barcode) => {
+const update_user = async (id, nickname, barcode, elec_invoice_agree) => {
     return new Promise( async(resolve, reject) => {
-        var sql = "UPDATE user SET nickname = ?, barcode = ?, updated_time = NOW() WHERE id = ?";
+        var elec_invoice_agree_time = elec_invoice_agree ? "NOW()" : "NULL";
+        var sql = "UPDATE user SET nickname = ?, barcode = ?, updated_time = NOW(), elec_invoice_agree = ?, elec_invoice_agree_time = ? WHERE id = ?";
         pool.getConnection( async (err, conn) => {
             if(err) {
                 print_error(err);
                 reject(err);
             } else {
-                await conn.query(sql, [conn.escape(nickname), conn.escape(barcode), id], (err, results, fields) => {
+                await conn.query(sql, [conn.escape(nickname), conn.escape(barcode), elec_invoice_agree, elec_invoice_agree_time, id], (err, results, fields) => {
                     if(err) {
                         print_error(err);
                         reject(err);
