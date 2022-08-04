@@ -25,7 +25,15 @@ const search = {
           search_str: getters.getParam
         }
       }).then(res => {
-        console.log(res.data.data)
+        res.data.data.sort((a, b) => {
+          if(a.record_date == b.record_date) {
+            if(a.record_updated_time == b.record_updated_time) {
+              return b.record_created_time > a.record_created_time ? 1 : -1;
+            }
+            return b.record_updated_time > a.record_updated_time ? 1 : -1;
+          }
+          return b.record_date > a.record_date ? 1 : -1;
+        })
         commit("setData", res.data.data)
       })
     }
