@@ -14,7 +14,7 @@
     </v-card>
     <Chart :data="chartData" type="doughnut" chartId="123" />
     <v-col cols="12" sm="6">
-      <RecordCard :records="handleRecord(getRecords)" showDate />
+      <RecordList :records="getMonthRecords" showDate showFilter />
     </v-col>
   </div>
 </template>
@@ -22,14 +22,14 @@
 <script>
 import Chart from "@/components/Chart/Main.vue"
 import MonthSelector from "@/components/Calendar/components/MonthSelector.vue"
-import RecordCard from "../components/RecordCard/Main.vue"
+import RecordList from "../components/RecordCard/RecordList.vue"
 import { mapGetters } from "vuex"
 export default {
   name: "Statics",
   components: {
     Chart: Chart,
     MonthSelector: MonthSelector,
-    RecordCard: RecordCard
+    RecordList: RecordList
   },
   data() {
     return {
@@ -41,46 +41,39 @@ export default {
     changeDate(v) {
       console.log(v)
     },
-    handleRecord(arr) {
-      let th = this;
-      let tmp = arr.filter(rec => rec.record_date.slice(0, 7) == th.getRange);
-      if (th.type != 'all')
-        tmp = arr.filter(rec => rec.record_type == th.type);
-      tmp.sort(function (a, b) {
-        if (a.record_date > b.record_date) return 1;
-        return -1;
-      });
-      return tmp;
-    }
   },
   computed: {
     ...mapGetters({
       getRecords: "wallet/getRecords",
+      getWalletTags: "wallet/getWalletTags",
       getAllWalletTags: "wallet/getAllWalletTags"
     }),
+    getMonthRecords() {
+      const vm = this;
+      return this.getRecords.filter(record => {
+        return record.record_date.slice(0, 7) == vm.getRange;
+      }).filter(record => {
+        return vm.type == "all" ? true : record.record_type == vm.type;
+      })
+    },
     type() {
-      let arr = ['all', 'expense', 'income'];
-      if (!this.btnSelected)
-        return arr[0]
-      return arr[this.btnSelected];
+      const arr = ['all', 'expense', 'income'];
+      return !this.btnSelected ? arr[0] : arr[this.btnSelected];
     },
     chartData() {
-      let th = this;
+      if (this.type == 'all' && !this.isEmpty) {
+        return {
+          labels: ["收入", "支出"],
+          datasets: [this.getBalance]
+        }
+      }
       if (this.isEmpty) {
-        let nullData = {
+        return {
           labels: ["本月無資料"],
           datasets: [{
             data: [1],
             backgroundColor: ["#5C7FB3"],
-            hoverOffset: 4,
           }],
-        }
-        return nullData;
-      }
-      if (this.type == 'all') {
-        return {
-          labels: ["收入", "支出"],
-          datasets: [this.getBalance]
         }
       }
       return {
@@ -92,31 +85,22 @@ export default {
       }
     },
     getLabels() {
-      let th = this;
-      let ret = this.getAllWalletTags.filter(tag => {
-        return tag.tag_type == th.type
-      }).map(item => {
+      let vm = this;
+      let ret = this.getWalletTags(this.type).map(item => {
         return item.tag_name
       }).filter((val, id, arr) => {
-        return th.getData[arr.indexOf(val)] != 0
+        return vm.getData[arr.indexOf(val)] != 0
       });
       return ret;
     },
     getColor() {
-      let th = this;
-      let ret = this.getAllWalletTags.filter(tag => tag.tag_type == th.type)
-      return ret.map(item => item.tag_color)
+      return this.getWalletTags(this.type).map(item => item.tag_color)
     },
     getData() {
-      let th = this
-      let validRecord = this.getRecords.filter(function (rec) {
-        return (rec.record_date.slice(0, 7) == th.getRange && rec.record_type == th.type)
-      })
       let arr = [];
-      let validTags = th.getAllWalletTags.filter((tag) => { return tag.tag_type == th.type });
-      for (let i = 0; i < validTags.length; i++) {
-        let sameTag = validRecord.filter(function (rec) {
-          return rec.wallet_record_tag_id == validTags[i].tag_id;
+      for (let i = 0; i < this.getWalletTags(this.type).length; i++) {
+        let sameTag = this.getMonthRecords.filter((rec) => {
+          return rec.wallet_record_tag_id == this.getWalletTags(this.type)[i].tag_id;
         });
         arr.push(sameTag.reduce((tmp, object) => {
           return tmp + object.record_amount;
@@ -125,38 +109,23 @@ export default {
       return arr
     },
     getRange() {
-      let mon = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-      let str = String();
-      let dateStr = String(this.date);
-      str = str.concat(dateStr.slice(11, 15), "-",);
-      var tmp = mon.findIndex(i => i == dateStr.slice(4, 7)) + 1;
-      if (tmp < 10)
-        str = str.concat("0");
-      str = str.concat(tmp);
-      return str;
+      return this.date.toISOString().slice(0, 7);
     },
     isEmpty() {
       let sum = 0;
-      let vm = this;
-      for (let i = 0; i < vm.getData.length; ++i)
-        sum += vm.getData[i]
-      if (sum == 0)
-        return true;
-      return false;
+      for (let i = 0; i < this.getData.length; ++i)
+        sum += this.getData[i];
+      return sum == 0;
     },
     getBalance() {
       const dataFilter = (type) => {
-        let th = this;
-        return this.getRecords.filter(function (rec) {
-          return (rec.record_date.slice(0, 7) == th.getRange && rec.record_type == type)
-        }).reduce((tmp, object) => {
+        return this.getMonthRecords.reduce((tmp, object) => {
           return tmp + object.record_amount;
         }, 0)
       }
       let ret = {
         data: [dataFilter("income"), dataFilter("expense")],
         backgroundColor: ['#E6746A', '#5C7FB3'],
-        hoverOffset: 4,
       }
       return ret;
     }

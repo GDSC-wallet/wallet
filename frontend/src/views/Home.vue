@@ -5,7 +5,7 @@
         <Calendar class="px-1" />
       </v-col>
       <v-col cols="12" sm="6">
-        <RecordCard :records="getTodaysRecords" editable />
+        <RecordList :records="getTodaysRecords" editable />
       </v-col>
     </v-row>
   </v-sheet>
@@ -13,7 +13,7 @@
 
 <script>
 import Calendar from "../components/Calendar/Main.vue";
-import RecordCard from "../components/RecordCard/Main.vue"
+import RecordList from "../components/RecordCard/RecordList.vue"
 import { mapGetters, mapActions } from "vuex";
 
 export default {
@@ -23,7 +23,7 @@ export default {
   },
   components: {
     Calendar: Calendar,
-    RecordCard: RecordCard
+    RecordList: RecordList
   },
   mounted() { },
   methods: {
