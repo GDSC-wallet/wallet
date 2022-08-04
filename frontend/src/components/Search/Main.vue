@@ -23,7 +23,7 @@
           </v-btn>
         </form>
         <div v-if="getData" class="py-3">
-          <RecordCard :records="getData" v-if="getData?.length > 0" />
+          <RecordList :records="getData" :editale="false" showDate showFilter v-if="getData?.length > 0" />
           <p v-else>無資料</p>
         </div>
       </v-card-text>
@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import RecordCard from "../RecordCard/Main.vue"
+import RecordList from "../RecordCard/RecordList.vue"
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
@@ -42,7 +42,7 @@ export default {
     }
   },
   components: {
-    RecordCard: RecordCard
+    RecordList: RecordList
   },
   methods: {
     ...mapActions({

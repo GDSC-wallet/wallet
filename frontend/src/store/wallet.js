@@ -150,6 +150,7 @@ const wallet = {
       return {}
     },
     getWalletTags: (state) => (mode) => {
+      if (state.wallet && mode == "all") return state.wallet.tags;
       if (state.wallet) return state.wallet.tags.filter(tag => tag.tag_type == mode);
       return []
     },
