@@ -139,13 +139,13 @@ const wallet = {
       if (state.wallet) return state.wallet.wallet_id;
       return ""
     },
-    getWalletInfo(state) {
+    getWalletInfo(state, getters, rootState, rootGetters) {
       if (state.wallet) return {
         wallet_id: state.wallet.wallet_id,
         wallet_total: state.wallet.wallet_total,
         wallet_name: state.wallet.wallet_name,
         wallet_description: state.wallet.wallet_description,
-        wallet_barcode: state.wallet.wallet_barcode,
+        wallet_barcode: state.wallet.wallet_barcode ? state.wallet.wallet_barcode : rootGetters["auth/getUserBarcode"],
       };
       return {}
     },

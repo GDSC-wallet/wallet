@@ -43,8 +43,23 @@ const auth = {
         commit("logout");
       })
     },
-    async signup({ commit, dispatch }, { nickname }) {
-      ajax("/api/user/signup", "post", { data: { nickname: nickname } }).then(res => {
+    async editProfile({ dispatch }, { nickname, barcode }) {
+      ajax("/api/user/edit", "post", { 
+        data: { 
+          nickname: nickname,
+          barcode: barcode,
+          elec_invoice_agree: true
+        }
+      }).then(res => {
+        if (!res.data?.success) throw new Error(res.data);
+        dispatch("getProfile")
+      }).catch((err) => {
+        console.log(err);
+        throw err;
+      });
+    },
+    async signup({ commit, dispatch }, { nickname, barcode }) {
+      ajax("/api/user/signup", "post", { data: { nickname: nickname, barcode: barcode } }).then(res => {
         if (!res.data?.success) throw new Error(res.data);
         dispatch("login")
       }).catch((err) => {
@@ -87,6 +102,9 @@ const auth = {
         }
       });
       return [];
+    },
+    getUserBarcode(state) {
+      return state.profile?.barcode
     }
   }
 }

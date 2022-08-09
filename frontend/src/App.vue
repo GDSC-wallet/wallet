@@ -13,7 +13,7 @@
           <v-btn icon to="/statics" v-if="$route.name == 'Home'">
             <v-icon>mdi-chart-arc</v-icon>
           </v-btn>
-          <v-btn icon to="/" v-if="$route.name == 'Statics'">
+          <v-btn icon to="/" v-else>
             <v-icon>mdi-home</v-icon>
           </v-btn>
         </template>
