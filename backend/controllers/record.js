@@ -25,15 +25,7 @@ export const get_record = async (req, res, next) => {
                     }
                 }
             })
-            .catch(err => {
-                var response = {
-                    "success": false,
-                    "message": "取得record資料失敗 error1: " + err.message,
-                    "data": {}
-                }
-                console.log(response);
-                res.status(400).json(response);
-            })
+            .catch(err => { throw err })
         var response = {
             "success": true,
             "message": "取得record資料成功",
@@ -92,15 +84,7 @@ export const get_month_records = async (req, res, next) => {
                             }
                         }
                     })
-                    .catch(err => {
-                        var response = {
-                            "success": false,
-                            "message": "取得指定月份records資料失敗 error: " + err.message,
-                            "data": {}
-                        }
-                        console.log(response);
-                        res.status(400).json(response);
-                    })
+                    .catch(err => { throw err })
                 response.data.push(record_obj);
             }
             console.log(response);
@@ -168,11 +152,32 @@ export const update_record = async (req, res, next) => {
         body.record_amount_diff,
     ).then(async result => {
         if(body.record_debtors) {
-            // create two array to diff debtors 
+            // 查看此record目前的debtors並執行新增或刪除
+            await Debtor.get_record_debtors(body.record_id)
+                .then(async results => {
+                    for(let i = 0; i < record_debtors.length; ++i) {
+                        if(results.indexOf(record_debtors[i]) === -1) {
+                            await Debtor.insert_debtor_record(
+                                body.record_id,
+                                record_debtors[i].debtor_id,
+                                body.record_amount
+                            ).then().catch(err => { throw err })
+                        }
+                    }
+                    for(let i = 0; i < results.length; ++i) {
+                        if(record_debtors.indexOf(results[i]) === -1) {
+                            await Debtor.delete_debtor_record(
+                                body.record_id,
+                                results[i].debtor_id,
+                                body.record_amount
+                            ).then().catch(err => { throw err })
+                        }
+                    }
+                })
+                .catch(err => { throw err })
         }
         next(result);
-    })
-    .catch(err => {
+    }).catch(err => {
         next(err);
     })
 };
