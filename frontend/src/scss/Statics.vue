@@ -2,20 +2,23 @@
   <div>
     <MonthSelector v-model="date" />
     <div class="d-flex flex-row-reverse justify-space-between">
-      <v-btn v-if="!donut" @click="donut = true" dense>
+      <v-btn v-if="mode == 'bar'" @click="mode = 'donut'" dense>
         <v-icon>mdi-chart-donut</v-icon>
       </v-btn>
-      <v-btn v-else @click="donut = false" dense>
+      <v-btn v-else @click="mode = 'bar'" dense>
         <v-icon>mdi-chart-bar</v-icon>
       </v-btn>
-      <v-btn-toggle v-if="donut" dense v-model="btnSelected">
+      <v-btn-toggle v-if="mode == 'donut'" dense v-model="btnSelected">
         <v-btn :disabled="btnSelected == 0">全部</v-btn>
         <v-btn :disabled="btnSelected == 1">支出</v-btn>
         <v-btn :disabled="btnSelected == 2">收入</v-btn>
       </v-btn-toggle>
     </div>
-    <DonutChart v-if="donut" :data="chartData" chartId="111" />
-    <BarChart v-else :data="chartData" chartId="222" :max="max" />
+
+    <Chart v-if="mode == 'donut'" :data="chartData" type="doughnut" chartId="0" />
+
+    <Chart v-else :data="test" type="bar" chartId="1" />
+
     <v-col cols="12" sm="6">
       <RecordList :records="getMonthRecords" showDate showFilter />
     </v-col>
@@ -23,25 +26,36 @@
 </template>
 
 <script>
+import Chart from "@/components/Chart/Main.vue"
 import MonthSelector from "@/components/Calendar/components/MonthSelector.vue"
 import RecordList from "../components/RecordCard/RecordList.vue"
 import { mapGetters } from "vuex"
-import BarChart from "../components/Chart/components/BarChart.vue"
-import DonutChart from "../components/Chart/components/DonutChart.vue"
 export default {
   name: "Statics",
   components: {
+    Chart: Chart,
     MonthSelector: MonthSelector,
-    RecordList: RecordList,
-    BarChart,
-    DonutChart
+    RecordList: RecordList
   },
   data() {
     return {
       date: new Date(),
       btnSelected: 0,
-      donut: true,
-      max: -1,
+      mode: "donut",
+      test: {
+        labels: ['1th', '2nd', '3rd'],
+        datasets: [
+          {
+            label: 'Dataset 1',
+            data: [11, 22, 33],
+            backgroundColor: [
+              'rgb(255, 99, 132)',
+              'rgb(255, 159, 64)',
+              'rgb(255, 205, 86)',
+            ],
+          },
+        ]
+      },
     }
   },
   methods: {
@@ -65,32 +79,9 @@ export default {
     },
     type() {
       const arr = ['all', 'expense', 'income'];
-      return !this.donut ? arr[0] : arr[this.btnSelected];
+      return !this.btnSelected ? arr[0] : arr[this.btnSelected];
     },
     chartData() {
-      if (!this.donut) {
-        let daysInMonth = new Date(this.date.getFullYear(), this.date.getMonth() + 1, 0).getDate();
-        return {
-          labels: [...Array(daysInMonth).keys()],
-          datasets: [{
-            label: 'DS1',
-            data: this.getData.bar_p,
-            backgroundColor: '#FF7575',
-            borderColor: '#FF7575',
-          }, {
-            label: 'DS2',
-            data: this.getData.bar_n,
-            backgroundColor: '#4EFEB3',
-            borderColor: '#4EFEB3',
-          }, {
-            label: 'DS3',
-            data: this.getData.line,
-            type: 'line',
-            backgroundColor: '#5C7FB3',
-            borderColor: '#5C7FB3',
-          }]
-        }
-      }
       if (this.type == 'all' && !this.isEmpty) {
         return {
           labels: ["收入", "支出"],
@@ -127,39 +118,6 @@ export default {
       return this.getWalletTags(this.type).map(item => item.tag_color)
     },
     getData() {
-      if (!this.donut) {
-        let ret = {
-          line: Array(),
-          bar_p: Array(),
-          bar_n: Array()
-        }
-        let tmp = this.getMonthRecords.sort(function (a, b) {
-          return (a.record_date > b.record_date) ? 1 : -1;
-        });
-        let days = new Date(this.date.getFullYear(), this.date.getMonth() + 1, 0).getDate();
-        ret.line = Array(days).fill(0);
-        ret.bar_p = Array(days).fill(0);
-        ret.bar_n = Array(days).fill(0);
-        this.max = -1;
-        for (let i = 0; i < tmp.length; ++i) {
-          let date = new Date(tmp[i].record_date);
-          ret.line[date.getDate() - 1] += tmp[i].record_amount;
-          if (Math.abs(ret.line[date.getDate() - 1]) > this.max)
-            this.max = Math.abs(ret.line[date.getDate() - 1]);
-          if (tmp[i].record_amount > 0)
-            ret.bar_p[date.getDate() - 1] += tmp[i].record_amount;
-          else
-            ret.bar_n[date.getDate() - 1] += tmp[i].record_amount;
-          let lmt = days;
-          if (i != tmp.length - 1) {
-            let nxt = new Date(tmp[i + 1].record_date);
-            lmt = nxt.getDate();
-          }
-          for (let j = date.getDate(); j < lmt; ++j)
-            ret.line[j] = ret.line[date.getDate() - 1];
-        }
-        return ret;
-      }
       let arr = [];
       for (let i = 0; i < this.getWalletTags(this.type).length; i++) {
         let sameTag = this.getMonthRecords.filter((rec) => {
