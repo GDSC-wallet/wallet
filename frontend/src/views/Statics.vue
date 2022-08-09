@@ -15,7 +15,7 @@
       </v-btn-toggle>
     </div>
     <DonutChart v-if="donut" :data="chartData" chartId="111" />
-    <BarChart v-else :data="chartData" chartId="222" :max="max" />
+    <BarChart v-else :data="chartData" chartId="222" :max="getMax" />
     <v-col cols="12" sm="6">
       <RecordList :records="getMonthRecords" showDate showFilter />
     </v-col>
@@ -41,13 +41,16 @@ export default {
       date: new Date(),
       btnSelected: 0,
       donut: true,
-      max: -1,
     }
   },
   methods: {
     changeDate(v) {
       console.log(v)
     },
+    strToDate(str) {
+      let tmp = new Date(str);
+      return tmp.getDate();
+    }
   },
   computed: {
     ...mapGetters({
@@ -74,27 +77,21 @@ export default {
           labels: [...Array(daysInMonth).keys()],
           datasets: [{
             label: 'DS1',
-            data: this.getData.bar_p,
+            data: this.getBarData.pos,
             backgroundColor: '#FF7575',
             borderColor: '#FF7575',
           }, {
             label: 'DS2',
-            data: this.getData.bar_n,
+            data: this.getBarData.neg,
             backgroundColor: '#4EFEB3',
             borderColor: '#4EFEB3',
           }, {
             label: 'DS3',
-            data: this.getData.line,
+            data: this.getLineData,
             type: 'line',
             backgroundColor: '#5C7FB3',
             borderColor: '#5C7FB3',
           }]
-        }
-      }
-      if (this.type == 'all' && !this.isEmpty) {
-        return {
-          labels: ["收入", "支出"],
-          datasets: [this.getBalance]
         }
       }
       if (this.isEmpty) {
@@ -106,10 +103,16 @@ export default {
           }],
         }
       }
+      if (this.type == 'all') {
+        return {
+          labels: ["收入", "支出"],
+          datasets: [this.getBalance]
+        }
+      }
       return {
         labels: this.getLabels,
         datasets: [{
-          data: this.getData,
+          data: this.getPieData,
           backgroundColor: this.getColor,
         }]
       }
@@ -119,47 +122,14 @@ export default {
       let ret = this.getWalletTags(this.type).map(item => {
         return item.tag_name
       }).filter((val, id, arr) => {
-        return vm.getData[arr.indexOf(val)] != 0
+        return vm.getPieData[arr.indexOf(val)] != 0
       });
       return ret;
     },
     getColor() {
       return this.getWalletTags(this.type).map(item => item.tag_color)
     },
-    getData() {
-      if (!this.donut) {
-        let ret = {
-          line: Array(),
-          bar_p: Array(),
-          bar_n: Array()
-        }
-        let tmp = this.getMonthRecords.sort(function (a, b) {
-          return (a.record_date > b.record_date) ? 1 : -1;
-        });
-        let days = new Date(this.date.getFullYear(), this.date.getMonth() + 1, 0).getDate();
-        ret.line = Array(days).fill(0);
-        ret.bar_p = Array(days).fill(0);
-        ret.bar_n = Array(days).fill(0);
-        this.max = -1;
-        for (let i = 0; i < tmp.length; ++i) {
-          let date = new Date(tmp[i].record_date);
-          ret.line[date.getDate() - 1] += tmp[i].record_amount;
-          if (Math.abs(ret.line[date.getDate() - 1]) > this.max)
-            this.max = Math.abs(ret.line[date.getDate() - 1]);
-          if (tmp[i].record_amount > 0)
-            ret.bar_p[date.getDate() - 1] += tmp[i].record_amount;
-          else
-            ret.bar_n[date.getDate() - 1] += tmp[i].record_amount;
-          let lmt = days;
-          if (i != tmp.length - 1) {
-            let nxt = new Date(tmp[i + 1].record_date);
-            lmt = nxt.getDate();
-          }
-          for (let j = date.getDate(); j < lmt; ++j)
-            ret.line[j] = ret.line[date.getDate() - 1];
-        }
-        return ret;
-      }
+    getPieData() {
       let arr = [];
       for (let i = 0; i < this.getWalletTags(this.type).length; i++) {
         let sameTag = this.getMonthRecords.filter((rec) => {
@@ -171,13 +141,45 @@ export default {
       }
       return arr
     },
+    getLineData() {
+      let days = new Date(this.date.getFullYear(), this.date.getMonth() + 1, 0).getDate();
+      let ret = Array(days).fill(0);
+      let tmpRec = this.getMonthRecords.sort((a, b) => {
+        return (a.record_date > b.record_date) ? 1 : -1;
+      });
+      for (let i = 0, j = 0; i < days; ++i) {
+        (i == 0) ? ret[i] = 0 : ret[i] = ret[i - 1];
+        while (j != tmpRec.length && this.strToDate(tmpRec[j].record_date) == i + 1)
+          ret[i] += tmpRec[j++].record_amount;
+      }
+      return ret;
+    },
+    getBarData() {
+      let days = new Date(this.date.getFullYear(), this.date.getMonth() + 1, 0).getDate();
+      let ret = {
+        pos: Array(days).fill(0),
+        neg: Array(days).fill(0),
+      }
+      let tmpRec = this.getMonthRecords;
+      for (let i = 0; i < tmpRec.length; ++i) {
+        if (tmpRec[i].record_amount > 0)
+          ret.pos[this.strToDate(tmpRec[i].record_date)] += tmpRec[i].record_amount;
+        else
+          ret.neg[this.strToDate(tmpRec[i].record_date)] += tmpRec[i].record_amount;
+      }
+      return ret;
+    },
+    getMax() {
+      return (this.isEmpty) ?
+        1 : Math.max(Math.max(...this.getBarData.pos), Math.min(...this.getBarData.neg) * -1);
+    },
     getRange() {
       return this.date.toISOString().slice(0, 7);
     },
     isEmpty() {
       let sum = 0;
-      for (let i = 0; i < this.getData.length; ++i)
-        sum += this.getData[i];
+      for (let i = 0; i < this.getPieData.length; ++i)
+        sum += this.getPieData[i];
       return sum == 0;
     },
     getBalance() {
