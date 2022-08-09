@@ -165,8 +165,11 @@ export const update_record = async (req, res, next) => {
         body.record_amount,
         body.record_type,
         body.record_date,
-        body.record_amount_diff
-    ).then(result => {
+        body.record_amount_diff,
+    ).then(async result => {
+        if(body.record_debtors) {
+            // create two array to diff debtors 
+        }
         next(result);
     })
     .catch(err => {
