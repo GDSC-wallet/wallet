@@ -36,8 +36,6 @@ export default {
       valid: true
     };
   },
-  mounted() {
-  },
   methods: {
     ...mapActions({
       _signup: "auth/signup",

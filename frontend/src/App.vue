@@ -99,8 +99,12 @@ export default {
     }),
   },
   watch: {
+    isReady() {
+      if (!this.isLoggedin && this.$route.name != "Login" && this.$route.meta.requiresAuth)
+        return this.$router.push({ path: "/login", replace: true });
+    },
     isLoggedin() {
-      if (!this.isLoggedin)
+      if (!this.isLoggedin && this.$route.name != "Login" && this.$route.meta.requiresAuth)
         return this.$router.push({ path: "/login", replace: true });
     },
   },

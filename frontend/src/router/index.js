@@ -6,6 +6,7 @@ import Setting from '../views/Setting.vue'
 import Login from '../views/Login.vue'
 import CallbackSignup from '../views/Callback/Signup.vue'
 import CallbackLogin from '../views/Callback/Login.vue'
+import Test from "../views/Test.vue"
 
 import store from '@/store';
 
@@ -48,6 +49,12 @@ const routes = [
         component: CallbackLogin,
         meta: { requiresAuth: false }, // 不需驗證
     },
+    {
+        path: '/test',
+        name: 'Test',
+        component: Test,
+        meta: { requiresAuth: true },
+    },
 ]
 
 const router = new VueRouter({
@@ -59,9 +66,9 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
     // console.log('to=', to.fullPath, '| from=', from.fullPath);
     const isAuthenticated = store.getters['auth/isLoggedin'];
-    //const isReady = store.getters['auth/isReady'];
+    const isReady = store.getters['auth/isReady'];
     if (to.matched.some(record => record.meta.requiresAuth)) {
-        !isAuthenticated ? next({ path: '/login' }) : next();
+        !isAuthenticated && isReady ? next({ path: '/login' }) : next();
     } else {
         next();
     }

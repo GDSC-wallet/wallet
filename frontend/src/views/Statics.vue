@@ -15,10 +15,8 @@
       </v-btn-toggle>
     </div>
     <DonutChart v-if="donut" :data="chartData" chartId="111" />
-    <BarChart v-else :data="chartData" chartId="222" :max="getMax" />
-    <v-col cols="12" sm="6">
-      <RecordList :records="getMonthRecords" showDate showFilter />
-    </v-col>
+    <BarChart v-else :data="chartData" chartId="222" :max="10000" />  
+    <RecordList :records="getMonthRecords" showDate showFilter />
   </div>
 </template>
 
