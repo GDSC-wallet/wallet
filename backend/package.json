@@ -1,0 +1,37 @@
+{
+  "name": "gdsc_wallet_backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "nodemon index.js"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.32.0",
+    "@aws-sdk/node-http-handler": "^3.32.0",
+    "aws-sdk": "^2.1066.0",
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.0",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.0",
+    "express": "^4.17.3",
+    "express-mysql-session": "^2.1.8",
+    "express-session": "^1.17.2",
+    "google-auth-library": "^7.10.3",
+    "helmet": "^5.0.2",
+    "jsonwebtoken": "^8.5.1",
+    "morgan": "^1.10.0",
+    "mysql": "^2.18.1",
+    "mysql2": "^2.3.3",
+    "node-datetime": "^2.1.2",
+    "nodemon": "^2.0.15",
+    "passport": "^0.5.2",
+    "passport-google-oauth20": "^2.0.0",
+    "passport-oauth2": "^1.6.1",
+    "rate-limiter-flexible": "^2.3.6",
+    "swagger-ui-express": "^4.4.0",
+    "uuid": "^8.3.2"
+  }
+}

@@ -1,0 +1,48 @@
+version: '2'
+services:
+  database:
+    container_name: database
+    build: database
+    command: --default-authentication-plugin=mysql_native_password
+    volumes:
+      - wallet-data:/var/lib/mysql
+  backend: 
+    image: node
+    container_name: backend
+    depends_on:
+      - database
+    volumes:
+      - ./backend:/app
+      - ./dist:/app/dist
+    command: bash -c "cd ./app && npm install && node index.js"
+    environment:
+      - MYSQL_HOST=database
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=root
+      - MYSQL_PORT=3306
+      - MYSQL_DATABASE=wallet
+      - DEV_URL=http://localhost:${SERVER_PORT}
+      - PRO_URL=${PROD_URL}
+      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
+      - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
+      - SECRET=${SECRET}
+      - MODE=${MODE}
+      - FRONTEND_PORT=${FRONTEND_PORT}
+  frontend:
+    container_name: frontend
+    build: frontend
+    volumes:
+      - dist:/app/dist
+  service:
+    container_name: service
+    build: service
+    depends_on:
+      - backend
+      - frontend
+    ports:
+      - ${SERVER_PORT}:80
+    volumes:
+      - dist:/frontend
+volumes:
+  dist:
+  wallet-data:
