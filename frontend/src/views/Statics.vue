@@ -184,7 +184,9 @@ export default {
     },
     getBalance() {
       const dataFilter = (type) => {
-        return this.getMonthRecords.reduce((tmp, object) => {
+        return this.getMonthRecords.filter(rec => {
+          return (rec.record_type == type)
+        }).reduce((tmp, object) => {
           return tmp + object.record_amount;
         }, 0)
       }
