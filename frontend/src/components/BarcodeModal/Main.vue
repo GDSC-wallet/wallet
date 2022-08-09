@@ -8,7 +8,10 @@
         <bc :value="barcode" align="center">
           尚未設定載具條碼
         </bc>
-        <v-btn @click="display = false" block class="my-2" to="/setting"> Setting </v-btn>
+        <v-container>
+          <v-btn @click="display = false" block to="/setting"> Setting </v-btn>
+        </v-container>
+        
       </v-card>
     </v-dialog>
   </div>
@@ -20,24 +23,19 @@ import { mapGetters } from "vuex";
 
 export default {
   name: "BarcodeModal",
+  components: {
+    'bc': VueBarcode
+  },
   data() {
     return {
       display: false,
     };
   },
-  components: {
-    'bc': VueBarcode
-  },
-  methods: {
-  },
   computed: {
     ...mapGetters({
-      basicInformation: "auth/basicInformation",
       getWalletInfo: "wallet/getWalletInfo"
     }),
     barcode() {
-      if (!this.getWalletInfo.wallet_barcode)
-        return this.basicInformation.barcode;
       return this.getWalletInfo.wallet_barcode;
     }
   }

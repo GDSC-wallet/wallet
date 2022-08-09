@@ -5,33 +5,43 @@
     </v-toolbar>
     <v-row>
       <v-col cols="12">
-        <p>使用者設定</p>
+        <div class="mx-1 my-3 d-flex justify-space-between align-center">
+          <span>個人資料</span>
+          <EditProfileModal />
+        </div>
         <v-card class="mx-1">
-          <v-card-title>{{ basicInformation.nickname }}</v-card-title>
-          <v-card-subtitle>{{ basicInformation.username }}</v-card-subtitle>
-          <v-row>
-            <v-spacer></v-spacer>
-            <v-text-field label="載具條碼" :disabled="display" v-model="basicInformation.barcode" />
-            <v-col>
-              <v-icon v-if="display" @click="display = !display">mdi-pencil</v-icon>
-              <v-icon v-if="!display" @click="submitBarcode">mdi-check</v-icon>
-            </v-col>
-          </v-row>
+          <v-list-item three-line>
+            <v-list-item-content>
+              <v-list-item-title class="text-h6 mb-1">
+                {{ basicInformation.nickname }}
+              </v-list-item-title>
+              <v-list-item-subtitle class="d-flex align-center">
+                {{ basicInformation.username }}
+              </v-list-item-subtitle>
+              <v-list-item-subtitle>
+                {{ basicInformation.barcode }}
+              </v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
         </v-card>
       </v-col>
       <v-col cols="12">
         <p>錢包設定</p>
         <v-card class="mx-1">
-          <v-card-title class="text-h6 d-flex justify-space-between">
-            <span>{{ getWalletInfo.wallet_name }}</span>
-            <span>${{ getWalletInfo.wallet_total }}</span>
-          </v-card-title>
-          <v-card-subtitle>{{
-              getWalletInfo.wallet_description
-          }}</v-card-subtitle>
-          <v-card-subtitle>
-            載具:{{ getWalletInfo.wallet_barcode }}
-          </v-card-subtitle>
+          <v-list-item three-line>
+            <v-list-item-content>
+              <v-list-item-title class="text-h6 mb-1 d-flex justify-space-between">
+                <span>{{ getWalletInfo.wallet_name }}</span>
+                <span>${{ getWalletInfo.wallet_total }}</span>
+              </v-list-item-title>
+              <v-list-item-subtitle class="d-flex align-center">
+                {{ getWalletInfo.wallet_description }}
+              </v-list-item-subtitle>
+              <v-list-item-subtitle>
+                {{ getWalletInfo.wallet_barcode }}
+              </v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
           <v-container>
             <v-row dense>
               <v-col cols="4">
@@ -58,6 +68,7 @@
 import { mapGetters, mapActions } from "vuex";
 import WalletModal from "../components/Wallet/components/WalletModal.vue";
 import TagModal from "../components/TagModal/Main.vue";
+import EditProfileModal from "../components/Setting/EditProfileModal.vue";
 
 export default {
   name: "Setting",
@@ -72,6 +83,7 @@ export default {
   components: {
     WalletModal: WalletModal,
     TagModal: TagModal,
+    EditProfileModal: EditProfileModal
   },
   mounted() { },
   methods: {
