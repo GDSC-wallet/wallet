@@ -50,34 +50,7 @@ export default {
     }
   },
   methods: {
-    sortByTime(records) {
-      if(!this.showDate) {
-        return {
-          data: records
-        }
-      }
-      let res = new Object();
-      records.forEach(record => {
-        if (!res[record.record_date]) res[record.record_date] = new Array();
-        res[record.record_date].push(record);
-      });
-      return res;
-    },
-    sortByTag(records) {
-      const tags = this.getAllWalletTags.map(tag => tag.tag_id);
-      return {
-        data: records.map(r => r).sort((a, b) => {
-          return tags.indexOf(a.wallet_record_tag_id) < tags.indexOf(b.wallet_record_tag_id) ? 1 : -1;
-        })
-      }
-    },
-    sortByCount(records) {
-      return {
-        data: records.map(r => r).sort((a, b) => {
-          return Math.abs(a.record_amount) < Math.abs(b.record_amount) ? 1 : -1;
-        })
-      }
-    },
+    
 
   },
   computed: {
@@ -87,14 +60,42 @@ export default {
     getSortedData() {
       switch (this.type) {
         case 1:
-          return this.sortByTag(this.records);
+          return this.sortByTag;
         case 2:
-          return this.sortByCount(this.records);
+          return this.sortByCount;
         case 0:
         default:
-          return this.sortByTime(this.records);
+          return this.sortByTime;
       }
-    }
+    },
+    sortByTime() {
+      if(!this.showDate) {
+        return {
+          data: this.records
+        }
+      }
+      let res = new Object();
+      this.records.forEach(record => {
+        if (!res[record.record_date]) res[record.record_date] = new Array();
+        res[record.record_date].push(record);
+      });
+      return res;
+    },
+    sortByTag() {
+      const tags = this.getAllWalletTags.map(tag => tag.tag_id);
+      return {
+        data: this.records.map(r => r).sort((a, b) => {
+          return tags.indexOf(a.wallet_record_tag_id) < tags.indexOf(b.wallet_record_tag_id) ? 1 : -1;
+        })
+      }
+    },
+    sortByCount() {
+      return {
+        data: this.records.map(r => r).sort((a, b) => {
+          return Math.abs(a.record_amount) < Math.abs(b.record_amount) ? 1 : -1;
+        })
+      }
+    },
   }
 
 }

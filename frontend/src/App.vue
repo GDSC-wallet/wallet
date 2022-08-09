@@ -13,7 +13,7 @@
           <v-btn icon to="/statics" v-if="$route.name == 'Home'">
             <v-icon>mdi-chart-arc</v-icon>
           </v-btn>
-          <v-btn icon to="/" v-if="$route.name == 'Statics'">
+          <v-btn icon to="/" v-else>
             <v-icon>mdi-home</v-icon>
           </v-btn>
         </template>
@@ -99,8 +99,12 @@ export default {
     }),
   },
   watch: {
+    isReady() {
+      if (!this.isLoggedin && this.$route.name != "Login" && this.$route.meta.requiresAuth)
+        return this.$router.push({ path: "/login", replace: true });
+    },
     isLoggedin() {
-      if (!this.isLoggedin)
+      if (!this.isLoggedin && this.$route.name != "Login" && this.$route.meta.requiresAuth)
         return this.$router.push({ path: "/login", replace: true });
     },
   },
