@@ -23,7 +23,8 @@ export default {
           scales: {
             y: {
               min: null,
-              max: null
+              max: null,
+              display: false
             }
           },
         },

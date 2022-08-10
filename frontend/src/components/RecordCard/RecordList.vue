@@ -75,7 +75,9 @@ export default {
         }
       }
       let res = new Object();
-      this.records.forEach(record => {
+      this.records.sort((a, b) => {
+        return new Date(a.record_date) < new Date(b.record_date) ? 1 : -1;
+      }).forEach(record => {
         if (!res[record.record_date]) res[record.record_date] = new Array();
         res[record.record_date].push(record);
       });
