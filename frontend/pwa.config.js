@@ -25,6 +25,7 @@ export default {
     ]
   },
   workbox: {
+    navigateFallbackDenylist: [new RegExp("/api*"), new RegExp("/oauth*")],
     globPatterns: ['**/*.{js,css,html, png}'],
     runtimeCaching: [
       {
@@ -40,11 +41,11 @@ export default {
         handler: 'CacheFirst',
       },
       {
-        urlPattern: /^\/api\/*/,
+        urlPattern: new RegExp("/api*"),
         handler: 'NetworkOnly',
       },
       {
-        urlPattern: /^\/oauth\/*/,
+        urlPattern: new RegExp("/oauth*"),
         handler: 'NetworkOnly',
       },
     ]
