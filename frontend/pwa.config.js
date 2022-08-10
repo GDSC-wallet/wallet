@@ -25,7 +25,7 @@ export default {
     ]
   },
   workbox: {
-    navigateFallbackDenylist: [new RegExp("/api*"), new RegExp("/oauth*")],
+    //navigateFallbackDenylist: [new RegExp("/api*"), new RegExp("/oauth*")],
     globPatterns: ['**/*.{js,css,html, png}'],
     runtimeCaching: [
       {
