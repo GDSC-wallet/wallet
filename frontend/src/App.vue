@@ -46,9 +46,11 @@
       <v-container style="height: 100%" fluid>
         <router-view />
       </v-container>
-      <v-btn v-if="isLoggedin" color="primary" bottom right fab fixed @click="openRecordModal">
-        <v-icon>mdi-plus</v-icon>
-      </v-btn>
+      <!--
+        <v-btn v-if="isLoggedin" color="primary" bottom right fab fixed @click="openRecordModal">
+          <v-icon>mdi-plus</v-icon>
+        </v-btn>
+      -->
     </v-main>
     <RecordModal />
   </v-app>
@@ -82,13 +84,7 @@ export default {
     ...mapActions({
       login: "auth/login",
       logout: "auth/logout",
-      openModal: "record/openModal",
-      switchCreateMode: "record/createMode",
     }),
-    openRecordModal() {
-      this.openModal();
-      this.switchCreateMode();
-    },
   },
   computed: {
     ...mapGetters({
