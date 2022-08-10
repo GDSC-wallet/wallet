@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="position: relative; max-height: 400px; max-width: 400px;" class="mx-auto">
     <canvas :id="chartId"></canvas>
   </div>
 </template>

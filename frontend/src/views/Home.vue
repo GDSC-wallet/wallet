@@ -5,9 +5,13 @@
         <Calendar class="px-1" />
       </v-col>
       <v-col cols="12" sm="6">
-        <RecordList :records="getTodaysRecords" editable />
+        <RecordList :records="getTodaysRecords" editable class="px-1" />
+        <br /><br /><br />
       </v-col>
     </v-row>
+    <v-btn color="primary" bottom right fab fixed @click="openRecordModal">
+      <v-icon>mdi-plus</v-icon>
+    </v-btn>
   </v-sheet>
 </template>
 
@@ -28,25 +32,12 @@ export default {
   mounted() { },
   methods: {
     ...mapActions({
-      deleteRecord: "record/deleteRecord",
       openModal: "record/openModal",
-      switchEditMode: "record/editMode",
-      setData: "record/setData",
+      switchCreateMode: "record/createMode",
     }),
-    openRecordModal(record) {
+    openRecordModal() {
       this.openModal();
-      this.switchEditMode();
-      this.setData(record);
-    },
-    contrastText(color) {
-      let hex = color.charAt(0) === "#" ? color.substring(1, 7) : color;
-      let r = parseInt(hex.slice(0, 2), 16),
-        g = parseInt(hex.slice(2, 4), 16),
-        b = parseInt(hex.slice(4, 6), 16);
-      return r * 0.299 + g * 0.587 + b * 0.114 > 186 ? "black" : "white";
-    },
-    tag(id) {
-      return this.getAllWalletTags.find((tag) => tag.tag_id == id);
+      this.switchCreateMode();
     },
   },
   computed: {
