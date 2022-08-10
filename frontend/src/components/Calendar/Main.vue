@@ -70,7 +70,7 @@ export default {
 
 <style scoped>
 .back-to-today-btn {
-  z-index: 100;
+  z-index: 4;
   position: absolute;
   bottom: 5px;
   right: 5px;
