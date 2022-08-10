@@ -26,7 +26,6 @@ export default {
   },
   workbox: {
     globPatterns: ['**/*.{js,css,html, png}'],
-    navigateFallbackDenylist: [/^\/api\/*/, /^\/oauth\/*/],
     runtimeCaching: [
       {
         urlPattern: /https:\/\/fonts\.googleapis\.com\/*/,
@@ -39,6 +38,14 @@ export default {
       {
         urlPattern: /https:\/\/cdn\.jsdelivr\.net\/*/,
         handler: 'CacheFirst',
+      },
+      {
+        urlPattern: /^\/api\/*/,
+        handler: 'NetworkOnly',
+      },
+      {
+        urlPattern: /^\/oauth\/*/,
+        handler: 'NetworkOnly',
       },
     ]
   }
