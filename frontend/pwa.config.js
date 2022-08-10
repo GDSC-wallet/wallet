@@ -25,8 +25,7 @@ export default {
     ]
   },
   workbox: {
-    //navigateFallbackDenylist: [new RegExp("/api*"), new RegExp("/oauth*")],
-    globPatterns: ['**/*.{js,css,html, png}'],
+    globPatterns: ['**/*.{js,css,html,png}'],
     runtimeCaching: [
       {
         urlPattern: /https:\/\/fonts\.googleapis\.com\/*/,
@@ -47,11 +46,6 @@ export default {
       {
         urlPattern: new RegExp("/oauth*"),
         handler: 'NetworkOnly',
-        options: {
-          cacheableResponse: {
-            statuses: [0, 302]
-          }
-        }
       },
     ]
   }
