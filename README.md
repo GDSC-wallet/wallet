@@ -22,7 +22,6 @@
 [![Stargazers][stars-shield]][stars-url]
 [![Issues][issues-shield]][issues-url]
 [![MIT License][license-shield]][license-url]
-[![LinkedIn][linkedin-shield]][linkedin-url]
 
 
 
@@ -30,18 +29,18 @@
 <br />
 <div align="center">
   <a href="https://github.com/GDSC-wallet/wallet">
-    <!--<img src="images/logo.png" alt="Logo" width="80" height="80">-->
+    <img src="https://raw.githubusercontent.com/GDSC-wallet/wallet/dev/images/Logo.png" alt="Logo" width="80" height="80">
   </a>
 
   <h3 align="center">Wallet</h3>
 
   <p align="center">
-    A light weight and self defined wallet
+    一個高度輕量化，完全自訂的記帳程式
     <br />
     <a href="https://github.com/GDSC-wallet/wallet"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/GDSC-wallet/wallet">View Demo</a>
+    <a href="https://wallet.andyjjrt.cc">View Demo</a>
     ·
     <a href="https://github.com/GDSC-wallet/wallet/issues">Report Bug</a>
     ·
@@ -82,26 +81,13 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
-
-There are many great README templates available on GitHub; however, I didn't find one that really suited my needs so I created this enhanced one. I want to create a README template so amazing that it'll be the last one you ever need -- I think this is it.
-
-Here's why:
-* Your time should be focused on creating something amazing. A project that solves a problem and helps others
-* You shouldn't be doing the same tasks over and over like creating a README from scratch
-* You should implement DRY principles to the rest of your life :smile:
-
-Of course, no one template will serve all projects since your needs may be different. So I'll be adding more in the near future. You may also suggest changes by forking this repo and creating a pull request or opening an issue. Thanks to all the people have contributed to expanding this template!
-
-Use the `BLANK_README.md` to get started.
+![Product Name Screen Shot][product-screenshot]
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 
 
 ### Built With
-
-This section should list any major frameworks/libraries used to bootstrap your project. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
 
 * [Vue.js](https://vuejs.org/)
 * [Vite](https://vitejs.dev/)
@@ -125,7 +111,6 @@ This section should list any major frameworks/libraries used to bootstrap your p
 
 ### Installation
 
-_Below is an example of how you can instruct your audience on installing and setting up your app. This template doesn't rely on any external dependencies or services._
 
 1. Clone the repo
    ```sh
@@ -252,5 +237,4 @@ Use this space to list resources you find helpful and would like to give credit 
 [license-shield]: https://img.shields.io/github/license/GDSC-wallet/wallet.svg?style=for-the-badge
 [license-url]: https://github.com/GDSC-wallet/wallet/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
-[linkedin-url]: https://linkedin.com/in/othneildrew
-[product-screenshot]: images/screenshot.png
+[product-screenshot]: https://github.com/GDSC-wallet/wallet/blob/dev/images/screenshot.png?raw=true
