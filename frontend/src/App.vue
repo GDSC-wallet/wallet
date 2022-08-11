@@ -3,7 +3,9 @@
     <template v-if="isLoggedin">
       <v-app-bar color="primary" dark app :hide-on-scroll="false">
         <v-app-bar-nav-icon @click="drawer = true" />
-        <v-toolbar-title>Wallet</v-toolbar-title>
+        <router-link to="/" custom v-slot="{ navigate }">
+          <v-toolbar-title @click="navigate" class="nav-title">Wallet</v-toolbar-title>
+        </router-link>
         <v-spacer />
         <Search />
         <BarcodeModal />
@@ -120,5 +122,9 @@ export default {
 
 .v-tab::before {
   background-color: transparent !important;
+}
+
+.nav-title {
+  cursor: pointer;
 }
 </style>
