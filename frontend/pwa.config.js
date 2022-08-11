@@ -25,7 +25,7 @@ export default {
     ]
   },
   workbox: {
-    globPatterns: ['**/*.{js,css,html, png}'],
+    globPatterns: ['**/*.{js,css,html,png}'],
     runtimeCaching: [
       {
         urlPattern: /https:\/\/fonts\.googleapis\.com\/*/,
@@ -38,6 +38,14 @@ export default {
       {
         urlPattern: /https:\/\/cdn\.jsdelivr\.net\/*/,
         handler: 'CacheFirst',
+      },
+      {
+        urlPattern: new RegExp("/api*"),
+        handler: 'NetworkOnly',
+      },
+      {
+        urlPattern: new RegExp("/oauth*"),
+        handler: 'NetworkOnly',
       },
     ]
   }
