@@ -150,7 +150,7 @@ export const insert_debtor = async (req, res, next) => {
     const debtor_user_id = req.session?.passport?.user?.user_id;
     await Debtor.insert_debtor(debtor_user_id, debtor_name)
         .then(result => {
-            next(result);
+            next();
         })
         .catch(err => {
             next(err);
@@ -164,7 +164,7 @@ export const insert_debtor_record = async (req, res, next) => {
 
     await Debtor.insert_debtor_record(record_id, debtor_id)
         .then(result => {
-            next(result);
+            next();
         })
         .catch(err => {
             next(err);
@@ -178,7 +178,7 @@ export const delete_debtor_record = async (req, res, next) => {
 
     await Debtor.delete_debtor_record(record_id, debtor_id)
         .then(result => {
-            next(result);
+            next();
         })
         .catch(err => {
             next(err);
@@ -192,7 +192,7 @@ export const update_debtor = async (req, res, next) => {
 
     await Debtor.update_debtor(debtor_id, debtor_name)
         .then(result => {
-            next(result);
+            next();
         })
         .catch(err => {
             next(err);
@@ -206,7 +206,7 @@ export const delete_debtor = async (req, res, next) => {
 
     await Debtor.delete_debtor(debtor_id)
         .then(result => {
-            next(result);
+            next();
         })
         .catch(err => {
             next(err);
