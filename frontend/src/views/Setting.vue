@@ -57,6 +57,22 @@
           </v-container>
         </v-card>
       </v-col>
+      <v-col cols="12">
+        <div class="mx-1 my-3 d-flex justify-space-between align-center">
+          <span>債務人設定</span>
+          <DebtorModal />
+        </div>
+        <v-card class="mx-1">
+          <v-list-item v-for="(item, i) in getDebtor" :key="i">
+            <v-list-item-content>
+              <v-list-item-title class="text-h6 mb-1 d-flex justify-space-between">
+                <span>{{ item.debtor_name }}</span>
+                <span>${{ item.debtor_amount }}</span>
+              </v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </v-card>
+      </v-col>
     </v-row>
     <WalletModal mode="edit" :open="walletDialogOpen" :editingWallet="edittingWallet"
       @handleDialogChange="handleWalletDialogChange" />
@@ -69,6 +85,7 @@ import { mapGetters, mapActions } from "vuex";
 import WalletModal from "../components/Wallet/components/WalletModal.vue";
 import TagModal from "../components/TagModal/Main.vue";
 import EditProfileModal from "../components/Setting/EditProfileModal.vue";
+import DebtorModal from "../components/DebtorModal/Main.vue";
 
 export default {
   name: "Setting",
@@ -83,7 +100,8 @@ export default {
   components: {
     WalletModal: WalletModal,
     TagModal: TagModal,
-    EditProfileModal: EditProfileModal
+    EditProfileModal: EditProfileModal,
+    DebtorModal: DebtorModal,
   },
   mounted() { },
   methods: {
@@ -109,6 +127,7 @@ export default {
     ...mapGetters({
       basicInformation: "auth/basicInformation",
       getWalletInfo: "wallet/getWalletInfo",
+      getDebtor: "debtor/getDebtor"
     }),
   },
 };

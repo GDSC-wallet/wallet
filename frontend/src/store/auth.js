@@ -37,6 +37,7 @@ const auth = {
         if (!res.data?.success) throw new Error(res.data);
         commit("setProfile", res.data.data);
         dispatch("wallet/setWallet", res.data.data.wallets.find(wallet => wallet.wallet_id == res.data.data.selected_wallet_id), { root: true })
+        dispatch("debtor/setDebtor", res.data.data.debtors, { root: true })
         commit("authenticateSuccess")
       }).catch((err) => {
         console.log(err);
@@ -44,8 +45,8 @@ const auth = {
       })
     },
     async editProfile({ dispatch }, { nickname, barcode }) {
-      ajax("/api/user/edit", "post", { 
-        data: { 
+      ajax("/api/user/edit", "post", {
+        data: {
           nickname: nickname,
           barcode: barcode,
           elec_invoice_agree: true
@@ -105,6 +106,9 @@ const auth = {
     },
     getUserBarcode(state) {
       return state.profile?.barcode
+    },
+    getDebtors(state) {
+      return state.profile?.debtors
     }
   }
 }

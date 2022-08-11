@@ -5,6 +5,7 @@ import calendar from "./calendar"
 import wallet from "./wallet"
 import record from "./record"
 import search from "./search"
+import debtor from "./debtor"
 
 Vue.use(Vuex)
 
@@ -14,6 +15,7 @@ export default new Vuex.Store({
         calendar: calendar,
         wallet: wallet,
         record: record,
-        search: search
+        search: search,
+        debtor: debtor
     }
 })
