@@ -3,9 +3,7 @@
     <template v-if="isLoggedin">
       <v-app-bar color="primary" dark app :hide-on-scroll="false">
         <v-app-bar-nav-icon @click="drawer = true" />
-        <router-link to="/" custom v-slot="{ navigate }">
-          <v-toolbar-title @click="navigate" class="nav-title">Wallet</v-toolbar-title>
-        </router-link>
+        <v-toolbar-title>Wallet</v-toolbar-title>
         <v-spacer />
         <Search />
         <BarcodeModal />
@@ -46,9 +44,11 @@
       <v-container style="height: 100%" fluid>
         <router-view />
       </v-container>
-      <v-btn v-if="isLoggedin" color="primary" bottom right fab fixed @click="openRecordModal">
-        <v-icon>mdi-plus</v-icon>
-      </v-btn>
+      <!--
+        <v-btn v-if="isLoggedin" color="primary" bottom right fab fixed @click="openRecordModal">
+          <v-icon>mdi-plus</v-icon>
+        </v-btn>
+      -->
     </v-main>
     <RecordModal />
   </v-app>
@@ -82,13 +82,7 @@ export default {
     ...mapActions({
       login: "auth/login",
       logout: "auth/logout",
-      openModal: "record/openModal",
-      switchCreateMode: "record/createMode",
     }),
-    openRecordModal() {
-      this.openModal();
-      this.switchCreateMode();
-    },
   },
   computed: {
     ...mapGetters({
@@ -126,9 +120,5 @@ export default {
 
 .v-tab::before {
   background-color: transparent !important;
-}
-
-.nav-title {
-  cursor: pointer;
 }
 </style>

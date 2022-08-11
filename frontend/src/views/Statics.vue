@@ -1,23 +1,32 @@
 <template>
-  <div>
-    <MonthSelector v-model="date" />
-    <div class="d-flex flex-row-reverse justify-space-between">
-      <v-btn v-if="!donut" @click="donut = true" dense>
-        <v-icon>mdi-chart-donut</v-icon>
-      </v-btn>
-      <v-btn v-else @click="donut = false" dense>
-        <v-icon>mdi-chart-bar</v-icon>
-      </v-btn>
-      <v-btn-toggle v-if="donut" dense v-model="btnSelected">
-        <v-btn :disabled="btnSelected == 0">全部</v-btn>
-        <v-btn :disabled="btnSelected == 1">支出</v-btn>
-        <v-btn :disabled="btnSelected == 2">收入</v-btn>
-      </v-btn-toggle>
-    </div>
-    <DonutChart v-if="donut" :data="chartData" chartId="111" />
-    <BarChart v-else :data="chartData" chartId="222" :max="10000" />  
-    <RecordList :records="getMonthRecords" showDate showFilter />
-  </div>
+  <v-container>
+    <v-row>
+      <v-col cols="12" sm="6">
+        <MonthSelector v-model="date" />
+        <div class="d-flex flex-row-reverse justify-space-between py-2">
+          <v-btn v-if="!donut" @click="donut = true" dense>
+            <v-icon>mdi-chart-donut</v-icon>
+          </v-btn>
+          <v-btn v-else @click="donut = false" dense>
+            <v-icon>mdi-chart-bar</v-icon>
+          </v-btn>
+          <v-btn-toggle v-if="donut" dense v-model="btnSelected">
+            <v-btn :disabled="btnSelected == 0">全部</v-btn>
+            <v-btn :disabled="btnSelected == 1">支出</v-btn>
+            <v-btn :disabled="btnSelected == 2">收入</v-btn>
+          </v-btn-toggle>
+        </div>
+        <div class="pt-2">
+          <DonutChart v-if="donut" :data="chartData" chartId="111" />
+          <BarChart v-else :data="chartData" chartId="222" :max="getMax" />
+        </div>
+
+      </v-col>
+      <v-col cols="12" sm="6">
+        <RecordList :records="getMonthRecords" showDate showFilter />
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
@@ -161,15 +170,15 @@ export default {
       let tmpRec = this.getMonthRecords;
       for (let i = 0; i < tmpRec.length; ++i) {
         if (tmpRec[i].record_amount > 0)
-          ret.pos[this.strToDate(tmpRec[i].record_date)] += tmpRec[i].record_amount;
+          ret.pos[this.strToDate(tmpRec[i].record_date) - 1] += tmpRec[i].record_amount;
         else
-          ret.neg[this.strToDate(tmpRec[i].record_date)] += tmpRec[i].record_amount;
+          ret.neg[this.strToDate(tmpRec[i].record_date) - 1] += tmpRec[i].record_amount;
       }
       return ret;
     },
     getMax() {
       return (this.isEmpty) ?
-        1 : Math.max(Math.max(...this.getBarData.pos), Math.min(...this.getBarData.neg) * -1);
+        1 : Math.max(Math.max(...this.getBarData.pos), Math.min(...this.getBarData.neg) * -1, Math.max(...this.getLineData), Math.min(...this.getLineData) * -1);
     },
     getRange() {
       return this.date.toISOString().slice(0, 7);

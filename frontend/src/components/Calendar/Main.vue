@@ -1,10 +1,11 @@
 <template>
   <div>
-    <vc-date-picker v-model="date" :attributes="statusBar" is-expanded is-required @update:to-page="toPage" ref="calendar">
+    <vc-date-picker v-model="date" :attributes="statusBar" is-expanded is-required @update:to-page="toPage"
+      ref="calendar">
       <template v-slot:footer>
-        <div class="pa-2">
-          <v-btn block elevation="2" @click="toToday">
-            <v-icon>mdi-calendar-check</v-icon>
+        <div>
+          <v-btn small text outlined @click="toToday" class="back-to-today-btn">
+            today
           </v-btn>
         </div>
       </template>
@@ -66,3 +67,12 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.back-to-today-btn {
+  z-index: 4;
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+}
+</style>
