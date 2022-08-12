@@ -104,9 +104,6 @@ router.get(
 router.get("/google/success", isLoggedIn, (req, res) => {
 
   //若尚未註冊，回到前端註冊頁
-  console.log('req.user :', req.user);
-  console.log("session")
-  console.log(req.sessionID, req.session, res.getHeaders())
   if (req.user.result === "USER_NOT_EXIST_IN_DB") {
     res.redirect(CLIENT_URL + "/callback/signup");
   }

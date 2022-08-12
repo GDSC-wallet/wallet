@@ -24,6 +24,7 @@ import walletRouter from "./routes/wallet.js";
 import recordRouter from "./routes/record.js";
 import tagRouter from "./routes/tag.js";
 import debtorRouter from "./routes/debtor.js";
+import einvoiceRouter from "./routes/einvoice.js";
 dotenv.config();
 
 const app = express();
@@ -93,6 +94,7 @@ app.use("/api/wallet", walletRouter);
 app.use("/api/record", recordRouter);
 app.use("/api/tag", tagRouter);
 app.use("/api/debtor", debtorRouter);
+app.use("/api/einvoice", einvoiceRouter);
 app.use('/api-doc', swaggerUi.serve, swaggerUi.setup(swaggerFile))
 
 //API:測試SERVER在線
