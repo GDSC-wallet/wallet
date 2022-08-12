@@ -6,6 +6,7 @@ nohup.out
 node_modules
 access.log
 */node_modules
+./database
 
 # dependencies
 /node_modules
