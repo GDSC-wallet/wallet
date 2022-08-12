@@ -1,27 +1,48 @@
 export const get_wallet_check = async (req, res, next) => {
     try {
         const query = req.query;
-        console.log('!!query.record_id :', !!query.record_id);
         if(!!!query.wallet_id){
-            res.status(401).json({success:false,msg:"record_id is required"})
+            res.status(401).json({success:false,msg:"wallet_id is required"})
+            return;
+        }
+        if(!!!query.time_choosen) {
+            res.status(401).json({success:false,msg:"time_choosen is required"})
             return;
         }
         next();
-      } catch (error) {
+    } catch (error) {
         console.log('error :', error);
         res.status(401).json({status:"token expired",msg:error})
-      }
+    }
 };
 
-export const create_wallet_check = async (req, res, next) => {
-    const body = req.body
+export const search_record_check = async (req, res, next) => {
     try {
-        if(!!!body.wallet_id){
-            res.status(401).json({success:false,msg:"record_id is required"})
+        const query = req.query;
+        if(!!!query.wallet_id){
+            res.status(401).json({success:false,msg:"wallet_id is required"})
+            return;
+        }
+        if(!!!query.search_str) {
+            res.status(401).json({success:false,msg:"search_str is required"})
             return;
         }
         next();
-      } catch (error) {
+    } catch (error) {
+        console.log('error :', error);
+        res.status(401).json({status:"token expired",msg:error})
+    }
+};
+
+export const insert_wallet_check = async (req, res, next) => {
+    const body = req.body
+    try {
+        if(!!!body.wallet_name) {
+            res.status(401).json({success:false,msg:"wallet_name is required"})
+            return;
+        }
+        next();
+    } catch (error) {
         console.log('error :', error);
         res.status(401).json({status:"token expired",msg:error})
     }
@@ -30,16 +51,16 @@ export const create_wallet_check = async (req, res, next) => {
 export const update_wallet_check = async (req, res, next) => {
     const body = req.body
     try {
-        if(!!!body.record_id){
-            res.status(401).json({success:false,msg:"record_id is required"})
+        if(!!!body.wallet_id){
+            res.status(401).json({success:false,msg:"wallet_id is required"})
             return;
         }
-        if(!!body.record_wallet_id){
-            res.status(401).json({success:false,msg:"record_wallet_id is required"})
+        if(!!!body.wallet_name){
+            res.status(401).json({success:false,msg:"wallet_name is required"})
             return;
         }
         next();
-      } catch (error) {
+    } catch (error) {
         console.log('error :', error);
         res.status(401).json({status:"token expired",msg:error})
     }
@@ -48,13 +69,13 @@ export const update_wallet_check = async (req, res, next) => {
 
 export const delete_wallet_check = async (req, res, next) => {
     try {
-        if(!!!body.record_id){
-            res.status(401).json({success:false,msg:"record_id is required"})
+        if(!!!body.wallet_id){
+            res.status(401).json({success:false,msg:"wallet_id is required"})
             return;
         }
         next();
-      } catch (error) {
+    } catch (error) {
         console.log('error :', error);
-        res.status(401).json({success:false,msg:"record_id is required"})
-      }
+        res.status(401).json({status:"token expired",msg:error})
+    }
 };
