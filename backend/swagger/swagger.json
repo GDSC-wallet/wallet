@@ -1410,6 +1410,62 @@
         }
       }
     },
+    "/tag/update": {
+      "post": {
+        "summary": "Updates all tags.",
+        "description": "update all tags",
+        "tags": [
+          "tag"
+        ],
+        "security": [
+          {
+            "login": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TagEditAll"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/API"
+                },
+                "example": {
+                  "success": true,
+                  "message": "更新tag資料成功",
+                  "data": {}
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/API"
+                },
+                "example": {
+                  "success": false,
+                  "message": "更新tag資料失敗 error:...",
+                  "data": {}
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/tag/delete": {
       "post": {
         "summary": "Deletes a tag.",
@@ -1464,6 +1520,92 @@
                 "example": {
                   "success": false,
                   "message": "刪除tag資料失敗 error:...",
+                  "data": {}
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/einvoice": {
+      "get": {
+        "summary": "Get einvoice information from api.einvoice.nat.gov.tw.",
+        "description": "get einvoice",
+        "tags": [
+          "einvoice"
+        ],
+        "security": [
+          {
+            "login": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "startDate",
+            "schema": {
+              "type": "string"
+            },
+            "description": "start date"
+          },
+          {
+            "in": "query",
+            "name": "endDate",
+            "schema": {
+              "type": "string"
+            },
+            "description": "end date"
+          },
+          {
+            "in": "query",
+            "name": "cardNo",
+            "schema": {
+              "type": "string"
+            },
+            "description": "card number"
+          },
+          {
+            "in": "query",
+            "name": "cardEncrypt",
+            "schema": {
+              "type": "string"
+            },
+            "description": "card password, should be coded"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Einvoice"
+                },
+                "example": {
+                  "success": true,
+                  "message": "取得載具發票明細資料成功",
+                  "data": [
+                    {
+                      "headers": [
+                        "..."
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/API"
+                },
+                "example": {
+                  "success": false,
+                  "message": "取得載具發票明細資料失敗 error:...",
                   "data": {}
                 }
               }
@@ -2249,7 +2391,113 @@
       "TagEditAll": {
         "type": "array",
         "items": {
-          "$ref": "#/components/schemas/Tag"
+          "type": "object",
+          "properties": {
+            "tag_id": {
+              "type": "string"
+            },
+            "tag_ordinary": {
+              "type": "string"
+            },
+            "tag_name": {
+              "type": "string"
+            },
+            "tag_type": {
+              "type": "string"
+            },
+            "tag_color": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "Einvoice": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "headers": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "v": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "string"
+                    },
+                    "msg": {
+                      "type": "string"
+                    },
+                    "invNum": {
+                      "type": "string"
+                    },
+                    "invDate": {
+                      "type": "string"
+                    },
+                    "sellerName": {
+                      "type": "string"
+                    },
+                    "amount": {
+                      "type": "string"
+                    },
+                    "invStatus": {
+                      "type": "string"
+                    },
+                    "invPeriod": {
+                      "type": "string"
+                    },
+                    "sellerBan": {
+                      "type": "string"
+                    },
+                    "sellerAddress": {
+                      "type": "string"
+                    },
+                    "invoiceTime": {
+                      "type": "string"
+                    },
+                    "buyerBan": {
+                      "type": "string"
+                    },
+                    "currency": {
+                      "type": "string"
+                    },
+                    "details": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "rowNum": {
+                            "type": "string"
+                          },
+                          "description": {
+                            "type": "string"
+                          },
+                          "quantity": {
+                            "type": "string"
+                          },
+                          "unitPrice": {
+                            "type": "string"
+                          },
+                          "amount": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
         }
       }
     }
