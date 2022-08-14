@@ -1,4 +1,5 @@
-import axios from "axios"
+import axios from "axios";
+import qs from "qs";
 import dotenv from "dotenv"
 
 dotenv.config();
@@ -8,20 +9,20 @@ export const getEinvoice = async (req, res, next) => {
     const { startDate, endDate, cardNo, cardEncrypt } = req.query;
     const version = 0.5;
     const cardType = "3J0002";
-    const expTimeStamp = 2000;
+    const expTimeStamp = 1000;
     const action = "carrierInvChk";
-    const timeStamp = new Date().getTime() + 100;   // suggested to add timestamp from 10 to 180
+    const timeStamp = Math.floor(Date.now()/1000)+100; // suggested to add timestamp from 10 to 180
     const onlyWinningInv = "N";
-    const uuid = 109703041;
+    const uuid = process.env.UUID;
     const appID = process.env.APP_ID;
-
+    const url = "https://api.einvoice.nat.gov.tw/PB2CAPIVAN/invServ/InvServ";
 
     //先查詢載具發票表頭
-    await axios.post({
-        method: "post",
-        baseURL: "https://api.einvoice.nat.gov.tw",
-        url: "/PB2CAPIVAN/invServ/InvServ",
-        params: {
+
+    await axios({
+        method: 'post',
+        url: url,
+        data: qs.stringify({
             action: action,
             appID: appID,
             cardEncrypt: cardEncrypt,
@@ -34,11 +35,16 @@ export const getEinvoice = async (req, res, next) => {
             timeStamp: timeStamp,
             uuid: uuid,
             version: version
-        },
-        "Content-Type": "application/x-www-form-urlencoded"
+        }),
+        headers: {
+            'content-type': 'application/x-www-form-urlencoded;charset=utf-8'
+        }
     }).then(response => {
-        //若成功,查詢每一發票的明細
+        console.log(response.data);
+        // 將收到的response.data.details[i].invNum用以查詢發票明細
+        res.status(201).json(response.data);
     }).catch(err => {
-
+        console.error(err);
+        res.status(400).json(err);
     })
 }

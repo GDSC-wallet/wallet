@@ -48,6 +48,10 @@ export const insert_record_response = async (req, res, next) => {
     }
 }
 
+export const batch_record_response = async (req, res, next) => {
+    //
+}
+
 
 export const update_record_response = async (req, res, next) => {
     var response = {};

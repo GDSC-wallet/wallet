@@ -68,6 +68,10 @@ export const insert_record_check = async (req, res, next) => {
     }
 };
 
+export const batch_record_check = async (req, res, next) => {
+    //
+}
+
 export const update_record_check = async (req, res, next) => {
     const body = req.body
     try {
