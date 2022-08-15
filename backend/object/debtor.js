@@ -46,6 +46,7 @@ export const update_debtor_check = async (req, res, next) => {
 };
 
 export const delete_debtor_check = async (req, res, next) => {
+    const body = req.body
     try {
         if(!!!body.debtor_id){
             res.status(401).json({success:false,msg:"debtor_id is required"})
