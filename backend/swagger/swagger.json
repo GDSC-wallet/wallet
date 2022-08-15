@@ -1013,6 +1013,62 @@
         }
       }
     },
+    "/record/batch": {
+      "post": {
+        "summary": "Creates many records.",
+        "description": "Creates many records.",
+        "tags": [
+          "record"
+        ],
+        "security": [
+          {
+            "login": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RecordBatch"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/API"
+                },
+                "example": {
+                  "success": true,
+                  "message": "批量新增record資料成功",
+                  "data": {}
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/API"
+                },
+                "example": {
+                  "success": false,
+                  "message": "批量新增record資料失敗 error:...",
+                  "data": {}
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/record/edit": {
       "post": {
         "summary": "Updates a record.",
@@ -2240,6 +2296,57 @@
               "properties": {
                 "debtor_id": {
                   "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "RecordBatch": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "record_wallet_id": {
+              "type": "string",
+              "default": ""
+            },
+            "wallet_record_tag_id": {
+              "type": "string",
+              "default": ""
+            },
+            "record_ordinary": {
+              "type": "string",
+              "default": ""
+            },
+            "record_name": {
+              "type": "string",
+              "default": ""
+            },
+            "record_description": {
+              "type": "string",
+              "default": ""
+            },
+            "record_amount": {
+              "type": "number",
+              "default": ""
+            },
+            "record_type": {
+              "type": "string",
+              "default": ""
+            },
+            "record_date": {
+              "type": "string",
+              "default": ""
+            },
+            "record_debtors": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "debtor_id": {
+                    "type": "string"
+                  }
                 }
               }
             }
