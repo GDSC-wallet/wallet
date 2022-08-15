@@ -93,6 +93,57 @@ const update_record = async (record_id, record_wallet_id, wallet_record_tag_id, 
 };
 
 
+const batch_record = async (records) => {
+    
+    let total_amount = 0;
+
+    const query_records = records.map((record)=>{
+        total_amount += record.record_amount;
+        return(
+            [
+                record.record_id,
+                record.record_wallet_id,
+                record.wallet_record_tag_id,
+                record.record_ordinary,
+                record.record_name,
+                record.record_description,
+                record.record_amount,
+                record.record_type,
+                record.record_date
+            ]
+        )
+    });
+
+    let query_wallets = [query_records.length, total_amount, records[0].record_wallet_id];
+    let value_str = "";
+    for(let i = 0; i < query_records.length; ++i) {
+        value_str+=" (?,?,?,?,?,?,?,?,?,NOW(),NOW()) ";
+        if(i!==query_records.length-1){
+            value_str+=" , ";
+        }
+    }
+
+    return new Promise( async (resolve, reject) => {
+        var sql = `START TRANSACTION; INSERT INTO wallet_record(record_id, record_wallet_id, wallet_record_tag_id, record_ordinary, record_name, record_description, record_amount, record_type, record_date, record_created_time, record_updated_time) VALUES ${value_str}; UPDATE wallet SET record_num = record_num + ?, wallet_total = wallet_total + ? WHERE wallet_id = ?; COMMIT`;
+        pool.getConnection( async (err, conn) => {
+            if(err) {
+                print_error(err);
+                reject(err);
+            } else {
+                await conn.query(sql, [].concat(...query_records, query_wallets), (err, results, fields) => {
+                    if(err) {
+                        print_error(err);
+                        reject(err);
+                    } else {
+                        conn.release();
+                        resolve();
+                    }
+                })
+            }
+        })
+    })
+}
+
 const delete_record = async (record_id, record_wallet_id, record_amount) => {
     return new Promise( async (resolve, reject) => {
         // 刪減wallet中的record_num和wallet_total
@@ -117,4 +168,4 @@ const delete_record = async (record_id, record_wallet_id, record_amount) => {
 };
 
 
-export default { get_record, get_month_records, insert_record, update_record, delete_record };
+export default { get_record, get_month_records, insert_record, batch_record, update_record, delete_record };

@@ -69,7 +69,17 @@ export const insert_record_check = async (req, res, next) => {
 };
 
 export const batch_record_check = async (req, res, next) => {
-    //
+    const body = req.body
+    try {
+        if(!!!body.records){
+            res.status(401).json({success:false,msg:"records is required"})
+            return;
+        }
+        next();
+    } catch (error) {
+        console.log('error :', error);
+        res.status(401).json({status:"token expired",msg:error})
+    }
 }
 
 export const update_record_check = async (req, res, next) => {

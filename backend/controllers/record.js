@@ -122,10 +122,13 @@ export const insert_record = async (req, res, next) => {
     ).then( async result => {
         if(body.record_debtors) {
             for(var i = 0; i < body.record_debtors.length; ++i) {
-                await Debtor.insert_debtor_record(record_id, body.record_debtors[i].debtor_id, body.record_amount)
-                    .catch(err => {
-                        next(err);
-                    })
+                await Debtor.insert_debtor_record(
+                    record_id,
+                    body.record_debtors[i].debtor_id,
+                    body.record_amount
+                ).catch(err => {
+                    next(err);
+                })
             }
         }
         next(result);
@@ -136,7 +139,36 @@ export const insert_record = async (req, res, next) => {
 };
 
 export const batch_record = async (req, res, next) => {
-    //
+    
+    const records = req.body.records;
+    
+    //預先將record_id加入records,提供insert_debtor_record
+    for(let i = 0; i < records.length; ++i) {
+        records[i].record_id = "record_" + uuid();
+    }
+
+    await Record.batch_record(
+        records
+    ).then( async result => {
+        for(let i = 0; i < records.length; ++i) {
+            if(records[i].record_debtors) {
+                for(let j = 0; j < records[i].record_debtors.length; ++j) {
+                    var debtors = records[i].record_debtors
+                    await Debtor.insert_debtor_record(
+                        records[i].record_id,
+                        debtors.debtor_id,
+                        records[i].record_amount
+                    ).catch(err => {
+                        next(err);
+                    }) 
+                }
+            }
+        }
+        next(result);
+    }).catch(err => {
+        next(err);
+    })
+
 }
 
 

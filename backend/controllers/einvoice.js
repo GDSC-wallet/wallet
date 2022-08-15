@@ -40,7 +40,7 @@ export const getEinvoice = async (req, res, next) => {
     }).then( async result => {
         var response = {
             success: true,
-            message: "取得載具發票明細資料成功"
+            message: "取得載具發票明細資料成功",
             data: {
                 headers: []
             }
