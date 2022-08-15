@@ -17,11 +17,11 @@ const get_user = (id, time_chosen) => {
                 reject(err);
             } else {
                 await conn.query(sql, [time_chosen, time_chosen, id], (err, results, fields) => {
+                    conn.release();
                     if(err) {
                         print_error(err);
                         reject(err);
                     } else {
-                        conn.release();
                         resolve(results);
                     }
                 })
@@ -40,11 +40,11 @@ const get_wallet_tag = (wallet_id) => {
                 reject(err);
             } else {
                 await conn.query(sql, wallet_id, (err, results, fields) => {
+                    conn.release();
                     if(err) {
                         print_error(err);
                         reject(err);
                     } else {
-                        conn.release();
                         resolve(results);
                     }
                 })
@@ -64,11 +64,11 @@ const user_exist = async (id) => {
                 reject(err);
             } else {
                 await conn.query(sql, id, (err, results, fields) => {
+                    conn.release();
                     if(err) {
                         print_error(err);
                         reject(err);
                     } else { 
-                        conn.release();
                         resolve(results);
                     }
                 });
@@ -123,12 +123,12 @@ const insert_user = async (id, channel, channel_id, email, username, nickname, b
                 reject(err);
             } else {
                 await conn.query(sql, [].concat(...query_tags()), async (err, results, fields) => {
+                    conn.release();
                     if(err) {
                         print_error(err);
                         reject(err);
                     }
                     else {
-                        conn.release();
                         resolve();
                     }
                 });
@@ -152,12 +152,12 @@ const update_user = async (id, nickname, barcode, elec_invoice_agree) => {
                 reject(err);
             } else {
                 await conn.query(sql, [conn.escape(nickname), conn.escape(barcode), id], (err, results, fields) => {
+                    conn.release();
                     if(err) {
                         print_error(err);
                         reject(err);
                     }
                     else {
-                        conn.release();
                         resolve();
                     }
                 });
@@ -176,12 +176,12 @@ const delete_user = async (id) => {
                 reject(err);
             } else {
                 await conn.query(sql, id, (err, results, fields) => {
+                    conn.release();
                     if(err) {
                         print_error(err);
                         reject(err);
                     }
                     else {
-                        conn.release();
                         resolve();
                     }
                 });

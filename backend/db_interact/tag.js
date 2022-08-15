@@ -15,9 +15,9 @@ const get_tag = (tag_id) => {
                 reject(err);
             } else {
                 await conn.query(sql, tag_id, (err, results, fields) => {
+                    conn.release();
                     if(err) reject(err);
                     else {
-                        conn.release();
                         resolve(results);
                     }
                 });
@@ -37,11 +37,11 @@ const insert_tag = async (tag_wallet_id, tag_ordinary, tag_name, tag_type, tag_c
                 reject(err);
             } else {
                 await conn.query(sql, [tag_id, tag_wallet_id, tag_ordinary, conn.escape(tag_name), tag_type, tag_color], (err, results, fields) => {
+                    conn.release();
                     if(err) {
                         print_error(err);
                         reject(err);
                     } else {
-                        conn.release();
                         resolve();
                     }
                 })
@@ -61,12 +61,12 @@ const update_tag = async (tag_id, tag_ordinary, tag_name, tag_type, tag_color) =
                 reject(err);
             } else {
                 await conn.query(sql, [ tag_ordinary, conn.escape(tag_name), tag_type, tag_color, tag_id], (err, results, fields) => {
+                    conn.release();
                     if(err) {
                         print_error(err);
                         reject(err);
                     }
                     else {
-                        conn.release();
                         resolve();
                     }
                 })
@@ -112,6 +112,7 @@ const update_all_tag = async (tags) => {
                 reject(err);
             } else {
                 await conn.query(sql, [].concat(...query_tags), (err, results, fields) => {
+                    conn.release();
                     if(err) {
                         print_error(err);
                         reject(err);
@@ -134,12 +135,12 @@ const delete_tag = async (tag_id) => {
                 reject(err);
             } else {
                 await conn.query(sql, tag_id, (err, results, fields) => {
+                    conn.release();
                     if(err) {
                         print_error(err);
                         reject(err);
                     }
                     else {
-                        conn.release();
                         resolve();
                     }
                 })

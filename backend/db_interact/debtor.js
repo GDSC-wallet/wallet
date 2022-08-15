@@ -15,11 +15,11 @@ const get_record_debtors = (record_id) => {
                 reject(err);
             } else {
                 await conn.query(sql, record_id, async (err, results, fields) => {
+                    conn.release();
                     if(err) {
                         print_error(err);
                         reject(err);
                     } else {
-                        conn.release();
                         resolve(results);
                     }
                 })
@@ -38,11 +38,11 @@ const get_debtor_records = (debtor_id) => {
                 reject(err);
             } else {
                 await conn.query(sql, debtor_id, async (err, results, fields) => {
+                    conn.release();
                     if(err) {
                         print_error(err);
                         reject(err);
                     } else {
-                        conn.release();
                         resolve(results);
                     }
                 })
@@ -62,11 +62,11 @@ const get_all_debtors = (user_id) => {
                 reject(err);
             } else {
                 await conn.query(sql, user_id, async (err, results, fields) => {
+                    conn.release();
                     if(err) {
                         print_error(err);
                         reject(err);
                     } else {
-                        conn.release();
                         resolve(results);
                     }
                 })
@@ -85,11 +85,11 @@ const insert_debtor = (debtor_user_id, debtor_name) => {
                 reject(err);
             } else {
                 await conn.query(sql, [debtor_id, debtor_user_id, conn.escape(debtor_name)], async (err, results, fields) => {
+                    conn.release();
                     if(err) {
                         print_error(err);
                         reject(err);
                     } else {
-                        conn.release();
                         resolve(results);
                     }
                 })
@@ -108,11 +108,11 @@ const insert_debtor_record = (record_id, debtor_id, record_amount) => {
                 reject(err);
             } else {
                 await conn.query(sql, [debtor_record_id, debtor_id, record_id, record_amount, debtor_id], (err, results, fields) => {
+                    conn.release();
                     if(err) {
                         print_error(err);
                         reject(err);
                     } else {
-                        conn.release();
                         resolve(results);
                     }
                 })
@@ -130,11 +130,11 @@ const delete_debtor_record = (record_id, debtor_id, record_amount) => {
                 reject(err);
             } else {
                 await conn.query(sql, [record_id, debtor_id, record_amount, debtor_id], (err, results, fields) => {
+                    conn.release();
                     if(err) {
                         print_error(err);
                         reject(err);
                     } else {
-                        conn.release();
                         resolve(results);
                     }
                 })
@@ -152,11 +152,11 @@ const update_debtor = (debtor_id, debtor_name) => {
                 reject(err);
             } else {
                 await conn.query(sql, [conn.escape(debtor_name), debtor_id], async (err, results, fields) => {
+                    conn.release();
                     if(err) {
                         print_error(err);
                         reject(err);
                     } else {
-                        conn.release();
                         resolve(results);
                     }
                 })
@@ -174,11 +174,11 @@ const delete_debtor = (debtor_id) => {
                 reject(err);
             } else {
                 await conn.query(sql, debtor_id, async (err, results, fields) => {
+                    conn.release();
                     if(err) {
                         print_error(err);
                         reject(err);
                     } else {
-                        conn.release();
                         resolve(results);
                     }
                 })

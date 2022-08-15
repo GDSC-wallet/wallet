@@ -14,9 +14,9 @@ const get_record = (record_id) => {
                 reject(err);
             } else {
                 await conn.query(sql, record_id, (err, results, fields) => {
+                    conn.release();
                     if(err) reject(err);
                     else {
-                        conn.release();
                         resolve(results);
                     }
                 });
@@ -34,11 +34,11 @@ const get_month_records = (wallet_id, time_choosen) => {
                 reject(err);
             } else {
                 await conn.query(sql, [time_choosen, time_choosen, wallet_id], (err, results, fields) => {
+                    conn.release();
                     if(err) {
                         print_error(err);
                         reject(err);
                     } else {
-                        conn.release();
                         resolve(results);
                     }
                 })
@@ -56,11 +56,11 @@ const insert_record = async (record_id, record_wallet_id, wallet_record_tag_id, 
                 reject(err);
             } else {
                 await conn.query(sql, [record_id, record_wallet_id, wallet_record_tag_id, record_ordinary, conn.escape(record_name), conn.escape(record_description), record_amount, record_type, record_date, record_wallet_id, record_amount, record_wallet_id], (err, results, fields) => {
+                    conn.release();
                     if(err) {
                         print_error(err);
                         reject(err);
                     } else {
-                        conn.release();
                         resolve();
                     }
                 });
@@ -79,11 +79,11 @@ const update_record = async (record_id, record_wallet_id, wallet_record_tag_id, 
                 reject(err);
             } else {
                 await conn.query(sql, [wallet_record_tag_id, record_ordinary, conn.escape(record_name), conn.escape(record_description), record_amount, record_type, record_date, record_id, record_amount_diff, record_wallet_id], (err, results, fields) => {
+                    conn.release();
                     if(err) {
                         print_error(err);
                         reject(err);
                     } else {
-                        conn.release();
                         resolve();
                     }
                 });
@@ -94,7 +94,7 @@ const update_record = async (record_id, record_wallet_id, wallet_record_tag_id, 
 
 
 const batch_record = async (records) => {
-    
+
     let total_amount = 0;
 
     const query_records = records.map((record)=>{
@@ -105,8 +105,8 @@ const batch_record = async (records) => {
                 record.record_wallet_id,
                 record.wallet_record_tag_id,
                 record.record_ordinary,
-                record.record_name,
-                record.record_description,
+                pool.escape(record.record_name),
+                pool.escape(record.record_description),
                 record.record_amount,
                 record.record_type,
                 record.record_date
@@ -131,11 +131,11 @@ const batch_record = async (records) => {
                 reject(err);
             } else {
                 await conn.query(sql, [].concat(...query_records, query_wallets), (err, results, fields) => {
+                    conn.release();
                     if(err) {
                         print_error(err);
                         reject(err);
                     } else {
-                        conn.release();
                         resolve();
                     }
                 })
@@ -154,11 +154,11 @@ const delete_record = async (record_id, record_wallet_id, record_amount) => {
                 reject(err);
             } else {
                 await conn.query(sql, [record_wallet_id, record_amount, record_wallet_id, record_id], (err, results, fields) => {
+                    conn.release();
                     if(err) {
                         print_error(err);
                         reject(err);
                     } else {
-                        conn.release();
                         resolve();
                     }
                 });

@@ -15,12 +15,12 @@ const get_wallet = (user_id, wallet_id, time_chosen) => {
                 reject(err);
             } else {
                 await conn.query(sql, [time_chosen, time_chosen, wallet_id, user_id, wallet_id], async (err, results, fields) => {
+                    conn.release();
                     if (err) {
                         print_error(err);
                         reject(err);
                     }
                     else {
-                        conn.release();
                         resolve(results);
                     }
                 });
@@ -63,11 +63,11 @@ const insert_wallet = async (user_id, wallet_name, wallet_description, wallet_ba
                 reject(err);
             } else {
                 await conn.query(sql, [].concat(query_tags()), async (err, results, fields) => {
+                    conn.release();
                     if (err) {
                         print_error(err);
                         reject(err);
                     } else {
-                        conn.release();
                         resolve();
                     }
                 });
@@ -88,11 +88,11 @@ const update_wallet = async (wallet_id, wallet_name, wallet_description, wallet_
                 reject(err);
             } else {
                 await conn.query(sql, [conn.escape(wallet_name), conn.escape(wallet_description), conn.escape(wallet_barcode), wallet_id], (err, results, fields) => {
+                    conn.release();
                     if (err) {
                         print_error(err);
                         reject(err);
                     } else {
-                        conn.release();
                         resolve();
                     }
                 });
@@ -120,11 +120,11 @@ const delete_wallet = async (user_id, wallet_id) => {
                     } else {
                         sql = "START TRANSACTION; DELETE FROM wallet WHERE wallet_id = ?; UPDATE user SET `wallet_num` = ( CASE WHEN `wallet_num` < 1 THEN 0 ELSE (`wallet_num` - 1) end) WHERE id = ?; UPDATE wallet SET selected = 1 WHERE selected = 0 AND user_id = ? ORDER BY wallet_updated_time DESC LIMIT 1; COMMIT";
                         await conn.query(sql, [wallet_id, user_id, user_id], (err, results, fields) => {
+                            conn.release();
                             if (err) {
                                 print_error(err);
                                 reject(err);
                             } else {
-                                conn.release();
                                 resolve();
                             }
                         })
@@ -148,11 +148,11 @@ const search_record = async (wallet_id, search_str) => {
                 search_str = conn.escape(search_str);
                 var sql = `START TRANSACTION; SELECT * FROM wallet_record WHERE record_wallet_id = ? AND record_name REGEXP ${search_str}; COMMIT`;
                 await conn.query(sql, wallet_id, (err, results, fields) => {
+                    conn.release();
                     if (err) {
                         print_error(err);
                         reject(err);
                     } else {
-                        conn.release();
                         resolve(results);
                     }
                 });
