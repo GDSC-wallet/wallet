@@ -98,16 +98,16 @@ const insert_debtor = (debtor_user_id, debtor_name) => {
     })
 }
 
-const insert_debtor_record = (record_id, debtor_id, record_amount) => {
+const insert_debtor_record = (record_id, debtor_id, debtor_record_amount) => {
     return new Promise( async (resolve, reject) => {
         var debtor_record_id = 'debtor_record_' + uuid();
-        var sql = "START TRANSACTION; INSERT INTO debtor_record(debtor_record_id, debtor_id, record_id) VALUE(?,?,?); UPDATE debtor SET debtor_amount = debtor_amount + ? WHERE debtor_id = ?; COMMIT";
+        var sql = "START TRANSACTION; INSERT INTO debtor_record(debtor_record_id, debtor_record_amount, debtor_id, record_id) VALUE(?,?,?,?); UPDATE debtor SET debtor_amount = debtor_amount + ? WHERE debtor_id = ?; COMMIT";
         pool.getConnection( async (err, conn) => {
             if(err) {
                 print_error(err);
                 reject(err);
             } else {
-                await conn.query(sql, [debtor_record_id, debtor_id, record_id, record_amount, debtor_id], (err, results, fields) => {
+                await conn.query(sql, [debtor_record_id, debtor_record_amount, debtor_id, record_id, debtor_record_amount, debtor_id], (err, results, fields) => {
                     conn.release();
                     if(err) {
                         print_error(err);
@@ -121,7 +121,7 @@ const insert_debtor_record = (record_id, debtor_id, record_amount) => {
     })    
 }
 
-const delete_debtor_record = (record_id, debtor_id, record_amount) => {
+const delete_debtor_record = (record_id, debtor_id, debtor_record_amount) => {
     return new Promise( async (resolve, reject) => {
         var sql = "START TRANSACTION; DELETE FROM debtor_record WHERE record_id = ? AND debtor_id = ?; UPDATE debtor SET debtor_amount = debtor_amount - ? WHERE debtor_id = ?; COMMIT";
         pool.getConnection( async (err, conn) => {
@@ -129,7 +129,7 @@ const delete_debtor_record = (record_id, debtor_id, record_amount) => {
                 print_error(err);
                 reject(err);
             } else {
-                await conn.query(sql, [record_id, debtor_id, record_amount, debtor_id], (err, results, fields) => {
+                await conn.query(sql, [record_id, debtor_id, debtor_record_amount, debtor_id], (err, results, fields) => {
                     conn.release();
                     if(err) {
                         print_error(err);

@@ -1164,6 +1164,9 @@
                       "properties": {
                         "debtor_id": {
                           "type": "string"
+                        },
+                        "debtor_record_amount": {
+                          "type": "number"
                         }
                       }
                     }
@@ -1262,7 +1265,8 @@
                       "record_debtors": [
                         {
                           "debtor_id": "debtor_12345",
-                          "debtor_name": "well"
+                          "debtor_name": "well",
+                          "debtor_record_amount": 777
                         }
                       ],
                       "record_created_time": "1648912357",
@@ -2314,6 +2318,9 @@
               "properties": {
                 "debtor_id": {
                   "type": "string"
+                },
+                "debtor_record_amount": {
+                  "type": "number"
                 }
               }
             }
@@ -2364,6 +2371,9 @@
                 "properties": {
                   "debtor_id": {
                     "type": "string"
+                  },
+                  "debtor_record_amount": {
+                    "type": "number"
                   }
                 }
               }
@@ -2420,6 +2430,9 @@
               "properties": {
                 "debtor_id": {
                   "type": "string"
+                },
+                "debtor_record_amount": {
+                  "type": "number"
                 }
               }
             }
