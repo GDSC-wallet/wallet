@@ -11,7 +11,7 @@ const debtor = {
     }
   },
   actions: {
-    async getDebtor(state) {
+    async getDebtor() {
       ajax("api/debtor/", "get", {}).then(res => {
         commit("setDebtor", res.data.data)
       }).catch((err) => {
@@ -35,18 +35,19 @@ const debtor = {
         }
       }).then(dispatch("update"));
     },
-    async editDebtor({ dispatch }, deb) {
+    async editDebtor({ getters, dispatch }, debName) {
+      let tmp = getters.getDebtor.find(deb => deb.debtor_name == debName.pre)
       ajax("api/debtor/edit", "post", {
         data: {
-          debtor_id: deb?.debtor_id,
-          debtor_name: deb?.debtor_name
+          debtor_id: tmp.debtor_id,
+          debtor_name: debName.cur
         }
       }).then(dispatch("update"));
     },
-    async deleteDebtor({ dispatch }, name) {
+    async deleteDebtor({ dispatch }, id) {
       ajax("api/debtor/delete", "post", {
         data: {
-          debtor_name: name,
+          debtor_id: id,
         }
       }).then(dispatch("update"));
     },
@@ -55,6 +56,10 @@ const debtor = {
         console.log(err);
       })
     },
+    getDebtorId({ getters }, str) {
+      let tmp = getters.getDebtor.find(deb => deb.debtor_name == str)
+      return tmp.debtor_id;
+    }
   },
   getters: {
     getDebtorNames(state) {

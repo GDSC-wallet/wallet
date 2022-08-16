@@ -46,10 +46,10 @@
               </v-chip>
             </template>
           </v-select>
-          <v-select :items="getDebtorNames" v-model="selectedDebtor" multiple label="債務人"
+          <v-select :items="getDebtorNames" v-model="data.selectedDebtor" multiple label="債務人"
             prepend-icon="mdi-account-arrow-left">
-            <template v-slot:prepend-item >
-              <NewDebtor/>
+            <template v-slot:prepend-item>
+              <NewDebtor :dialog="open" />
             </template>
             <template v-slot:item="{ item }">
               <v-avatar color="primary" size="25">
@@ -106,11 +106,11 @@ export default {
         record_type: "income",
         record_updated_time: "",
         wallet_record_tag_id: "",
+        selectedDebtor: null,
       },
       valid: true,
       record_date_picker: false,
       record_tag_selector: false,
-      selectedDebtor: [],
     };
   },
   methods: {
@@ -211,6 +211,7 @@ export default {
             record_type: "income",
             record_updated_time: "",
             wallet_record_tag_id: this.walletTags[0]?.value.tag_id,
+            selectedDebtor: null,
           };
         } else if (this.mode == "edit") {
           this.data = Object.assign({}, this.editData);

@@ -10,24 +10,27 @@
         <v-toolbar-title>編輯債務人</v-toolbar-title>
       </v-toolbar>
       <v-container class="flex-grow-1" style="overflow: auto">
-        <v-list-item v-for="debtor in debtors">
+        <v-list-item v-for="(debtor, index) in debtors" :key="index">
           <v-list-item-content>
             <v-card>
-              <span>
-                {{ debtor.debtor_name }}
-                <v-btn icon>
-                  <v-icon @click="">mdi-pencil</v-icon>
-                </v-btn>
-                <v-btn icon color="error" @click="deleteDebtor(debtor.debtor_name)">
-                  <v-icon>mdi-delete</v-icon>
-                </v-btn>
-              </span>
+              {{ debtor.debtor_name }}
+              <v-btn icon>
+                <v-icon @click="edit(debtor.debtor_name)">mdi-pencil</v-icon>
+              </v-btn>
+              <v-btn icon color="error" @click="deleteDebtor(debtor.debtor_id)">
+                <v-icon>mdi-delete</v-icon>
+              </v-btn>
             </v-card>
           </v-list-item-content>
         </v-list-item>
       </v-container>
-        <NewDebtor />
+      <NewDebtor :dialog="dialogOpen" />
     </v-card>
+    <v-dialog v-model="editDialog">
+      <v-card>
+        <NewDebtor edit :dialog="dialogOpen" :previousName="previousName" />
+      </v-card>
+    </v-dialog>
   </v-dialog>
 </template>
 
@@ -44,13 +47,23 @@ export default {
   data() {
     return {
       dialogOpen: false,
+      editDialog: false,
+      previousName: null
     };
   },
   methods: {
     ...mapActions({
       createDebtor: "debtor/createDebtor",
-      deleteDebtor: "debtor/deleteDebtor"
+      deleteDebtor: "debtor/deleteDebtor",
+      editDebtor: "debtor/editDebtor",
+      getDebtorId: "debtor/getDebtorId",
     }),
+    ...mapGetters({
+    }),
+    edit(str) {
+      this.editDialog = true;
+      this.previousName = str;
+    },
   },
   computed: {
     ...mapGetters({
