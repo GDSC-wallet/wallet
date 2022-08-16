@@ -196,7 +196,8 @@ export const getUserProfile = async (req, res, next) => {
                                     for(var i = 0; i < result.length; ++i) {
                                         var record_debtor_obj = {
                                             debtor_id: result[i].debtor_id,
-                                            debtor_name: result[i].debtor_name.slice(1, result[i].debtor_name.length-1)
+                                            debtor_name: result[i].debtor_name.slice(1, result[i].debtor_name.length-1),
+                                            debtor_record_amount: result[i].debtor_record_amount
                                         }
                                         record_obj.record_debtors.push(record_debtor_obj);
                                     }

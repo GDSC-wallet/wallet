@@ -18,7 +18,8 @@ export const get_record_debtors = async (req, res, next) => {
                     results[i].debtor_name = results[i].debtor_name.slice(1, results[i].debtor_name.length-1);
                     var record_debtor_obj = {
                         debtor_id: results[i].debtor_id,
-                        debtor_name: results[i].debtor_name
+                        debtor_name: results[i].debtor_name,
+                        debtor_record_amount: results[i].debtor_record_amount
                     }
                     response.data.record_debtors.push(record_debtor_obj);
                 }
@@ -75,7 +76,8 @@ export const get_debtor_records = async (req, res, next) => {
                                     result[j].debtor_name = result[j].debtor_name.slice(1, result[j].debtor_name.length-1);
                                     var record_debtor_obj = {
                                         debtor_id: result[j].debtor_id,
-                                        debtor_name: result[j].debtor_name
+                                        debtor_name: result[j].debtor_name,
+                                        debtor_record_amount: result[j].debtor_record_amount
                                     }
                                     results.record_debtors.push(record_debtor_obj);
                                 }

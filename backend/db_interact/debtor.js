@@ -8,18 +8,19 @@ function print_error(err) {
 // return debtor_id, debtor_name
 const get_record_debtors = (record_id) => {
     return new Promise(async (resolve, reject) => {
-        var sql = "SELECT debtor_id, debtor_name FROM debtor WHERE debtor.debtor_id = (SELECT debtor_id FROM debtor_record WHERE record_id = ?)";
+        var sql = "SELECT debtor.debtor_id, debtor.debtor_name, debtor_record.debtor_record_amount FROM debtor INNER JOIN debtor_record ON debtor.debtor_id = debtor_record.debtor_id AND debtor_record.record_id = ? WHERE debtor.debtor_id = (SELECT debtor_id FROM debtor_record WHERE record_id = ?)";
         pool.getConnection( async (err, conn) => {
             if(err) {
                 print_error(err);
                 reject(err);
             } else {
-                await conn.query(sql, record_id, async (err, results, fields) => {
+                await conn.query(sql, [record_id, record_id], async (err, results, fields) => {
                     conn.release();
                     if(err) {
                         print_error(err);
                         reject(err);
                     } else {
+                        console.log(results);
                         resolve(results);
                     }
                 })
@@ -27,7 +28,6 @@ const get_record_debtors = (record_id) => {
         })
     })
 }
-
 
 const get_debtor_records = (debtor_id) => {
     return new Promise(async (resolve, reject) => {
