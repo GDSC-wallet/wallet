@@ -26,14 +26,14 @@ const debtor = {
         data: {
           debtor_name: name
         }
-      }).then(dispatch("update"));
+      }).then(() => dispatch("update"));
     },
     async deleteDebtor({ dispatch }, id) {
       ajax("api/debtor/delete", "post", {
         data: {
           debtor_id: id
         }
-      }).then(dispatch("update"));
+      }).then(() => dispatch("update"));
     },
     async editDebtor({ getters, dispatch }, debName) {
       let tmp = getters.getDebtor.find(deb => deb.debtor_name == debName.pre)
@@ -42,14 +42,14 @@ const debtor = {
           debtor_id: tmp.debtor_id,
           debtor_name: debName.cur
         }
-      }).then(dispatch("update"));
+      }).then(() => dispatch("update"));
     },
     async deleteDebtor({ dispatch }, id) {
       ajax("api/debtor/delete", "post", {
         data: {
           debtor_id: id,
         }
-      }).then(dispatch("update"));
+      }).then(() => dispatch("update"));
     },
     update({ dispatch }) {
       dispatch("auth/getProfile", null, { root: true }).catch((err) => {

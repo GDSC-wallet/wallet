@@ -6,7 +6,7 @@
     <div v-if="showDetail || edit">
       <v-form @submit.prevent="submit" ref="form" lazy-validation>
         <v-text-field v-model="currentName" label="名稱" prepend-icon="mdi-account-arrow-left"
-          :rules="[rules.required, rules.counter, rules.duplicate]" dense>
+          :rules="[rules.required, rules.counter, rules.duplicate]" dense autofocus>
           <template v-slot:append>
             <v-icon @click="submit">mdi-check</v-icon>
           </template>
@@ -51,8 +51,9 @@ export default {
         this.editDebtor({ pre: this.previousName, cur: this.currentName });
       } else
         this.createDebtor(this.currentName);
-      this.debtorName = null;
+      this.currentName = null;
       this.showDetail = false;
+      this.$emit('finish');
     }
   },
   computed: {

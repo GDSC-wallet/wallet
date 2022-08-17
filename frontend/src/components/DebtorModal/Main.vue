@@ -28,7 +28,7 @@
     </v-card>
     <v-dialog v-model="editDialog">
       <v-card>
-        <NewDebtor edit :dialog="dialogOpen" :previousName="previousName" />
+        <NewDebtor edit :dialog="dialogOpen" :previousName="previousName" @finish="editDialog = false" />
       </v-card>
     </v-dialog>
   </v-dialog>

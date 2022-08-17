@@ -62,7 +62,7 @@
           <span>債務人設定</span>
           <DebtorModal />
         </div>
-        <v-card class="mx-1">
+        <v-card class="scroll" height="200">
           <v-list-item v-for="(item, i) in getDebtor" :key="i">
             <v-list-item-content>
               <v-list-item-title class="text-h6 mb-1 d-flex justify-space-between">
@@ -132,3 +132,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.scroll {
+  overflow-y: scroll
+}
+</style>
