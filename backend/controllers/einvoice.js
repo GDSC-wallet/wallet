@@ -38,6 +38,7 @@ export const getEinvoice = async (req, res, next) => {
             'content-type': 'application/x-www-form-urlencoded;charset=utf-8'
         }
     }).then( async result => {
+        console.log(result.data);
         var response = {
             success: true,
             message: "取得載具發票明細資料成功",

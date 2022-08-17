@@ -135,35 +135,35 @@
                 }
               }
             }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/API"
-                },
-                "example": {
-                  "success": true,
-                  "message": "使用者資料更新成功",
-                  "data": {}
+          },
+          "responses": {
+            "201": {
+              "description": "OK",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/API"
+                  },
+                  "example": {
+                    "success": true,
+                    "message": "使用者資料更新成功",
+                    "data": {}
+                  }
                 }
               }
-            }
-          },
-          "400": {
-            "description": "Failed",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/API"
-                },
-                "example": {
-                  "success": false,
-                  "message": "使用者資料更新失敗 error:...",
-                  "data": {}
+            },
+            "400": {
+              "description": "Failed",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/API"
+                  },
+                  "example": {
+                    "success": false,
+                    "message": "使用者資料更新失敗 error:...",
+                    "data": {}
+                  }
                 }
               }
             }

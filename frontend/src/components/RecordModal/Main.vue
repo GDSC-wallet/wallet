@@ -46,6 +46,19 @@
               </v-chip>
             </template>
           </v-select>
+          <v-select :items="getDebtorNames" v-model="data.selectedDebtor" multiple label="債務人"
+            prepend-icon="mdi-account-arrow-left">
+            <template v-slot:prepend-item>
+              <NewDebtor :dialog="open" />
+            </template>
+            <template v-slot:item="{ item }">
+              <v-avatar color="primary" size="25">
+                <span class="white--text">{{ item[0] }}</span>
+              </v-avatar>
+              <v-spacer></v-spacer>
+              <span>{{ item }}</span>
+            </template>
+          </v-select>
           <v-text-field label="備註" v-model="data.record_description" prepend-icon="mdi-message-text"></v-text-field>
         </v-card-text>
         <v-card-actions class="py-0">
@@ -69,9 +82,13 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
+import NewDebtor from "../DebtorModal/components/NewDebtor.vue"
 
 export default {
   name: "RecordModal",
+  components: {
+    NewDebtor: NewDebtor,
+  },
   data() {
     return {
       data: {
@@ -89,6 +106,7 @@ export default {
         record_type: "income",
         record_updated_time: "",
         wallet_record_tag_id: "",
+        selectedDebtor: null,
       },
       valid: true,
       record_date_picker: false,
@@ -125,6 +143,7 @@ export default {
       editData: "record/getData",
       _walletTags: "wallet/getWalletTags",
       calendarDate: "calendar/getDate",
+      getDebtorNames: "debtor/getDebtorNames"
     }),
     walletTags() {
       return this._walletTags(this.data.record_type).map((tag) => {
@@ -192,6 +211,7 @@ export default {
             record_type: "income",
             record_updated_time: "",
             wallet_record_tag_id: this.walletTags[0]?.value.tag_id,
+            selectedDebtor: null,
           };
         } else if (this.mode == "edit") {
           this.data = Object.assign({}, this.editData);
