@@ -135,35 +135,35 @@
                 }
               }
             }
-          },
-          "responses": {
-            "201": {
-              "description": "OK",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "$ref": "#/components/schemas/API"
-                  },
-                  "example": {
-                    "success": true,
-                    "message": "使用者資料更新成功",
-                    "data": {}
-                  }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/API"
+                },
+                "example": {
+                  "success": true,
+                  "message": "使用者資料更新成功",
+                  "data": {}
                 }
               }
-            },
-            "400": {
-              "description": "Failed",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "$ref": "#/components/schemas/API"
-                  },
-                  "example": {
-                    "success": false,
-                    "message": "使用者資料更新失敗 error:...",
-                    "data": {}
-                  }
+            }
+          },
+          "400": {
+            "description": "Failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/API"
+                },
+                "example": {
+                  "success": false,
+                  "message": "使用者資料更新失敗 error:...",
+                  "data": {}
                 }
               }
             }
@@ -1591,10 +1591,10 @@
         }
       }
     },
-    "/einvoice": {
+    "/einvoice/headers": {
       "get": {
-        "summary": "Get einvoice information from api.einvoice.nat.gov.tw.",
-        "description": "get einvoice",
+        "summary": "Get einvoice headers from api.einvoice.nat.gov.tw.",
+        "description": "get einvoice headers",
         "tags": [
           "einvoice"
         ],
@@ -1634,7 +1634,7 @@
             "schema": {
               "type": "string"
             },
-            "description": "card password, should be coded"
+            "description": "card password, should be encoded"
           }
         ],
         "responses": {
@@ -1643,16 +1643,106 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Einvoice"
+                  "$ref": "#/components/schemas/EinvoiceHeaders"
+                },
+                "example": {
+                  "success": true,
+                  "message": "取得載具發票表頭資料成功",
+                  "data": [
+                    {
+                      "description": "詳見雲端發票api資料回傳格式"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/API"
+                },
+                "example": {
+                  "success": false,
+                  "message": "取得載具發票表頭資料失敗 error:...",
+                  "data": {}
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/einvoice/details": {
+      "get": {
+        "summary": "Get einvoice details from api.einvoice.nat.gov.tw.",
+        "description": "get einvoice details",
+        "tags": [
+          "einvoice"
+        ],
+        "security": [
+          {
+            "login": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "year",
+            "schema": {
+              "type": "string"
+            },
+            "description": "invDate.year"
+          },
+          {
+            "in": "query",
+            "name": "month",
+            "schema": {
+              "type": "string"
+            },
+            "description": "invDate.month"
+          },
+          {
+            "in": "query",
+            "name": "date",
+            "schema": {
+              "type": "string"
+            },
+            "description": "invDate.date"
+          },
+          {
+            "in": "query",
+            "name": "cardNo",
+            "schema": {
+              "type": "string"
+            },
+            "description": "card number"
+          },
+          {
+            "in": "query",
+            "name": "cardEncrypt",
+            "schema": {
+              "type": "string"
+            },
+            "description": "card password, should be encoded"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EinvoiceDetails"
                 },
                 "example": {
                   "success": true,
                   "message": "取得載具發票明細資料成功",
                   "data": [
                     {
-                      "headers": [
-                        "..."
-                      ]
+                      "description": "詳見雲端發票api資料回傳格式"
                     }
                   ]
                 }
@@ -2563,7 +2653,7 @@
           }
         }
       },
-      "Einvoice": {
+      "EinvoiceHeaders": {
         "type": "object",
         "properties": {
           "success": {
@@ -2573,76 +2663,190 @@
             "type": "string"
           },
           "data": {
-            "type": "object",
-            "properties": {
-              "headers": {
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "properties": {
-                    "v": {
-                      "type": "string"
-                    },
-                    "code": {
-                      "type": "string"
-                    },
-                    "msg": {
-                      "type": "string"
-                    },
-                    "invNum": {
-                      "type": "string"
-                    },
-                    "invDate": {
-                      "type": "string"
-                    },
-                    "sellerName": {
-                      "type": "string"
-                    },
-                    "amount": {
-                      "type": "string"
-                    },
-                    "invStatus": {
-                      "type": "string"
-                    },
-                    "invPeriod": {
-                      "type": "string"
-                    },
-                    "sellerBan": {
-                      "type": "string"
-                    },
-                    "sellerAddress": {
-                      "type": "string"
-                    },
-                    "invoiceTime": {
-                      "type": "string"
-                    },
-                    "buyerBan": {
-                      "type": "string"
-                    },
-                    "currency": {
-                      "type": "string"
-                    },
-                    "details": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "rowNum": {
-                            "type": "string"
-                          },
-                          "description": {
-                            "type": "string"
-                          },
-                          "quantity": {
-                            "type": "string"
-                          },
-                          "unitPrice": {
-                            "type": "string"
-                          },
-                          "amount": {
-                            "type": "string"
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "v": {
+                  "type": "string"
+                },
+                "code": {
+                  "type": "string"
+                },
+                "msg": {
+                  "type": "string"
+                },
+                "onlyWinningInv": {
+                  "type": "string"
+                },
+                "details": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "rowNum": {
+                        "type": "string"
+                      },
+                      "invNum": {
+                        "type": "string"
+                      },
+                      "cardType": {
+                        "type": "string"
+                      },
+                      "cardNo": {
+                        "type": "string"
+                      },
+                      "sellerName": {
+                        "type": "string"
+                      },
+                      "invStatus": {
+                        "type": "string"
+                      },
+                      "invDonatable": {
+                        "type": "string"
+                      },
+                      "amount": {
+                        "type": "string"
+                      },
+                      "invPeriod": {
+                        "type": "string"
+                      },
+                      "sellerBan": {
+                        "type": "string"
+                      },
+                      "sellerAddress": {
+                        "type": "string"
+                      },
+                      "invoiceTime": {
+                        "type": "string"
+                      },
+                      "buyerBan": {
+                        "type": "string"
+                      },
+                      "currency": {
+                        "type": "string"
+                      },
+                      "donateMark": {
+                        "type": "string"
+                      },
+                      "invDate": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "year": {
+                              "type": "string"
+                            },
+                            "month": {
+                              "type": "string"
+                            },
+                            "date": {
+                              "type": "string"
+                            },
+                            "day": {
+                              "type": "string"
+                            },
+                            "hours": {
+                              "type": "string"
+                            },
+                            "minutes": {
+                              "type": "string"
+                            },
+                            "seconds": {
+                              "type": "string"
+                            },
+                            "time": {
+                              "type": "string"
+                            },
+                            "timezoneOffset": {
+                              "type": "string"
+                            }
                           }
                         }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "EinvoiceDetails": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "v": {
+                  "type": "string"
+                },
+                "code": {
+                  "type": "string"
+                },
+                "msg": {
+                  "type": "string"
+                },
+                "invNum": {
+                  "type": "string"
+                },
+                "invDate": {
+                  "type": "string"
+                },
+                "sellerName": {
+                  "type": "string"
+                },
+                "amount": {
+                  "type": "string"
+                },
+                "invStatus": {
+                  "type": "string"
+                },
+                "invPeriod": {
+                  "type": "string"
+                },
+                "sellerBan": {
+                  "type": "string"
+                },
+                "sellerAddress": {
+                  "type": "string"
+                },
+                "invoiceTime": {
+                  "type": "string"
+                },
+                "buyerBan": {
+                  "type": "string"
+                },
+                "currency": {
+                  "type": "string"
+                },
+                "details": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "rowNum": {
+                        "type": "string"
+                      },
+                      "description": {
+                        "type": "string"
+                      },
+                      "quantity": {
+                        "type": "string"
+                      },
+                      "unitPrice": {
+                        "type": "string"
+                      },
+                      "amount": {
+                        "type": "string"
                       }
                     }
                   }
