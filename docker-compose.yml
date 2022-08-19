@@ -23,7 +23,6 @@ services:
       - MYSQL_DATABASE=wallet
       - APP_ID=${APP_ID}
       - API_KEY=${API_KEY}
-      - UUID=${UUID}
       - DEV_URL=http://localhost:${SERVER_PORT}
       - PRO_URL=${PROD_URL}
       - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
