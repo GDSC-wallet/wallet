@@ -44,13 +44,16 @@
           </v-list-item>
           <v-container>
             <v-row dense>
-              <v-col cols="4">
+              <v-col cols="6" md="3" lg="3">
                 <v-btn block @click="handleDialogChange(true)">編輯標籤</v-btn>
               </v-col>
-              <v-col cols="4">
+              <v-col cols="6" md="3" lg="3">
                 <v-btn color="info" block @click="editModal(getWalletInfo)">編輯錢包</v-btn>
               </v-col>
-              <v-col cols="4">
+               <v-col cols="6" md="3" lg="3">
+                <v-btn color="info" block @click="handleEinvoiceDialogOpen(true)">匯入雲端發票</v-btn>
+              </v-col>
+              <v-col cols="6" md="3" lg="3">
                 <v-btn color="error" block @click="deleteWallet(getWalletInfo.wallet_id)">刪除錢包</v-btn>
               </v-col>
             </v-row>
@@ -77,6 +80,7 @@
     <WalletModal mode="edit" :open="walletDialogOpen" :editingWallet="edittingWallet"
       @handleDialogChange="handleWalletDialogChange" />
     <TagModal :open="tagDialogOpen" @handleChange="handleDialogChange" />
+    <EinvoiceModal v-model="einvoiceDialogOpen" />
   </v-sheet>
 </template>
 
@@ -86,6 +90,7 @@ import WalletModal from "../components/Wallet/components/WalletModal.vue";
 import TagModal from "../components/TagModal/Main.vue";
 import EditProfileModal from "../components/Setting/EditProfileModal.vue";
 import DebtorModal from "../components/DebtorModal/Main.vue";
+import EinvoiceModal from "../components/Einvoice/EinvoiceModal.vue";
 
 export default {
   name: "Setting",
@@ -94,6 +99,7 @@ export default {
       tagDialogOpen: false,
       walletDialogOpen: false,
       edittingWallet: null,
+      einvoiceDialogOpen: false,
       display: true
     };
   },
@@ -102,6 +108,7 @@ export default {
     TagModal: TagModal,
     EditProfileModal: EditProfileModal,
     DebtorModal: DebtorModal,
+    EinvoiceModal: EinvoiceModal,
   },
   mounted() { },
   methods: {
@@ -117,6 +124,9 @@ export default {
     },
     editModal(data) {
       (this.edittingWallet = data), (this.walletDialogOpen = true);
+    },
+    handleEinvoiceDialogOpen(value) {
+      this.einvoiceDialogOpen = value;
     },
     submitBarcode() {
       this.display = !this.display;

@@ -62,7 +62,7 @@ import BarcodeModal from "./components/BarcodeModal/Main.vue";
 import Search from "./components/Search/Main.vue"
 
 export default {
-  name: "App",
+  name: "Wallet",
   data() {
     return {
       route: "Home",
