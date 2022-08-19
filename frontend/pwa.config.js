@@ -47,6 +47,10 @@ export default {
         urlPattern: new RegExp("/oauth*"),
         handler: 'NetworkOnly',
       },
+      {
+        urlPattern: new RegExp("/api-doc*"),
+        handler: 'NetworkOnly',
+      },
     ]
   }
 }
