@@ -1,4 +1,5 @@
 import axios from "axios";
+import https from "https";
 import qs from "qs";
 import dotenv from "dotenv"
 
@@ -6,12 +7,15 @@ dotenv.config();
 
 export const getHeaders = async (req, res, next) => {
 
+    // 從 req.session?.passport?.user 取得 jwt decode 的資料，不進行二次解密
+    const user_id = req.session?.passport?.user?.user_id;
+
     const { startDate, endDate, cardNo, cardEncrypt } = req.query;
     const version = 0.5;
     const cardType = "3J0002";
     const expTimeStamp = 2147483647;
     const onlyWinningInv = "N";
-    const uuid = process.env.UUID;
+    const uuid = user_id;
     const appID = process.env.APP_ID;
     const url = "https://api.einvoice.nat.gov.tw/PB2CAPIVAN/invServ/InvServ";
 
@@ -61,15 +65,17 @@ export const getHeaders = async (req, res, next) => {
 
 export const getDetails = async (req, res, next) => {
 
-    const { cardNo, cardEncrypt, invNum, year, month, date } = req.query;
+    // 從 req.session?.passport?.user 取得 jwt decode 的資料，不進行二次解密
+    const user_id = req.session?.passport?.user?.user_id;
 
+    const { cardNo, cardEncrypt, invNum, year, month, date } = req.query;
     const version = 0.5;
     const cardType = "3J0002";
     const expTimeStamp = 2147483647;
-    const uuid = process.env.UUID;
+    const uuid = user_id;
     const appID = process.env.APP_ID;
     const url = "https://api.einvoice.nat.gov.tw/PB2CAPIVAN/invServ/InvServ";
-    
+
     var queryYear = (Number(year)+1911).toString();
     var queryMonth = (Number(month) < 10) ? '0' + month : month;
     var queryDate = (Number(date) < 10) ? '0' + date : date;
