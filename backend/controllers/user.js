@@ -275,10 +275,8 @@ export const getUserProfile = async (req, res, next) => {
                     console.log(response);
                     res.status(400).json(response);
                 })
-
-            response = Data;
-            console.log(response);
-            res.status(201).json(response);
+            console.log(Data);
+            res.status(201).json(Data);
         }).catch(err => {
             var response = {
                 success: false,
