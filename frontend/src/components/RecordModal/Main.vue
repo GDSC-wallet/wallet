@@ -46,19 +46,8 @@
               </v-chip>
             </template>
           </v-select>
-          <v-select :items="getDebtorNames" v-model="data.selectedDebtor" multiple label="債務人"
-            prepend-icon="mdi-account-arrow-left">
-            <template v-slot:prepend-item>
-              <NewDebtor :dialog="open" />
-            </template>
-            <template v-slot:item="{ item }">
-              <v-avatar color="primary" size="25">
-                <span class="white--text">{{ item[0] }}</span>
-              </v-avatar>
-              <v-spacer></v-spacer>
-              <span>{{ item }}</span>
-            </template>
-          </v-select>
+          <v-text-field prepend-icon="mdi-account-arrow-left" v-model="selectedDebtor" @click="debtorDialog = true"
+            label="債務人" readonly></v-text-field>
           <v-text-field label="備註" v-model="data.record_description" prepend-icon="mdi-message-text"></v-text-field>
         </v-card-text>
         <v-card-actions class="py-0">
@@ -77,17 +66,22 @@
         </v-card-actions>
       </v-card>
     </v-form>
+    <v-dialog v-model="debtorDialog">
+      <DebtorDialog @finish="getDebtorInfo" />
+    </v-dialog>
   </v-dialog>
 </template>
 
 <script>
 import { mapActions, mapGetters } from "vuex";
-import NewDebtor from "../DebtorModal/components/NewDebtor.vue"
+import NewDebtor from "../DebtorModal/components/NewDebtor.vue";
+import DebtorDialog from "./component/DebtorDialog.vue";
 
 export default {
   name: "RecordModal",
   components: {
     NewDebtor: NewDebtor,
+    DebtorDialog: DebtorDialog,
   },
   data() {
     return {
@@ -99,6 +93,7 @@ export default {
         )
           .toISOString()
           .split("T")[0],
+        record_debtors: "",
         record_description: "",
         record_id: "",
         record_name: "",
@@ -106,11 +101,12 @@ export default {
         record_type: "income",
         record_updated_time: "",
         wallet_record_tag_id: "",
-        selectedDebtor: null,
       },
       valid: true,
       record_date_picker: false,
       record_tag_selector: false,
+      debtorDialog: false,
+      selectedDebtor: null
     };
   },
   methods: {
@@ -136,6 +132,12 @@ export default {
         b = parseInt(hex.slice(4, 6), 16);
       return r * 0.299 + g * 0.587 + b * 0.114 > 186 ? "black" : "white";
     },
+    getDebtorInfo(debInfo, debNames) {
+      console.log(debInfo)
+      this.data.record_debtors = debInfo;
+      this.debtorDialog = false;
+      this.selectedDebtor = debNames
+    }
   },
   computed: {
     ...mapGetters({
@@ -204,6 +206,7 @@ export default {
             )
               .toISOString()
               .split("T")[0],
+            record_debtors: null,
             record_description: "",
             record_id: "",
             record_name: "",
@@ -211,8 +214,8 @@ export default {
             record_type: "income",
             record_updated_time: "",
             wallet_record_tag_id: this.walletTags[0]?.value.tag_id,
-            selectedDebtor: null,
           };
+          this.selectedDebtor = null;
         } else if (this.mode == "edit") {
           this.data = Object.assign({}, this.editData);
           this.data.record_date = new Date(
