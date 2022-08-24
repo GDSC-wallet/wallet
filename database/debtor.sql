@@ -56,7 +56,9 @@ CREATE TABLE `debtor_record` (
   `debtor_record_amount` int DEFAULT 0,
   `debtor_id` varchar(140) NOT NULL,
   `record_id` varchar(140) NOT NULL,
-  PRIMARY KEY (`debtor_record_id`)
+  PRIMARY KEY (`debtor_record_id`),
+  CONSTRAINT `debtor_record_ibfk_1` FOREIGN KEY (`debtor_id`) REFERENCES `debtor` (`debtor_id`) ON DELETE CASCADE,
+  CONSTRAINT `debtor_record_ibfk_2` FOREIGN KEY (`record_id`) REFERENCES `wallet_record` (`record_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
