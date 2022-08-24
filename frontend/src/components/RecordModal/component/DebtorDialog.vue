@@ -73,8 +73,28 @@ export default {
   computed: {
     ...mapGetters({
       getDebtorNames: "debtor/getDebtorNames",
-      getDebtor: "debtor/getDebtor"
-    })
-  }
+      getDebtor: "debtor/getDebtor",
+      getModal: "record/getModal",
+      getData: "record/getData",
+      mode: "record/getMode"
+    }),
+  },
+  watch: {
+    getModal(newVal) {
+      if (newVal == true) {
+        if (this.$refs.form) this.$refs.form.resetValidation();
+        this.selected = [];
+        this.amount = [];
+        if (this.mode == "edit") {
+          let tmp = this.getData.record_debtors.map(ele => ele.debtor_name);
+          for (let i = 0; i < tmp.length; ++i) {
+            let id = this.getDebtorNames.findIndex(str => str == tmp[i])
+            this.selected[i] = id;
+            this.amount[id] = this.getData.record_debtors[i].debtor_record_amount;
+          }
+        }
+      }
+    },
+  },
 }
 </script>

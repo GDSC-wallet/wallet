@@ -218,6 +218,7 @@ export default {
           this.selectedDebtor = null;
         } else if (this.mode == "edit") {
           this.data = Object.assign({}, this.editData);
+          this.selectedDebtor = this.editData.record_debtors.map((deb) => deb.debtor_name)
           this.data.record_date = new Date(
             new Date(this.data.record_date) -
             new Date(this.data.record_date).getTimezoneOffset() * 60000
