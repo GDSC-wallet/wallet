@@ -47,7 +47,11 @@
             </template>
           </v-select>
           <v-text-field prepend-icon="mdi-account-arrow-left" v-model="selectedDebtor" @click="debtorDialog = true"
-            label="債務人" readonly></v-text-field>
+            label="債務人" readonly>
+            <v-avatar color="indigo" size="36">
+              <span class="white--text text-h5">36</span>
+            </v-avatar>
+          </v-text-field>
           <v-text-field label="備註" v-model="data.record_description" prepend-icon="mdi-message-text"></v-text-field>
         </v-card-text>
         <v-card-actions class="py-0">
