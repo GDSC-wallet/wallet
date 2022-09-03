@@ -7,7 +7,7 @@ node_modules
 access.log
 */node_modules
 ./database
-./wallet-data
+./backup
 
 # dependencies
 /node_modules
