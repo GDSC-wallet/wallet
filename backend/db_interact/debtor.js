@@ -8,7 +8,7 @@ function print_error(err) {
 // return debtor_id, debtor_name
 const get_record_debtors = (record_id) => {
     return new Promise(async (resolve, reject) => {
-        var sql = "SELECT debtor.debtor_id, debtor.debtor_name, debtor_record.debtor_record_amount FROM debtor INNER JOIN debtor_record ON debtor.debtor_id = debtor_record.debtor_id AND debtor_record.record_id = ? WHERE debtor.debtor_id = (SELECT debtor_id FROM debtor_record WHERE record_id = ?)";
+        var sql = "SELECT debtor.debtor_id, debtor.debtor_name, debtor_record.debtor_record_amount FROM debtor INNER JOIN debtor_record ON debtor.debtor_id = debtor_record.debtor_id AND debtor_record.record_id = ? WHERE debtor.debtor_id IN (SELECT debtor_id FROM debtor_record WHERE record_id = ?)";
         pool.getConnection( async (err, conn) => {
             if(err) {
                 print_error(err);
@@ -31,7 +31,7 @@ const get_record_debtors = (record_id) => {
 
 const get_debtor_records = (debtor_id) => {
     return new Promise(async (resolve, reject) => {
-        var sql = "SELECT * FROM wallet_record WHERE record_id = (SELECT record_id FROM debtor_record WHERE debtor_id = ?)";
+        var sql = "SELECT * FROM wallet_record WHERE record_id IN (SELECT record_id FROM debtor_record WHERE debtor_id = ?)";
         pool.getConnection( async (err, conn) => {
             if(err) {
                 print_error(err);
@@ -122,6 +122,9 @@ const insert_debtor_record = (record_id, debtor_id, debtor_record_amount) => {
 }
 
 const delete_debtor_record = (record_id, debtor_id, debtor_record_amount) => {
+    console.log("record_id: " + record_id);
+    console.log("debtor_id: " + debtor_id);
+    console.log("debtor_record_amount: " + debtor_record_amount);
     return new Promise( async (resolve, reject) => {
         var sql = "START TRANSACTION; DELETE FROM debtor_record WHERE record_id = ? AND debtor_id = ?; UPDATE debtor SET debtor_amount = debtor_amount - ? WHERE debtor_id = ?; COMMIT";
         pool.getConnection( async (err, conn) => {

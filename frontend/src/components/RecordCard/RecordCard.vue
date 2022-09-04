@@ -16,12 +16,15 @@
     </v-expansion-panel-header>
     <v-expansion-panel-content>
       <p>{{ record.record_description }}</p>
+      <p v-if="record.record_debtors.length != 0">
+        <small>債務人:{{ record.record_debtors.map(deb => deb.debtor_name) }}</small>
+      </p>
       <v-row v-if="editable">
         <v-col>
           <v-btn color="primary" @click="openRecordModal(record)" block>修改</v-btn>
         </v-col>
         <v-col>
-          <v-btn color="error" @click="deleteRecord(record)" block>刪除</v-btn>
+          <v-btn color="error" @click="deleteRec" :disabled="disabled" block>刪除</v-btn>
         </v-col>
       </v-row>
     </v-expansion-panel-content>
@@ -35,6 +38,11 @@ export default {
   props: {
     record: Object,
     editable: Boolean,
+  },
+  data() {
+    return {
+      disabled: false,
+    }
   },
   methods: {
     ...mapActions({
@@ -57,6 +65,11 @@ export default {
     },
     tag(id) {
       return this.getAllWalletTags.find((tag) => tag.tag_id == id);
+    },
+    deleteRec() {
+      this.disabled = true;
+      this.deleteRecord(this.record).catch(() => this.disabled = false
+      )
     }
   },
   computed: {

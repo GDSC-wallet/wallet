@@ -37,7 +37,7 @@ const app = express();
 //   secret: 's3Cur3',
 //   name: 'sessionId'
 // }))
-app.use(helmet.hidePoweredBy());
+app.use(helmet());
 
 //設定logger，將每個request寫到access.log裡
 //若要deploy到server，請將下四行註解掉
