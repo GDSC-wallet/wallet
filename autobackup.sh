@@ -8,4 +8,3 @@ sudo docker exec database sh -c 'mysqldump -uroot -p"root" wallet' > ./backup/${
 cd backup
 gzip ${FILENAME}
 cd ..
-exit
