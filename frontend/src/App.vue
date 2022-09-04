@@ -51,6 +51,7 @@
       -->
     </v-main>
     <RecordModal />
+    <ReloadPrompt />
   </v-app>
 </template>
 
@@ -60,6 +61,7 @@ import Wallets from "./components/Wallet/Main.vue";
 import RecordModal from "./components/RecordModal/Main.vue";
 import BarcodeModal from "./components/BarcodeModal/Main.vue";
 import Search from "./components/Search/Main.vue"
+import ReloadPrompt from "./components/ReloadPrompt.vue"
 
 export default {
   name: "Wallet",
@@ -73,7 +75,8 @@ export default {
     RecordModal: RecordModal,
     Wallets: Wallets,
     BarcodeModal: BarcodeModal,
-    Search: Search
+    Search: Search,
+    ReloadPrompt: ReloadPrompt
   },
   mounted() {
     this.login();

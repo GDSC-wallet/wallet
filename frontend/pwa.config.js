@@ -26,6 +26,7 @@ export default {
   },
   workbox: {
     globPatterns: ['**/*.{js,css,html,png}'],
+    navigateFallbackDenylist: [new RegExp("/oauth/*")],
     runtimeCaching: [
       {
         urlPattern: /https:\/\/fonts\.googleapis\.com\/*/,
