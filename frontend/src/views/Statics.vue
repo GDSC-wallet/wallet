@@ -83,17 +83,17 @@ export default {
         return {
           labels: [...Array(daysInMonth).keys()],
           datasets: [{
-            label: 'DS1',
+            label: '收入',
             data: this.getBarData.pos,
             backgroundColor: '#FF7575',
             borderColor: '#FF7575',
           }, {
-            label: 'DS2',
+            label: '支出',
             data: this.getBarData.neg,
             backgroundColor: '#4EFEB3',
             borderColor: '#4EFEB3',
           }, {
-            label: 'DS3',
+            label: '總和',
             data: this.getLineData,
             type: 'line',
             backgroundColor: '#5C7FB3',
@@ -119,7 +119,7 @@ export default {
       return {
         labels: this.getLabels,
         datasets: [{
-          data: this.getPieData,
+          data: this.getPieData.filter(val => val != 0),
           backgroundColor: this.getColor,
         }]
       }
@@ -134,7 +134,11 @@ export default {
       return ret;
     },
     getColor() {
+      let vm = this;
       return this.getWalletTags(this.type).map(item => item.tag_color)
+        .filter((val, id, arr) => {
+          return vm.getPieData[arr.indexOf(val)] != 0
+        });
     },
     getPieData() {
       let arr = [];
