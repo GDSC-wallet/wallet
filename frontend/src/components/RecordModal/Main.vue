@@ -123,7 +123,7 @@ export default {
     }),
     sendRecord() {
       if (!this.$refs.form.validate()) return;
-      if (this.mode == "create") {
+      if (this.mode == "create" || this.mode == "import") {
         this.createRecord(this.data);
       } else if (this.mode == "edit") {
         this.editRecord(this.data);
@@ -220,7 +220,7 @@ export default {
             wallet_record_tag_id: this.walletTags[0]?.value.tag_id,
           };
           this.selectedDebtor = null;
-        } else if (this.mode == "edit") {
+        } else if (this.mode == "edit" || this.mode == "import") {
           this.data = Object.assign({}, this.editData);
           this.selectedDebtor = this.editData.record_debtors.map((deb) => deb.debtor_name)
           this.data.record_date = new Date(
