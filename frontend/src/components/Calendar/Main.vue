@@ -1,7 +1,13 @@
 <template>
   <div>
-    <vc-date-picker v-model="date" :attributes="statusBar" is-expanded is-required @update:to-page="toPage"
-      ref="calendar">
+    <vc-date-picker
+      v-model="date"
+      :attributes="statusBar"
+      is-expanded
+      is-required
+      @update:to-page="toPage"
+      ref="calendar"
+    >
       <template v-slot:footer>
         <div>
           <v-btn small text outlined @click="toToday" class="back-to-today-btn">
@@ -14,30 +20,35 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import { mapGetters, mapActions } from "vuex";
 
 export default {
   name: "Calendar",
   data() {
     return {};
   },
-  mounted() { },
+  mounted() {},
   methods: {
     ...mapActions({
-      setDate: "calendar/setDate"
+      setDate: "calendar/setDate",
     }),
     toPage(e) {
       // First check if date is equal to score's date,
       // because render will trigger this function.
-      if (e.month != this.date.getMonth() + 1 || e.year != this.date.getFullYear()) {
-        this.date = new Date(new Date(this.date.setMonth(e.month - 1)).setFullYear(e.year))
+      if (
+        e.month != this.date.getMonth() + 1 ||
+        e.year != this.date.getFullYear()
+      ) {
+        this.date = new Date(
+          new Date(this.date.setMonth(e.month - 1)).setFullYear(e.year)
+        );
       }
     },
     toToday() {
       const calendar = this.$refs.calendar;
       calendar.move(new Date());
       this.setDate(new Date());
-    }
+    },
   },
   computed: {
     ...mapGetters({
@@ -49,21 +60,38 @@ export default {
         return this.getDate;
       },
       set(value) {
-        this.setDate(value)
-      }
+        this.setDate(value);
+      },
     },
     statusBar() {
       let incomeDates = [];
       let expenseDates = [];
-      this.getRecords.map(record => {
+      this.getRecords.map((record) => {
         if (record.record_type === "income") {
-          incomeDates.push(new Date(record.record_date))
+          incomeDates.push(new Date(record.record_date));
         } else if (record.record_type === "expense") {
-          expenseDates.push(new Date(record.record_date))
+          expenseDates.push(new Date(record.record_date));
         }
-      })
-      return [{ bar: true, dates: incomeDates }, { bar: "red", dates: expenseDates }]
-    }
+      });
+      return [
+        {
+          bar: {
+            style: {
+              backgroundColor: this.$vuetify.theme.themes.light.income,
+            },
+          },
+          dates: incomeDates,
+        },
+        {
+          bar: {
+            style: {
+              backgroundColor: this.$vuetify.theme.themes.light.expense,
+            },
+          },
+          dates: expenseDates,
+        },
+      ];
+    },
   },
 };
 </script>
