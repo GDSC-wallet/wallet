@@ -5,6 +5,7 @@
         <Calendar class="px-1" />
       </v-col>
       <v-col cols="12" sm="6">
+        <Balance />
         <RecordList :records="getTodaysRecords" editable class="px-1" />
         <br /><br /><br />
       </v-col>
@@ -17,7 +18,8 @@
 
 <script>
 import Calendar from "../components/Calendar/Main.vue";
-import RecordList from "../components/RecordCard/RecordList.vue"
+import RecordList from "../components/RecordCard/RecordList.vue";
+import Balance from "../components/Balance/Main.vue";
 import { mapGetters, mapActions } from "vuex";
 
 export default {
@@ -27,7 +29,8 @@ export default {
   },
   components: {
     Calendar: Calendar,
-    RecordList: RecordList
+    RecordList: RecordList,
+    Balance: Balance,
   },
   mounted() { },
   methods: {

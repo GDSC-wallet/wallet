@@ -47,7 +47,11 @@
             </template>
           </v-select>
           <v-text-field prepend-icon="mdi-account-arrow-left" v-model="selectedDebtor" @click="debtorDialog = true"
-            label="債務人" readonly></v-text-field>
+            label="債務人" readonly>
+            <v-avatar color="indigo" size="36">
+              <span class="white--text text-h5">36</span>
+            </v-avatar>
+          </v-text-field>
           <v-text-field label="備註" v-model="data.record_description" prepend-icon="mdi-message-text"></v-text-field>
         </v-card-text>
         <v-card-actions class="py-0">
@@ -119,7 +123,7 @@ export default {
     }),
     sendRecord() {
       if (!this.$refs.form.validate()) return;
-      if (this.mode == "create") {
+      if (this.mode == "create" || this.mode == "import") {
         this.createRecord(this.data);
       } else if (this.mode == "edit") {
         this.editRecord(this.data);
@@ -216,7 +220,7 @@ export default {
             wallet_record_tag_id: this.walletTags[0]?.value.tag_id,
           };
           this.selectedDebtor = null;
-        } else if (this.mode == "edit") {
+        } else if (this.mode == "edit" || this.mode == "import") {
           this.data = Object.assign({}, this.editData);
           this.selectedDebtor = this.editData.record_debtors.map((deb) => deb.debtor_name)
           this.data.record_date = new Date(

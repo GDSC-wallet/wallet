@@ -16,9 +16,14 @@
     </v-expansion-panel-header>
     <v-expansion-panel-content>
       <p>{{ record.record_description }}</p>
-      <p v-if="record.record_debtors.length != 0">
-        <small>債務人:{{ record.record_debtors.map(deb => deb.debtor_name) }}</small>
-      </p>
+      <div v-if="record.record_debtors.length != 0" class="d-flex py-2" >
+          <v-chip v-for="deb in record.record_debtors" color="primary" >
+            <v-avatar color="grey lighten-1" size="20">
+              <span>{{ deb.debtor_name[0] }}</span>
+            </v-avatar>
+            <span>{{ deb.debtor_name }}</span>
+          </v-chip>
+      </div>
       <v-row v-if="editable">
         <v-col>
           <v-btn color="primary" @click="openRecordModal(record)" block>修改</v-btn>

@@ -31,6 +31,9 @@ const record = {
     editMode({ commit }) {
       commit("setMode", "edit");
     },
+    importMode({ commit }) {
+      commit("setMode", "import");
+    },
     setData({ commit }, data) {
       commit("setData", data)
     },

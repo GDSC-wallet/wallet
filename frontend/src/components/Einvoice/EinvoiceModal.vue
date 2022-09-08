@@ -17,22 +17,34 @@
       </v-card-text>
       <v-form @submit.prevent="getEinvoiceData(barcode, password)" ref="form" lazy-validation v-model="valid" v-else>
         <v-card-text class="pa-3">
-          <v-text-field label="載具條碼" v-model="barcode" :rules="[(v) => !!v || '請輸入條碼']" />
+          <v-text-field label="載具條碼" v-model="barcode" :rules="[(v) => !!v || '請輸入條碼']" @keyup="uppercase" />
           <v-text-field label="載具驗證碼" v-model="password" :type="passwordShow ? 'text' : 'password'"
             :append-icon="passwordShow ? 'mdi-eye' : 'mdi-eye-off'" @click:append="passwordShow = !passwordShow"
             :rules="[(v) => !!v || '請輸入驗證碼']" />
+          <v-container>
+            <v-row>
+              <v-col>
+                <v-text-field label="年" v-model.number="year" type="number" required
+                  :rules="[(v) => (v && !isNaN(parseFloat(v))) || '請填入年份']"></v-text-field>
+              </v-col>
+              <v-col>
+                <v-select :items="month" v-model=mon label="月"></v-select>
+              </v-col>
+            </v-row>
+          </v-container>
         </v-card-text>
         <v-card-actions class="pa-3">
           <v-btn block color="primary" type="submit" :disabled="!valid || fetching" :loading="fetching">取得載具發票</v-btn>
         </v-card-actions>
       </v-form>
-      <v-card-text  v-if="!fetching">
+      <v-card-text v-if="!fetching">
         <v-list two-line>
           <v-list-item v-for="(invoice, index) in invoiceRecords">
             <v-list-item-content>
               <v-list-item-title class="d-flex justify-space-between">
-                <span>{{ invoice.detail }}</span>
+                <span class="overflow-x-auto overflow-y-hidden">{{ invoice.detail }}</span>
                 <span>{{ invoice.amount }}</span>
+                <v-icon @click="openRecordModal(invoice)">mdi-plus</v-icon>
               </v-list-item-title>
               <v-list-item-subtitle>{{ invoice.date }}</v-list-item-subtitle>
             </v-list-item-content>
@@ -69,13 +81,49 @@ export default {
       },
       barcode: "",
       password: "",
-      passwordShow: false
+      passwordShow: false,
+      datePicker: [false, false],
+      month: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+      year: new Date().getFullYear(),
+      mon: new Date().getMonth() + 1,
+      date: Date()
     }
   },
   mounted() {
     this.barcode = this.getWalletInfo.wallet_barcode
   },
   methods: {
+    ...mapActions({
+      openModal: "record/openModal",
+      importMode: "record/importMode",
+      setData: "record/setData",
+    }),
+    ...mapGetters({
+      walletTags: "wallet/getWalletTags",
+    }),
+    test() {
+      this.openModal();
+    },
+    openRecordModal(invoice) {
+      console.log(invoice)
+      this.importMode();
+      this.openModal();
+      this.setData({
+        record_amount: invoice.amount,
+        record_created_time: "",
+        record_date: new Date(invoice.date.slice(0, 4) + '-' + invoice.date.slice(4, 6) + '-' + invoice.date.slice(6, 8))
+          .toISOString()
+          .split("T")[0],
+        record_debtors: [],
+        record_description: invoice.seller,
+        record_id: "",
+        record_name: invoice.detail,
+        record_ordinary: 1,
+        record_type: "expense",
+        record_updated_time: "",
+        wallet_record_tag_id: "",/*  this.walletTags('expense').map(val=>val.tag_id)[0], */
+      });
+    },
     init() {
       this.barcode = this.getWalletInfo.wallet_barcode;
       this.password = "";
@@ -91,8 +139,10 @@ export default {
         failure: []
       },
         this.fetching = false;
+      this.startDate = "", this.endDate = "";
     },
     getEinvoiceData(barcode, password) {
+      let daysInMonth = new Date(this.year, this.mon, 0).getDate();
       if (!this.$refs.form.validate()) return;
       this.fetching = true;
       this.fetchingStage = {
@@ -107,9 +157,9 @@ export default {
       },
         ajax("/api/einvoice/headers", "get", {
           params: {
-            startDate: "2022/07/01",
-            endDate: "2022/07/31",
-            cardNo: barcode,
+            startDate: String(this.year) + '/0' + String(this.mon) + '/' + "01",
+            endDate: String(this.year) + '/0' + String(this.mon) + '/' + String(daysInMonth),
+            cardNo: (barcode[0] == '/') ? barcode : '/' + barcode,
             cardEncrypt: password
           }
         }).then(res => {
@@ -146,6 +196,9 @@ export default {
         }).then(() => {
           this.fetching = false;
         })
+    },
+    uppercase() {
+      this.barcode = this.barcode.toUpperCase();
     }
   },
   computed: {
@@ -163,11 +216,11 @@ export default {
     invoiceRecords() {
       return this.fetchingData.success.map(invoice => {
         return {
-            amount: invoice.amount,
-            date: invoice.invDate,
-            seller: invoice.sellerName,
-            detail: invoice.details.map(detail => detail.description).join(", ")
-          }
+          amount: invoice.amount,
+          date: invoice.invDate,
+          seller: invoice.sellerName,
+          detail: invoice.details.map(detail => detail.description).join(", ")
+        }
       })
     }
   },
