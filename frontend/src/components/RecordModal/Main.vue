@@ -222,6 +222,7 @@ export default {
           this.selectedDebtor = null;
         } else if (this.mode == "edit" || this.mode == "import") {
           this.data = Object.assign({}, this.editData);
+          this.data.record_amount = Math.abs(this.data.record_amount);
           this.selectedDebtor = this.editData.record_debtors.map((deb) => deb.debtor_name)
           this.data.record_date = new Date(
             new Date(this.data.record_date) -

@@ -66,11 +66,8 @@ const record = {
     },
     async editRecord({ rootGetters, getters, dispatch }, record) {
       const old_record = getters.getData;
-      const new_record_amount = record?.record_amount;
+      const new_record_amount = (record?.record_type == "expense" ? -1 : 1) * record?.record_amount;
       const old_record_amount = old_record?.record_amount;
-      const new_record_weight = record?.record_type == "expense" ? -1 : 1;
-      const old_record_weight = old_record?.record_type == "expense" ? -1 : 1;
-      const diff = new_record_weight * new_record_amount - old_record_weight * old_record_amount;
 
       if (record?.record_type != old_record?.record_type && record?.record_debtors) {
         let len = record.record_debtors.length;
@@ -86,10 +83,10 @@ const record = {
           record_ordinary: 1,
           record_name: record?.record_name,
           record_description: record?.record_description,
-          record_amount: record?.record_amount,
+          record_amount: new_record_amount,
           record_type: record?.record_type,
           record_date: new Date(record?.record_date).toISOString().split("Z")[0],
-          record_amount_diff: diff,
+          record_amount_diff: new_record_amount - old_record_amount,
           record_debtors: record?.record_debtors,
         }
       }).then(res => {
