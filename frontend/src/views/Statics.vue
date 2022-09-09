@@ -22,7 +22,13 @@
         </div>
       </v-col>
       <v-col cols="12" sm="6">
-        <RecordList :records="getMonthRecords" showDate showFilter />
+        <RecordList :records="getMonthRecords" showDate showFilter>
+          <template v-slot:empty>
+            <div class="mt-5 text-center">
+              本月無資料
+            </div>
+          </template>
+        </RecordList>
       </v-col>
     </v-row>
   </v-container>
