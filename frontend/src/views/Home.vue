@@ -6,7 +6,15 @@
       </v-col>
       <v-col cols="12" sm="6">
         <Balance />
-        <RecordList :records="getTodaysRecords" editable class="px-1" />
+        <RecordList :records="getTodaysRecords" editable class="px-1">
+          <template v-slot:empty>
+            <v-card class="py-4 px-6 elevation-0" elevation-0>
+              本日無資料
+              <br />
+              用右下角的按鈕新增這天的第一筆吧
+            </v-card>
+          </template>
+        </RecordList>
         <br /><br /><br />
       </v-col>
     </v-row>
@@ -32,7 +40,7 @@ export default {
     RecordList: RecordList,
     Balance: Balance,
   },
-  mounted() { },
+  mounted() {},
   methods: {
     ...mapActions({
       openModal: "record/openModal",
