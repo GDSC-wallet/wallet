@@ -68,6 +68,7 @@ export const update_wallet_check = async (req, res, next) => {
 };
 
 export const delete_wallet_check = async (req, res, next) => {
+    const body = req.body
     try {
         if(!!!body.wallet_id){
             res.status(401).json({success:false,msg:"wallet_id is required"})

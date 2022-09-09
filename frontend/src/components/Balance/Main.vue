@@ -42,14 +42,11 @@ export default {
       records: "wallet/getRecords",
     }),
     currentRecord() {
-      let vm = this;
+      let end = new Date(this.curDate.getFullYear(), this.curDate.getMonth(), this.curDate.getDate(), 23, 59, 59);
+      let start = new Date(this.curDate.getFullYear(), this.curDate.getMonth(), 1, 0, 0, 0);
       return this.records.filter(function (rec) {
         let tmp = new Date(rec.record_date);
-        return (
-          tmp.getMonth() == vm.curDate.getMonth() &&
-          tmp.getYear() == vm.curDate.getYear() &&
-          tmp <= vm.curDate
-        );
+        return (tmp >= start && tmp <= end);
       });
     },
   },
