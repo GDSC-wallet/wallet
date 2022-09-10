@@ -7,7 +7,7 @@
       <v-toolbar dark flat color="primary">
         <v-toolbar-title>編輯債務人</v-toolbar-title>
       </v-toolbar>
-      <v-container class="flex-grow-1" style="overflow: auto">
+      <v-card-text class="pa-0">
         <v-list>
           <v-list-item v-for="(debtor, index) in debtors" :key="index">
             <v-list-item-content>
@@ -16,11 +16,15 @@
                   {{ debtor.debtor_name }}
                 </span>
                 <div>
-                  <v-btn icon>
-                    <v-icon @click="edit(debtor.debtor_name)"
-                      >mdi-pencil</v-icon
-                    >
-                  </v-btn>
+                  <NewDebtor edit :previousName="previousName">
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-btn icon v-bind="attrs" v-on="on">
+                        <v-icon @click="edit(debtor.debtor_name)">
+                          mdi-pencil
+                        </v-icon>
+                      </v-btn>
+                    </template>
+                  </NewDebtor>
                   <v-btn
                     icon
                     color="error"
@@ -33,19 +37,17 @@
             </v-list-item-content>
           </v-list-item>
         </v-list>
-      </v-container>
-      <NewDebtor :dialog="dialogOpen" />
+      </v-card-text>
+      <v-card-actions>
+        <NewDebtor>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn block color="primary" v-bind="attrs" v-on="on">
+              新增債務人
+            </v-btn>
+          </template>
+        </NewDebtor>
+      </v-card-actions>
     </v-card>
-    <v-dialog v-model="editDialog">
-      <v-card>
-        <NewDebtor
-          edit
-          :dialog="dialogOpen"
-          :previousName="previousName"
-          @finish="editDialog = false"
-        />
-      </v-card>
-    </v-dialog>
   </v-dialog>
 </template>
 
@@ -61,7 +63,6 @@ export default {
   data() {
     return {
       dialogOpen: false,
-      editDialog: false,
       previousName: null,
     };
   },

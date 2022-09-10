@@ -127,18 +127,16 @@
                 </v-btn>
               </v-col>
               <v-col>
-                <v-btn type="submit" color="primary" block :disabled="!valid"
-                  >Submit</v-btn
-                >
+                <v-btn type="submit" color="primary" block :disabled="!valid">
+                  Submit
+                </v-btn>
               </v-col>
             </v-row>
           </v-container>
         </v-card-actions>
       </v-card>
     </v-form>
-    <v-dialog v-model="debtorDialog">
-      <DebtorDialog @finish="getDebtorInfo" />
-    </v-dialog>
+    <DebtorDialog @finish="getDebtorInfo" v-model="debtorDialog" />
   </v-dialog>
 </template>
 
@@ -189,7 +187,7 @@ export default {
     }),
     sendRecord() {
       if (!this.$refs.form.validate()) return;
-      if(this.data.record_name === "") {
+      if (this.data.record_name === "") {
         this.data.record_name = this.selectedTag?.tag_name;
       }
       if (this.mode == "create" || this.mode == "import") {
@@ -292,7 +290,9 @@ export default {
         } else if (this.mode == "edit" || this.mode == "import") {
           this.data = Object.assign({}, this.editData);
           this.data.record_amount = Math.abs(this.data.record_amount);
-          this.selectedDebtor = this.editData.record_debtors.map((deb) => deb.debtor_name)
+          this.selectedDebtor = this.editData.record_debtors.map(
+            (deb) => deb.debtor_name
+          );
           this.data.record_date = new Date(
             new Date(this.data.record_date) -
               new Date(this.data.record_date).getTimezoneOffset() * 60000
