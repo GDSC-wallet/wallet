@@ -1,35 +1,42 @@
 <template>
   <v-expansion-panel :readonly="!editable && !record.record_description">
     <v-expansion-panel-header>
-      <div class="d-flex align-center">
-        <v-chip :color="tag(record.wallet_record_tag_id).tag_color"
-          :text-color="contrastText(tag(record.wallet_record_tag_id).tag_color)" label small class="mr-2">
+      <v-sheet class="d-flex align-center overflow-hidden">
+        <v-chip
+          :color="tag(record.wallet_record_tag_id).tag_color"
+          :text-color="contrastText(tag(record.wallet_record_tag_id).tag_color)"
+          label
+          small
+          style="min-width: 48px"
+        >
           {{ tag(record.wallet_record_tag_id).tag_name }}
         </v-chip>
-        <span>{{ record.record_name }}</span>
-      </div>
-      <template v-slot:actions>
-        <span>
-          {{ record.record_amount }}
-        </span>
-      </template>
+        <div class="flex-grow-1 mx-2">{{ record.record_name }}</div>
+      </v-sheet>
+      <template v-slot:actions>{{ record.record_amount }}</template>
     </v-expansion-panel-header>
     <v-expansion-panel-content>
-      <p v-if="record.record_description !== ''">{{ record.record_description }}</p>
-      <div v-if="record.record_debtors.length != 0" class="d-flex pb-2" >
-          <v-chip v-for="deb in record.record_debtors" color="primary" >
-            <v-avatar color="grey lighten-1" size="20">
-              <span>{{ deb.debtor_name[0] }}</span>
-            </v-avatar>
-            <span>{{ deb.debtor_name }}</span>
-          </v-chip>
+      <p v-if="record.record_description !== ''">
+        {{ record.record_description }}
+      </p>
+      <div v-if="record.record_debtors.length != 0" class="d-flex pb-2">
+        <v-chip v-for="deb in record.record_debtors" color="primary">
+          <v-avatar color="grey lighten-1" size="20">
+            <span>{{ deb.debtor_name[0] }}</span>
+          </v-avatar>
+          <span>{{ deb.debtor_name }}</span>
+        </v-chip>
       </div>
       <v-row v-if="editable">
         <v-col>
-          <v-btn color="primary" @click="openRecordModal(record)" block>修改</v-btn>
+          <v-btn color="primary" @click="openRecordModal(record)" block
+            >修改</v-btn
+          >
         </v-col>
         <v-col>
-          <v-btn color="error" @click="deleteRec" :disabled="disabled" block>刪除</v-btn>
+          <v-btn color="error" @click="deleteRec" :disabled="disabled" block
+            >刪除</v-btn
+          >
         </v-col>
       </v-row>
     </v-expansion-panel-content>
@@ -37,7 +44,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions, mapGetters } from "vuex";
 export default {
   name: "RecordCard",
   props: {
@@ -47,7 +54,7 @@ export default {
   data() {
     return {
       disabled: false,
-    }
+    };
   },
   methods: {
     ...mapActions({
@@ -73,9 +80,8 @@ export default {
     },
     deleteRec() {
       this.disabled = true;
-      this.deleteRecord(this.record).catch(() => this.disabled = false
-      )
-    }
+      this.deleteRecord(this.record).catch(() => (this.disabled = false));
+    },
   },
   computed: {
     ...mapGetters({
@@ -83,5 +89,5 @@ export default {
       getAllWalletTags: "wallet/getAllWalletTags",
     }),
   },
-}
+};
 </script>
