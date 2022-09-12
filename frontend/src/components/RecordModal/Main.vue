@@ -125,6 +125,9 @@
                 >
                   刪除
                 </v-btn>
+                <v-btn @click="open = false" block v-else>
+                  關閉
+                </v-btn>
               </v-col>
               <v-col>
                 <v-btn type="submit" color="primary" block :disabled="!valid">
