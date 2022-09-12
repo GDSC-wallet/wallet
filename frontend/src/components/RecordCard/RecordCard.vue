@@ -16,13 +16,20 @@
     </v-expansion-panel-header>
     <v-expansion-panel-content>
       <p v-if="record.record_description !== ''">{{ record.record_description }}</p>
-      <div v-if="record.record_debtors.length != 0" class="d-flex pb-2" >
-          <v-chip v-for="deb in record.record_debtors" color="primary" >
-            <v-avatar color="grey lighten-1" size="20">
-              <span>{{ deb.debtor_name[0] }}</span>
-            </v-avatar>
-            <span>{{ deb.debtor_name }}</span>
-          </v-chip>
+      <div v-if="record.record_debtors.length != 0" class="d-flex pb-2">
+        <v-tooltip bottom v-for="deb in record.record_debtors">
+          <template v-slot:activator="{ on, attrs }">
+            <v-chip v-bind="attrs" v-on="on" color="orange lighten-2" class="px-1 mr-1">
+              <v-avatar color="white lighten-1" size="20" class="">
+                <span>{{ deb.debtor_name[0] }}</span>
+              </v-avatar>
+              <span class="px-1 ml-1  ">{{ deb.debtor_name }}</span>
+            </v-chip>
+          </template>
+          <span>{{ deb.debtor_record_amount }}</span>
+        </v-tooltip>
+
+
       </div>
       <v-row v-if="editable">
         <v-col>

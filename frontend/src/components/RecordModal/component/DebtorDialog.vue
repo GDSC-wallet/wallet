@@ -29,7 +29,7 @@
                       <v-col>
                         <v-text-field
                           label="金額"
-                          v-model="amount[index]"
+                          v-model.number="amount[index]"
                           :rules="[rules.number]"
                           class="py-0"
                           @click="stopPop"
