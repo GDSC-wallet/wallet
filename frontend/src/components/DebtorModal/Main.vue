@@ -12,10 +12,10 @@
           <v-list-item v-for="(debtor, index) in debtors" :key="index">
             <v-list-item-content>
               <v-sheet class="d-flex justify-space-between">
-                <span class="flex-grow-1">
-                  {{ debtor.debtor_name }}
-                </span>
-                <div>
+                <v-list-item-title class="flex-grow-1">{{
+                  debtor.debtor_name
+                }}</v-list-item-title>
+                <div class="d-flex">
                   <NewDebtor edit :previousName="previousName">
                     <template v-slot:activator="{ on, attrs }">
                       <v-btn icon v-bind="attrs" v-on="on">

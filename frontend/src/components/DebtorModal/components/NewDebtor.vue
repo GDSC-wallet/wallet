@@ -1,26 +1,5 @@
 <template>
-  <!-- <div class="px-4 py-4">
-    <v-btn block v-if="!showDetail && !edit" @click="showDetail = true">
-      新增債務人
-    </v-btn>
-    <div v-if="showDetail || edit">
-      <v-form @submit.prevent="submit" ref="form" lazy-validation>
-        <v-text-field
-          v-model="currentName"
-          label="名稱"
-          prepend-icon="mdi-account-arrow-left"
-          :rules="[rules.required, rules.counter, rules.duplicate]"
-          dense
-          autofocus
-        >
-          <template v-slot:append>
-            <v-icon @click="submit">mdi-check</v-icon>
-          </template>
-        </v-text-field>
-      </v-form>
-    </div>
-  </div> -->
-  <v-dialog v-model="open">
+  <v-dialog v-model="open" max-width="500px">
     <template v-slot:activator="{ on, attrs }">
       <slot name="activator" :on="on" :attrs="attrs">
         <v-btn block v-bind="attrs" v-on="on"> Click Me </v-btn>

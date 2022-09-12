@@ -15,8 +15,8 @@
       </template>
     </v-expansion-panel-header>
     <v-expansion-panel-content>
-      <p>{{ record.record_description }}</p>
-      <div v-if="record.record_debtors.length != 0" class="d-flex py-2" >
+      <p v-if="record.record_description !== ''">{{ record.record_description }}</p>
+      <div v-if="record.record_debtors.length != 0" class="d-flex pb-2" >
           <v-chip v-for="deb in record.record_debtors" color="primary" >
             <v-avatar color="grey lighten-1" size="20">
               <span>{{ deb.debtor_name[0] }}</span>
