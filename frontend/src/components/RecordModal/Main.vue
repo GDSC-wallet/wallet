@@ -210,7 +210,6 @@ export default {
       return r * 0.299 + g * 0.587 + b * 0.114 > 186 ? "black" : "white";
     },
     getDebtorInfo(debInfo, debNames) {
-      console.log(debInfo);
       this.data.record_debtors = debInfo;
       this.debtorDialog = false;
       this.selectedDebtor = debNames;
