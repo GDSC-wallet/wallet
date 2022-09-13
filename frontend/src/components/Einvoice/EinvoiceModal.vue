@@ -47,7 +47,7 @@
             @click:append="passwordShow = !passwordShow"
             :rules="[(v) => !!v || '請輸入驗證碼']"
           />
-          <v-container>
+          <v-container class="px-0">
             <v-row>
               <v-col>
                 <v-text-field
@@ -64,7 +64,7 @@
             </v-row>
           </v-container>
         </v-card-text>
-        <v-card-actions class="pa-3">
+        <v-card-actions class="pa-3 pt-0">
           <v-btn
             block
             color="primary"
@@ -98,7 +98,7 @@
           <v-container>
             <v-row>
               <v-col>
-                <v-btn block>返回</v-btn>
+                <v-btn block @click="step = 1">返回</v-btn>
               </v-col>
               <v-col v-if="fetchingStage.failure > 0">
                 <v-btn block @click="refetch">重新擷取({{ fetchingStage.failure }})</v-btn>

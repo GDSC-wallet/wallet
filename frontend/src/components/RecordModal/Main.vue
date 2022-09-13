@@ -190,7 +190,7 @@ export default {
     }),
     sendRecord() {
       if (!this.$refs.form.validate()) return;
-      if (!this.wallet_record_tag_id) {
+      if (!this.data.wallet_record_tag_id) {
         this.data.wallet_record_tag_id = this.walletTags.find(tag => tag.text === "其他")?.value?.tag_id;
       }
       if (this.data.record_name === "") {
