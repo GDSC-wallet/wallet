@@ -191,49 +191,24 @@ export const update_record = async (req, res, next) => {
         body.record_amount_diff,
     ).then(async result => {
         if(body.record_debtors) {
-            // 查看此record目前的debtors並執行新增或刪除
             await Debtor.get_record_debtors(body.record_id)
                 .then(async results => {
-                    // 將results的debtor_id存入originIds
-                    // results的debtor_record_amount存入originAmounts
-                    var originIds = [];
-                    var originAmounts = [];
-                    results.forEach(result => {
-                        originIds.push(result.debtor_id);
-                        originAmounts.push(result.debtor_record_amount);
-                    })
-                    // 將record_debtors的debtor_id存入alterIds
-                    // record_debtors的debtor_record_amount存入alterAmounts
-                    var alterIds = [];
-                    var alterAmounts = [];
-                    body.record_debtors.forEach(result => {
-                        alterIds.push(result.debtor_id);
-                        alterAmounts.push(result.debtor_record_amount);
-                    })
-                    for(let i = 0; i < alterIds.length; ++i) {
-                        // 將被新增的debtor新增
-                        if(originIds.indexOf(alterIds[i]) === -1) {
-                            await Debtor.insert_debtor_record(
-                                body.record_id,
-                                alterIds[i],
-                                alterAmounts[i]
-                            ).then().catch(err => { throw err })
-                        }
+                    for(let i = 0; i < results.length; ++i) {
+                        await Debtor.delete_debtor_record(body.record_id,
+                                                        results[i].debtor_id,
+                                                        results[i].debtor_record_amount)
+                            .then().catch(err => { throw err; })
                     }
-                    for(let i = 0; i < originIds.length; ++i) {
-                        // 將被刪除的debtor刪除
-                        if(alterIds.indexOf(originIds[i]) === -1) {
-                            await Debtor.delete_debtor_record(
-                                body.record_id,
-                                originIds[i],
-                                originAmounts[i]
-                            ).then().catch(err => { throw err })
-                        }
+                    for(let i = 0; i < body.record_debtors.length; ++i) {
+                        await Debtor.insert_debtor_record(body.record_id,
+                                                    body.record_debtors[i].debtor_id,
+                                                    body.record_debtors[i].debtor_record_amount)
+                            .then().catch(err => { throw err; })
                     }
                 })
                 .catch(err => { throw err })
         }
-        next(result);
+        next();
     }).catch(err => {
         next(err);
     })

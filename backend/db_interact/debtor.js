@@ -122,9 +122,6 @@ const insert_debtor_record = (record_id, debtor_id, debtor_record_amount) => {
 }
 
 const delete_debtor_record = (record_id, debtor_id, debtor_record_amount) => {
-    console.log("record_id: " + record_id);
-    console.log("debtor_id: " + debtor_id);
-    console.log("debtor_record_amount: " + debtor_record_amount);
     return new Promise( async (resolve, reject) => {
         var sql = "START TRANSACTION; DELETE FROM debtor_record WHERE record_id = ? AND debtor_id = ?; UPDATE debtor SET debtor_amount = debtor_amount - ? WHERE debtor_id = ?; COMMIT";
         pool.getConnection( async (err, conn) => {
