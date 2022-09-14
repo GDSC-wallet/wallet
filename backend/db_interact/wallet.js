@@ -146,7 +146,7 @@ const search_record = async (wallet_id, search_str) => {
                 reject(err);
             } else {
                 search_str = conn.escape(search_str);
-                var sql = `START TRANSACTION; SELECT * FROM wallet_record WHERE record_wallet_id = ? AND record_name REGEXP ${search_str}; COMMIT`;
+                var sql = `START TRANSACTION; SELECT * FROM wallet_record WHERE record_wallet_id = ? AND (record_name REGEXP ${search_str} OR wallet_record_tag_id IN (SELECT tag_id from wallet_record_tag_id WHERE tag_name REGEXP ${search_str})); COMMIT`;
                 await conn.query(sql, wallet_id, (err, results, fields) => {
                     conn.release();
                     if (err) {

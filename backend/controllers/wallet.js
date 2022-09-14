@@ -43,7 +43,7 @@ export const get_wallet = async (req, res, next) => {
                     "record_created_time": results[1][i].record_created_time,
                     "record_updated_time": results[1][i].record_updated_time
                 }
-                
+
                 // add record_debtors
                 await Debtor.get_record_debtors(results[1][i].record_id)
                     .then(result => {
@@ -188,7 +188,7 @@ export const search_record = async (req, res, next) => {
                                     debtor_name: result[i].debtor_name.slice(1, result[i].debtor_name.length-1),
                                     debtor_record_amount: result[i].debtor_record_amount
                                 }
-                                results.record_debtors.push(record_debtor_obj);
+                                record_data.record_debtors.push(record_debtor_obj);
                             }
                         }
                     })
