@@ -1,5 +1,5 @@
 <template>
-  <v-expansion-panel :readonly="isContentEmpty">
+  <v-expansion-panel :readonly="isContentEmpty && !editable">
     <v-expansion-panel-header>
       <v-sheet class="d-flex align-center overflow-hidden">
         <v-chip
@@ -19,8 +19,16 @@
       <p v-if="record.record_description !== ''">
         {{ record.record_description }}
       </p>
-      <div v-if="record.record_debtors.length != 0" class="d-flex" :class="{'pb-4': editable}">
-        <v-tooltip bottom v-for="deb in record.record_debtors" :key="deb">
+      <div
+        v-if="record.record_debtors.length != 0"
+        class="d-flex"
+        :class="{ 'pb-4': editable }"
+      >
+        <v-tooltip
+          bottom
+          v-for="deb in record.record_debtors"
+          :key="deb.debtor_name"
+        >
           <template v-slot:activator="{ on, attrs }">
             <v-chip
               v-bind="attrs"
@@ -86,13 +94,18 @@ export default {
       return r * 0.299 + g * 0.587 + b * 0.114 > 186 ? "black" : "white";
     },
     tag(id) {
-      return this.getAllWalletTags.find((tag) => tag.tag_id == id);
+      const res = this.getAllWalletTags.find((tag) => tag.tag_id == id);
+      if (!res)
+        return  this.getAllWalletTags.find((tag) => tag.tag_id == "tag_default");
+      return res;
     },
     deleteRec() {
       this.disabled = true;
-      this.deleteRecord(this.record).catch(() => (this.disabled = false)).then(() => {
-        console.log(123)
-      });
+      this.deleteRecord(this.record)
+        .catch(() => (this.disabled = false))
+        .then(() => {
+          console.log(123);
+        });
     },
   },
   computed: {
@@ -101,14 +114,17 @@ export default {
       getAllWalletTags: "wallet/getAllWalletTags",
     }),
     isContentEmpty() {
-      return this.record.record_description === '' && this.record.record_debtors.length === 0
-    }
+      return (
+        this.record.record_description === "" &&
+        this.record.record_debtors.length === 0
+      );
+    },
   },
 };
 </script>
 
 <style scoped>
-  .empty-content .v-expansion-panel-content__wrap {
-    padding-bottom: 0 !important;
-  }
+.empty-content .v-expansion-panel-content__wrap {
+  padding-bottom: 0 !important;
+}
 </style>
