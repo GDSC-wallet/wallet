@@ -3,34 +3,15 @@
     <v-dialog v-model="dialog" width="500">
       <v-card style="overflow: hidden" class="d-flex flex-column">
         <v-toolbar dark flat color="primary">
-          <v-toolbar-title
-            >{{ mode == "edit" ? "修改" : "新增" }}錢包</v-toolbar-title
-          >
+          <v-toolbar-title>{{ mode == "edit" ? "修改" : "新增" }}錢包</v-toolbar-title>
         </v-toolbar>
-        <v-form
-          @submit.prevent="handleSubmit"
-          ref="form"
-          lazy-validation
-          v-model="valid"
-        >
+        <v-form @submit.prevent="handleSubmit" ref="form" lazy-validation v-model="valid">
           <v-container class="flex-grow-1" style="overflow: auto">
-            <v-text-field
-              label="標題"
-              prepend-icon="mdi-format-title"
-              v-model="data.wallet_name"
-              required
-              :rules="[(v) => !!v || '請填入標題']"
-            />
-            <v-text-field
-              label="備註"
-              prepend-icon="mdi-message-text"
-              v-model="data.wallet_description"
-            />
-            <v-text-field
-              label="載具條碼"
-              prepend-icon="mdi-barcode-scan"
-              v-model="data.wallet_barcode"
-            />
+            <v-text-field label="標題" prepend-icon="mdi-format-title" v-model="data.wallet_name" required
+              :rules="[(v) => !!v || '請填入標題']" />
+            <v-text-field label="備註" prepend-icon="mdi-message-text" v-model="data.wallet_description" />
+            <v-text-field label="載具條碼" prepend-icon="mdi-barcode-scan" v-model="data.wallet_barcode"
+              @keyup="data.wallet_barcode = data.wallet_barcode.toUpperCase()" :rules="[rules.required]" />
           </v-container>
           <v-card-actions>
             <v-row justify="end">
@@ -49,6 +30,7 @@
 
 <script>
 import { mapActions } from "vuex";
+import { rules } from "../../../utils";
 
 export default {
   props: {
@@ -66,6 +48,7 @@ export default {
         wallet_id: "",
         wallet_barcode: ""
       },
+      rules: rules,
     };
   },
   methods: {
@@ -75,6 +58,8 @@ export default {
     }),
     handleSubmit() {
       if (!this.$refs.form.validate()) return;
+      if(this.data.wallet_barcode[0] != '/')
+        this.data.wallet_barcode = '/' + this.data.wallet_barcode;
       if (this.mode == "create") {
         this.createWallet(this.data).then(() => {
           this.dialog = false;

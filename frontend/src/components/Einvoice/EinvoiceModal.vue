@@ -12,55 +12,30 @@
         <div v-if="fetchingStage.stage == 2" class="pa-1">
           <p>
             擷取雲端發票細項中 ({{
-              fetchingStage.success + fetchingStage.failure
+            fetchingStage.success + fetchingStage.failure
             }}/{{ fetchingStage.total }})
           </p>
-          <v-progress-linear
-            :value="
-              ((fetchingStage.success + fetchingStage.failure) /
-                fetchingStage.total) *
-              100
-            "
-          >
+          <v-progress-linear :value="
+            ((fetchingStage.success + fetchingStage.failure) /
+              fetchingStage.total) *
+            100
+          ">
           </v-progress-linear>
         </div>
       </v-card-text>
-      <v-form
-        @submit.prevent="getEinvoiceData(barcode, password)"
-        ref="form"
-        lazy-validation
-        v-model="valid"
-        v-if="step === 1"
-      >
+      <v-form @submit.prevent="getEinvoiceData(barcode, password)" ref="form" lazy-validation v-model="valid"
+        v-if="step === 1">
         <v-card-text class="pa-3">
-          <v-text-field
-            label="載具條碼"
-            v-model="barcode"
-            :rules="[(v) => !!v || '請輸入條碼']"
-            @keyup="uppercase"
-          />
-          <v-text-field
-            label="載具驗證碼"
-            v-model="password"
-            :type="passwordShow ? 'text' : 'password'"
-            :append-icon="passwordShow ? 'mdi-eye' : 'mdi-eye-off'"
-            @click:append="passwordShow = !passwordShow"
-            :rules="[(v) => !!v || '請輸入驗證碼']"
-          />
-          <v-checkbox
-            v-model="rememberPassword"
-            label="記住我的密碼"
-          ></v-checkbox>
+          <v-text-field label="載具條碼" v-model="barcode" :rules="[rules.required]" @keyup="uppercase" />
+          <v-text-field label="載具驗證碼" v-model="password" :type="passwordShow ? 'text' : 'password'"
+            :append-icon="passwordShow ? 'mdi-eye' : 'mdi-eye-off'" @click:append="passwordShow = !passwordShow"
+            :rules="[(v) => !!v || '請輸入驗證碼']" />
+          <v-checkbox v-model="rememberPassword" label="記住我的密碼"></v-checkbox>
           <v-container class="px-0">
             <v-row>
               <v-col>
-                <v-text-field
-                  label="年"
-                  v-model.number="year"
-                  type="number"
-                  required
-                  :rules="[(v) => (v && !isNaN(parseFloat(v))) || '請填入年份']"
-                ></v-text-field>
+                <v-text-field label="年" v-model.number="year" type="number" required
+                  :rules="[(v) => (v && !isNaN(parseFloat(v))) || '請填入年份']"></v-text-field>
               </v-col>
               <v-col>
                 <v-select :items="month" v-model="mon" label="月"></v-select>
@@ -69,14 +44,7 @@
           </v-container>
         </v-card-text>
         <v-card-actions class="pa-3 pt-0">
-          <v-btn
-            block
-            color="primary"
-            type="submit"
-            :disabled="!valid || fetching"
-            :loading="fetching"
-            >取得載具發票</v-btn
-          >
+          <v-btn block color="primary" type="submit" :disabled="!valid || fetching" :loading="fetching">取得載具發票</v-btn>
         </v-card-actions>
       </v-form>
       <template v-if="!fetching && step === 2">
@@ -84,10 +52,7 @@
           <v-list two-line>
             <v-list-item v-for="(invoice, index) in invoiceRecords">
               <v-list-item-content>
-                <v-list-item-title
-                  class="d-flex align-center"
-                  style="gap: 10px"
-                >
+                <v-list-item-title class="d-flex align-center" style="gap: 10px">
                   <span class="flex-grow-1 text-wrap">
                     {{ invoice.detail }}
                   </span>
@@ -108,9 +73,7 @@
                 <v-btn block @click="step = 1">返回</v-btn>
               </v-col>
               <v-col v-if="fetchingStage.failure > 0">
-                <v-btn block @click="refetch"
-                  >重新擷取({{ fetchingStage.failure }})</v-btn
-                >
+                <v-btn block @click="refetch">重新擷取({{ fetchingStage.failure }})</v-btn>
               </v-col>
             </v-row>
           </v-container>
@@ -123,6 +86,7 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 import ajax from "../../api";
+import { rules } from "../../utils";
 
 const encode = (rowData) => {
   let res = [];
@@ -162,6 +126,7 @@ export default {
       mon: new Date().getMonth() + 1,
       date: Date(),
       rememberPassword: true,
+      rules: rules
     };
   },
   mounted() {
@@ -185,10 +150,10 @@ export default {
         record_created_time: "",
         record_date: new Date(
           invoice.date.slice(0, 4) +
-            "-" +
-            invoice.date.slice(4, 6) +
-            "-" +
-            invoice.date.slice(6, 8)
+          "-" +
+          invoice.date.slice(4, 6) +
+          "-" +
+          invoice.date.slice(6, 8)
         )
           .toISOString()
           .split("T")[0],
@@ -248,7 +213,7 @@ export default {
           this.barcode + "_pass",
           this.encode(this.password)
         );
-      }else {
+      } else {
         localStorage.removeItem(this.barcode + "_pass")
       }
 

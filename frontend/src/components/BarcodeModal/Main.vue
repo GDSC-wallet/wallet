@@ -5,13 +5,12 @@
     </v-btn>
     <v-dialog v-model="display" max-width="300" scrollable>
       <v-card>
-        <bc :value="barcode" align="center">
+        <bc :value="barcode" align="center" format="CODE39" width="1">
           尚未設定載具條碼
         </bc>
         <v-container>
           <v-btn @click="display = false" block to="/setting"> Setting </v-btn>
         </v-container>
-        
       </v-card>
     </v-dialog>
   </div>

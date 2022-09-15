@@ -6,7 +6,8 @@
           <v-card-title>剩下最後一步，填寫你的暱稱吧</v-card-title>
           <v-card-text>
             <v-text-field label="暱稱" placeholder="暱稱" v-model="nickname" required :rules="[(v) => !!v || '請輸入暱稱']" />
-            <v-text-field label="雲端發票條碼(選填)" placeholder="雲端發票條碼" v-model="barcode" />
+            <v-text-field label="雲端發票條碼(選填)" placeholder="雲端發票條碼" v-model="barcode"
+              @keyup="barcode = barcode.toUpperCase()" :rules="[rules.required]" />
           </v-card-text>
           <v-card-actions>
             <v-row justify="end">
@@ -26,6 +27,7 @@
 
 <script>
 import { mapActions } from "vuex";
+import { rules } from "../../utils";
 
 export default {
   name: "CallbackSignup",
@@ -33,7 +35,8 @@ export default {
     return {
       nickname: "",
       barcode: "",
-      valid: true
+      valid: true,
+      rules: rules
     };
   },
   methods: {
@@ -42,7 +45,7 @@ export default {
     }),
     signup(nickname, barcode) {
       if (!this.$refs.form.validate()) return;
-      this._signup({ nickname: nickname, barcode: barcode }).then(() => {
+      this._signup({ nickname: nickname, barcode: barcode[0] == '/' ? barcode : '/' + barcode }).then(() => {
         this.$router.replace("/login");
       });
     }
