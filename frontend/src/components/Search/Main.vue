@@ -23,7 +23,7 @@
           </v-btn>
         </form>
         <div v-if="getData" class="py-3">
-          <RecordList :records="getData" :editale="false" showDate showFilter v-if="getData?.length > 0" />
+          <RecordList :records="getData" showDate showFilter v-if="getData?.length > 0" />
           <p v-else>無資料</p>
         </div>
       </v-card-text>

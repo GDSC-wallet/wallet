@@ -1,5 +1,5 @@
 <template>
-  <v-expansion-panel :readonly="!editable && !record.record_description">
+  <v-expansion-panel :readonly="isContentEmpty">
     <v-expansion-panel-header>
       <v-sheet class="d-flex align-center overflow-hidden">
         <v-chip
@@ -19,8 +19,8 @@
       <p v-if="record.record_description !== ''">
         {{ record.record_description }}
       </p>
-      <div v-if="record.record_debtors.length != 0" class="d-flex pb-2">
-        <v-tooltip bottom v-for="deb in record.record_debtors">
+      <div v-if="record.record_debtors.length != 0" class="d-flex" :class="{'pb-4': editable}">
+        <v-tooltip bottom v-for="deb in record.record_debtors" :key="deb">
           <template v-slot:activator="{ on, attrs }">
             <v-chip
               v-bind="attrs"
@@ -90,7 +90,9 @@ export default {
     },
     deleteRec() {
       this.disabled = true;
-      this.deleteRecord(this.record).catch(() => (this.disabled = false));
+      this.deleteRecord(this.record).catch(() => (this.disabled = false)).then(() => {
+        console.log(123)
+      });
     },
   },
   computed: {
@@ -98,6 +100,15 @@ export default {
       currentDate: "calendar/getDate",
       getAllWalletTags: "wallet/getAllWalletTags",
     }),
+    isContentEmpty() {
+      return this.record.record_description === '' && this.record.record_debtors.length === 0
+    }
   },
 };
 </script>
+
+<style scoped>
+  .empty-content .v-expansion-panel-content__wrap {
+    padding-bottom: 0 !important;
+  }
+</style>
