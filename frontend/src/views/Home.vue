@@ -2,10 +2,10 @@
   <v-sheet>
     <v-row>
       <v-col cols="12" sm="6">
-        <Calendar class="px-1" />
+        <Calendar class="px-1" @switch="changeDisplay" />
       </v-col>
       <v-col cols="12" sm="6">
-        <Balance />
+        <Balance :displayToday="displayToday" />
         <RecordList :records="getTodaysRecords" editable class="px-1">
           <template v-slot:empty>
             <v-card class="py-4 px-6 elevation-0" elevation-0>
@@ -33,7 +33,9 @@ import { mapGetters, mapActions } from "vuex";
 export default {
   name: "Home",
   data() {
-    return {};
+    return {
+      displayToday: false
+    };
   },
   components: {
     Calendar: Calendar,
@@ -50,6 +52,9 @@ export default {
       this.openModal();
       this.switchCreateMode();
     },
+    changeDisplay() {
+      this.displayToday = !this.displayToday
+    }
   },
   computed: {
     ...mapGetters({

@@ -13,6 +13,9 @@
           <v-btn small text outlined @click="toToday" class="back-to-today-btn">
             today
           </v-btn>
+          <v-btn small text outlined @click="$emit('switch')" class="switch-btn">
+            <v-icon>mdi-swap-horizontal</v-icon>
+          </v-btn>
         </div>
       </template>
     </vc-date-picker>
@@ -102,5 +105,12 @@ export default {
   position: absolute;
   bottom: 5px;
   right: 5px;
+}
+
+.switch-btn {
+  z-index: 4;
+  position: absolute;
+  bottom: 5px;
+  left: 5px;
 }
 </style>
