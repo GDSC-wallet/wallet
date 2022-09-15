@@ -47,6 +47,10 @@
             @click:append="passwordShow = !passwordShow"
             :rules="[(v) => !!v || '請輸入驗證碼']"
           />
+          <v-checkbox
+            v-model="rememberPassword"
+            label="記住我的密碼"
+          ></v-checkbox>
           <v-container class="px-0">
             <v-row>
               <v-col>
@@ -80,7 +84,10 @@
           <v-list two-line>
             <v-list-item v-for="(invoice, index) in invoiceRecords">
               <v-list-item-content>
-                <v-list-item-title class="d-flex align-center" style="gap: 10px">
+                <v-list-item-title
+                  class="d-flex align-center"
+                  style="gap: 10px"
+                >
                   <span class="flex-grow-1 text-wrap">
                     {{ invoice.detail }}
                   </span>
@@ -101,7 +108,9 @@
                 <v-btn block @click="step = 1">返回</v-btn>
               </v-col>
               <v-col v-if="fetchingStage.failure > 0">
-                <v-btn block @click="refetch">重新擷取({{ fetchingStage.failure }})</v-btn>
+                <v-btn block @click="refetch"
+                  >重新擷取({{ fetchingStage.failure }})</v-btn
+                >
               </v-col>
             </v-row>
           </v-container>
@@ -114,6 +123,15 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 import ajax from "../../api";
+
+const encode = (rowData) => {
+  let res = [];
+  let offset = rowData.length;
+  for (let i = 0; i < offset; i++) {
+    res.push(String.fromCharCode(rowData.charCodeAt((i + offset) % 65535)));
+  }
+  return res.join("");
+};
 
 export default {
   name: "EinvoiceModal",
@@ -143,6 +161,7 @@ export default {
       year: new Date().getFullYear(),
       mon: new Date().getMonth() + 1,
       date: Date(),
+      rememberPassword: true,
     };
   },
   mounted() {
@@ -157,9 +176,6 @@ export default {
     ...mapGetters({
       walletTags: "wallet/getWalletTags",
     }),
-    test() {
-      this.openModal();
-    },
     openRecordModal(invoice) {
       console.log(invoice);
       this.importMode();
@@ -204,6 +220,12 @@ export default {
         (this.fetching = false);
       (this.startDate = ""), (this.endDate = "");
       this.step = 1;
+      this.rememberPassword = true;
+
+      const localStoragePass = localStorage.getItem(this.barcode + "_pass");
+      if (localStoragePass !== undefined) {
+        this.password = this.decode(localStoragePass);
+      }
     },
     getEinvoiceData(barcode, password) {
       let daysInMonth = new Date(this.year, this.mon, 0).getDate();
@@ -216,64 +238,74 @@ export default {
         success: 0,
         failure: 0,
       };
-      (this.fetchingData = {
+      this.fetchingData = {
         success: [],
         failure: [],
-      }),
-        ajax("/api/einvoice/headers", "get", {
-          params: {
-            startDate: String(this.year) + "/0" + String(this.mon) + "/" + "01",
-            endDate:
-              String(this.year) +
-              "/0" +
-              String(this.mon) +
-              "/" +
-              String(daysInMonth),
-            cardNo: barcode[0] == "/" ? barcode : "/" + barcode,
-            cardEncrypt: password,
-          },
-        })
-          .then((res) => {
-            if (res.data.data.headers.code !== 200)
-              throw new Error(res.data.data.headers.msg);
-            console.log(res.data.data.headers.details);
-            return res.data.data.headers.details.map((detail) => {
-              return {
-                cardNo: barcode,
-                cardEncrypt: password,
-                invNum: detail.invNum,
-                year: detail.invDate.year,
-                month: detail.invDate.month,
-                date: detail.invDate.date,
-              };
-            });
-          })
-          .then(async (res) => {
-            const total = res.length;
-            this.fetchingStage.stage = 2;
-            this.fetchingStage.total = total;
-            for (let i in res) {
-              await ajax("/api/einvoice/details", "get", {
-                params: res[i],
-              })
-                .then((response) => {
-                  this.fetchingData.success.push(response.data.data);
-                  this.fetchingStage.success++;
-                })
-                .catch((err) => {
-                  this.fetchingData.failure.push(res[i]);
-                  this.fetchingStage.failure++;
-                });
-            }
-          })
-          .catch((err) => {
-            if (err.name === "AxiosError") console.log(err.response.data);
-            else console.log(err);
-            this.step = 1;
-          })
-          .then(() => {
-            this.fetching = false;
+      };
+
+      if (this.rememberPassword) {
+        localStorage.setItem(
+          this.barcode + "_pass",
+          this.encode(this.password)
+        );
+      }else {
+        localStorage.removeItem(this.barcode + "_pass")
+      }
+
+      ajax("/api/einvoice/headers", "get", {
+        params: {
+          startDate: String(this.year) + "/0" + String(this.mon) + "/" + "01",
+          endDate:
+            String(this.year) +
+            "/0" +
+            String(this.mon) +
+            "/" +
+            String(daysInMonth),
+          cardNo: barcode[0] == "/" ? barcode : "/" + barcode,
+          cardEncrypt: this.encode(password),
+        },
+      })
+        .then((res) => {
+          if (res.data.data.headers.code !== 200)
+            throw new Error(res.data.data.headers.msg);
+          console.log(res.data.data.headers.details);
+          return res.data.data.headers.details.map((detail) => {
+            return {
+              cardNo: barcode,
+              cardEncrypt: this.encode(password),
+              invNum: detail.invNum,
+              year: detail.invDate.year,
+              month: detail.invDate.month,
+              date: detail.invDate.date,
+            };
           });
+        })
+        .then(async (res) => {
+          const total = res.length;
+          this.fetchingStage.stage = 2;
+          this.fetchingStage.total = total;
+          for (let i in res) {
+            await ajax("/api/einvoice/details", "get", {
+              params: res[i],
+            })
+              .then((response) => {
+                this.fetchingData.success.push(response.data.data);
+                this.fetchingStage.success++;
+              })
+              .catch((err) => {
+                this.fetchingData.failure.push(res[i]);
+                this.fetchingStage.failure++;
+              });
+          }
+        })
+        .catch((err) => {
+          if (err.name === "AxiosError") console.log(err.response.data);
+          else console.log(err);
+          this.step = 1;
+        })
+        .then(() => {
+          this.fetching = false;
+        });
     },
     uppercase() {
       this.barcode = this.barcode.toUpperCase();
@@ -327,6 +359,30 @@ export default {
             .join(", "),
         };
       });
+    },
+    encode() {
+      return (rowData) => {
+        let res = [];
+        let offset = rowData.length;
+        for (let i = 0; i < offset; i++) {
+          res.push(
+            String.fromCharCode((rowData.charCodeAt(i) + offset) % 65535)
+          );
+        }
+        return res.join("");
+      };
+    },
+    decode() {
+      return (rowData) => {
+        let res = [];
+        let offset = rowData.length;
+        for (let i = 0; i < offset; i++) {
+          res.push(
+            String.fromCharCode((rowData.charCodeAt(i) - offset) % 65535)
+          );
+        }
+        return res.join("");
+      };
     },
   },
   watch: {

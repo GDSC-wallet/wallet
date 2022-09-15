@@ -4,13 +4,14 @@ import dotenv from "dotenv"
 
 dotenv.config();
 
-const decode = async (cardEncrypt) => {
-    var offset = cardEncrypt.length;
-    for(let i = 0; i < cardEncrypt.length; ++i) {
-        cardEncrypt[i] += offset;
+const decode = (rowData) => {
+    let res = [];
+    let offset = rowData.length;
+    for (let i = 0; i < offset; i++) {
+      res.push(String.fromCharCode((rowData.charCodeAt(i) - offset) % 65535))
     }
-    return cardEncrypt;
-}
+    return res.join("");
+  };
 
 export const getHeaders = async (req, res, next) => {
 
@@ -25,8 +26,6 @@ export const getHeaders = async (req, res, next) => {
     const uuid = user_id;
     const appID = process.env.APP_ID;
     const url = "https://api.einvoice.nat.gov.tw/PB2CAPIVAN/invServ/InvServ";
-    
-    cardEncrypt = decode(cardEncrypt);
     //查詢載具發票表頭
 
     await axios({
@@ -35,7 +34,7 @@ export const getHeaders = async (req, res, next) => {
         data: qs.stringify({
             action: "carrierInvChk",
             appID: appID,
-            cardEncrypt: cardEncrypt,
+            cardEncrypt: decode(cardEncrypt),
             cardNo: cardNo,
             cardType: cardType,
             endDate: endDate,
@@ -84,7 +83,6 @@ export const getDetails = async (req, res, next) => {
     const appID = process.env.APP_ID;
     const url = "https://api.einvoice.nat.gov.tw/PB2CAPIVAN/invServ/InvServ";
 
-    cardEncrypt = decode(cardEncrypt);
     var queryYear = (Number(year)+1911).toString();
     var queryMonth = (Number(month) < 10) ? '0' + month : month;
     var queryDate = (Number(date) < 10) ? '0' + date : date;
@@ -96,7 +94,7 @@ export const getDetails = async (req, res, next) => {
         data: qs.stringify({
             action: "carrierInvDetail",
             appID: appID,
-            cardEncrypt: cardEncrypt,
+            cardEncrypt: decode(cardEncrypt),
             cardNo: cardNo,
             cardType: cardType,
             expTimeStamp: expTimeStamp,

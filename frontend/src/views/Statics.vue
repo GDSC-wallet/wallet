@@ -24,9 +24,7 @@
       <v-col cols="12" sm="6">
         <RecordList :records="getMonthRecords" showDate showFilter>
           <template v-slot:empty>
-            <div class="mt-5 text-center">
-              本月無資料
-            </div>
+            <div class="mt-5 text-center">本月無資料</div>
           </template>
         </RecordList>
       </v-col>
@@ -78,6 +76,15 @@ export default {
         })
         .filter((record) => {
           return vm.type == "all" ? true : record.record_type == vm.type;
+        })
+        .map((record) => {
+          const res = this.getAllWalletTags.find(
+            (tag) => tag.tag_id == record.wallet_record_tag_id
+          );
+          if (!res) {
+            record.wallet_record_tag_id = "tag_default";
+          }
+          return record;
         });
     },
     type() {
