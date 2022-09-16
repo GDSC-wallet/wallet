@@ -41,7 +41,13 @@ const insert_wallet = async (user_id, wallet_name, wallet_description, wallet_ba
             var values = [];
             values.push(wallet_id, user_id, 0, pool.escape(wallet_name), 0, pool.escape(wallet_description), pool.escape(wallet_barcode), user_id);
             for (var i = 0; i < 12; ++i) {
-                values.push("tag_" + uuid());
+                if(i === 7) {
+                    values.push("tag_expense_" + wallet_id)
+                } else if(i === 11) {
+                    values.push("tag_income_" + wallet_id);
+                } else {
+                    values.push("tag_" + uuid());
+                }
                 values.push(wallet_id);
                 values.push(i + 1);
                 values.push(pool.escape(name[i]));

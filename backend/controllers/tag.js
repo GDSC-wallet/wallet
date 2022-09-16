@@ -44,6 +44,12 @@ export const update_tag = async (req, res, next) => {
 };
 
 export const delete_tag = async (req, res, next) => {
+    const expense_rule = /tag_expense/;
+    const income_rule = /tag_income/;
+    if(expense_rule.test(req.body.tag_id) || income_rule.test(req.body.tag_id)) {
+        var err = new Error(`The tag is not allowed to delete`);
+        next(err);
+    }
     await Tag.delete_tag(req.body.tag_id)
         .then(result => {
             next(result);

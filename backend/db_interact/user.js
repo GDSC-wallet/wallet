@@ -101,13 +101,20 @@ const insert_user = async (id, channel, channel_id, email, username, nickname, b
             var values = [];
             values.push(id, channel, channel_id, pool.escape(email), username, pool.escape(nickname), pool.escape(barcode), wallet_id, id, 1, pool.escape(wallet_name), 0, pool.escape(wallet_description));
             for(var i = 0; i < 12; ++i) {
-                values.push("tag_" + uuid());
+                if(i === 7) {
+                    values.push("tag_expense_" + wallet_id)
+                } else if(i === 11) {
+                    values.push("tag_income_" + wallet_id);
+                } else {
+                    values.push("tag_" + uuid());
+                }
                 values.push(wallet_id);
                 values.push(i+1);
                 values.push(pool.escape(name[i]));
                 values.push(type[i]);
                 values.push(color[i]);
             }
+            console.log(values);
             return values;
         }
         var value_str = "";

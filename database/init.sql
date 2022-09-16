@@ -64,6 +64,28 @@ CREATE TABLE `wallet` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `wallet_record_tag_id`
+--
+
+DROP TABLE IF EXISTS `wallet_record_tag_id`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `wallet_record_tag_id` (
+  `tag_id` varchar(140) NOT NULL,
+  `tag_wallet_id` varchar(140) DEFAULT NULL,
+  `tag_ordinary` int unsigned DEFAULT NULL,
+  `tag_name` varchar(50) DEFAULT NULL,
+  `tag_type` varchar(50) DEFAULT NULL,
+  `tag_created_time` datetime DEFAULT NULL,
+  `tag_updated_time` datetime DEFAULT NULL,
+  `tag_color` varchar(20) DEFAULT '#BEBEBE',
+  PRIMARY KEY (`tag_id`),
+  KEY `wallet_record_tag_id_ibfk_1` (`tag_wallet_id`),
+  CONSTRAINT `wallet_record_tag_id_ibfk_1` FOREIGN KEY (`tag_wallet_id`) REFERENCES `wallet` (`wallet_id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `wallet_record`
 --
 
@@ -88,29 +110,22 @@ CREATE TABLE `wallet_record` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Table structure for table `wallet_record_tag_id`
---
+/*
+DELIMITER $$
 
-DROP TABLE IF EXISTS `wallet_record_tag_id`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `wallet_record_tag_id` (
-  `tag_id` varchar(140) NOT NULL,
-  `tag_wallet_id` varchar(140) DEFAULT NULL,
-  `tag_ordinary` int unsigned DEFAULT NULL,
-  `tag_name` varchar(50) DEFAULT NULL,
-  `tag_type` varchar(50) DEFAULT NULL,
-  `tag_created_time` datetime DEFAULT NULL,
-  `tag_updated_time` datetime DEFAULT NULL,
-  `tag_color` varchar(20) DEFAULT '#BEBEBE',
-  PRIMARY KEY (`tag_id`),
-  KEY `wallet_record_tag_id_ibfk_1` (`tag_wallet_id`),
-  CONSTRAINT `wallet_record_tag_id_ibfk_1` FOREIGN KEY (`tag_wallet_id`) REFERENCES `wallet` (`wallet_id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+CREATE TRIGGER wallet.set_tag_default BEFORE UPDATE ON wallet.wallet_record
+FOR EACH ROW BEGIN
+    IF NOT EXISTS (SELECT `tag_id` from `wallet_record_tag_id` WHERE `tag_id` = OLD.wallet_record_tag_id) THEN
+        SET NEW.wallet_record_tag_id = 'tag_default';
+    END IF;
+END; 
+$$
+*/
+
+/*preinsertion for tag_default*/
+INSERT INTO `wallet_record_tag_id` VALUES('tag_default', 'NULL', 0, '無', 'none', NOW(), NOW(), '#BEBEBE');
+
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
-
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
 /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;

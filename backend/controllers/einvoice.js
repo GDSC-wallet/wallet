@@ -49,15 +49,27 @@ export const getHeaders = async (req, res, next) => {
             'content-type': 'application/x-www-form-urlencoded;charset=utf-8'
         }
     }).then( async result => {
-        var response = {
-            success: true,
-            message: "取得載具發票表頭資料成功",
-            data: {
-                headers: result.data
+        var response = {};
+        var status;
+        if(result.data.code !== 200) {
+            response = {
+                success: false,
+                message: "取得載具發票表頭資料失敗 error: " + result.data.msg,
+                data: {}
             }
-        };
+            status = 400;
+        } else {
+            response = {
+                success: true,
+                message: "取得載具發票表頭資料成功",
+                data: {
+                    headers: result.data
+                }
+            }
+            status = 201;
+        }
         console.log(response);
-        res.status(201).json(response);
+        res.status(status).json(response);
     }).catch(err => {
         var response = {
             success: false,
@@ -108,17 +120,29 @@ export const getDetails = async (req, res, next) => {
             'content-type': 'application/x-www-form-urlencoded;charset=utf-8'
         }
     }).then(result => {
-        var response = {
-            success: true,
-            message: "取得載具發票明細資料成功",
-            data: result.data
+        var response = {};
+        var status;
+        if(result.data.code !== 200) {
+            response = {
+                success: false,
+                message: "取得載具發票明細資料失敗 error: " + result.data.msg,
+                data: {}
+            }
+            status = 400;
+        } else {
+            response = {
+                success: true,
+                message: "取得載具發票明細資料成功",
+                data: result.data
+            }
+            status = 201;
         }
         console.log(response);
-        res.status(201).json(response);
+        res.status(status).json(response);
     }).catch(err => {
         var response = {
             success: false,
-            message: "取得載具發票明細資料失敗error: " + err.message,
+            message: "取得載具發票明細資料失敗 error: " + err.message,
             data: {}
         }
         console.error(response);

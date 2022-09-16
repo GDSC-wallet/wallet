@@ -128,13 +128,13 @@ const update_all_tag = async (tags) => {
 
 const delete_tag = async (tag_id) => {
     return new Promise( async (resolve, reject) => {
-        var sql = "DELETE FROM wallet_record_tag_id WHERE tag_id = ?";
+        var sql = "START TRANSACTION; DELETE FROM wallet_record_tag_id WHERE tag_id = ?; UPDATE wallet_record SET wallet_record_tag_id = 'tag_default' WHERE wallet_record_tag_id = ?; COMMIT";
         pool.getConnection( async (err, conn) => {
             if(err) {
                 print_error(err);
                 reject(err);
             } else {
-                await conn.query(sql, tag_id, (err, results, fields) => {
+                await conn.query(sql, [tag_id, tag_id], (err, results, fields) => {
                     conn.release();
                     if(err) {
                         print_error(err);
