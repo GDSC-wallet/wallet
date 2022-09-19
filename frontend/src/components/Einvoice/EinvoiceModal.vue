@@ -327,6 +327,7 @@ export default {
     },
     encode() {
       return (rowData) => {
+        if (!rowData) return "";
         let res = [];
         let offset = rowData.length;
         for (let i = 0; i < offset; i++) {
@@ -339,6 +340,7 @@ export default {
     },
     decode() {
       return (rowData) => {
+        if (!rowData) return "";
         let res = [];
         let offset = rowData.length;
         for (let i = 0; i < offset; i++) {
