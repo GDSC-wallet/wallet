@@ -1,6 +1,6 @@
 import ajax from "../api";
 
-const default_tag = {
+/* const default_tag = {
   tag_created_time: null,
   tag_color: "#000000",
   tag_id: "tag_default",
@@ -9,7 +9,7 @@ const default_tag = {
   tag_type: null,
   tag_updated_time: null,
   tag_wallet_id: "wallet_default",
-};
+}; */
 
 const wallet = {
   namespaced: true,
@@ -194,16 +194,15 @@ const wallet = {
     },
     getWalletTags: (state) => (mode) => {
       if (state.wallet && mode == "all")
-        return [...state.wallet.tags, default_tag];
+        return [...state.wallet.tags];
       if (state.wallet)
         return [
-          ...state.wallet.tags.filter((tag) => tag.tag_type == mode),
-          default_tag,
+          ...state.wallet.tags.filter((tag) => tag.tag_type == mode)
         ];
       return [];
     },
     getAllWalletTags: (state) => {
-      if (state.wallet) return [...state.wallet.tags, default_tag];
+      if (state.wallet) return [...state.wallet.tags];
       return [];
     },
   },

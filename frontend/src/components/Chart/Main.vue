@@ -26,12 +26,10 @@ export default {
         document.getElementById(this.chartId),
         this.config
       )
-      console.log(this.mychart)
     }
   },
   watch: {
     'config.data'() {
-      console.log('config change');
       this.mychart.destroy();
       this.init();
     }

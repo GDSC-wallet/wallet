@@ -35,7 +35,7 @@
 <script>
 import MonthSelector from "@/components/Calendar/components/MonthSelector.vue";
 import RecordList from "../components/RecordCard/RecordList.vue";
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 import BarChart from "../components/Chart/components/BarChart.vue";
 import DonutChart from "../components/Chart/components/DonutChart.vue";
 export default {
@@ -48,12 +48,15 @@ export default {
   },
   data() {
     return {
-      date: new Date(),
+      /* date: new Date(), */
       btnSelected: 0,
       donut: true,
     };
   },
   methods: {
+    ...mapActions({
+      setDate: "calendar/setDate",
+    }),
     changeDate(v) {
       console.log(v);
     },
@@ -67,7 +70,16 @@ export default {
       getRecords: "wallet/getRecords",
       getWalletTags: "wallet/getWalletTags",
       getAllWalletTags: "wallet/getAllWalletTags",
+      getDate: "calendar/getDate",
     }),
+    date: {
+      get() {
+        return this.getDate;
+      },
+      set(val) {
+        this.setDate(val);
+      }
+    },
     getMonthRecords() {
       const vm = this;
       return this.getRecords
@@ -230,11 +242,11 @@ export default {
       return this.isEmpty
         ? 1
         : Math.max(
-            Math.max(...this.getBarData.pos),
-            Math.min(...this.getBarData.neg) * -1,
-            Math.max(...this.getLineData),
-            Math.min(...this.getLineData) * -1
-          );
+          Math.max(...this.getBarData.pos),
+          Math.min(...this.getBarData.neg) * -1,
+          Math.max(...this.getLineData),
+          Math.min(...this.getLineData) * -1
+        );
     },
     getRange() {
       return this.date.toISOString().slice(0, 7);
