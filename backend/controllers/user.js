@@ -203,15 +203,7 @@ export const getUserProfile = async (req, res, next) => {
                                     }
                                 }
                             })
-                            .catch(err => {
-                                var response = {
-                                    success: false,
-                                    message: "取得user資料失敗 error1: " + err.message,
-                                    data: {}
-                                }
-                                console.log(response);
-                                res.status(400).json(response);
-                            })
+                            .catch(err => {throw err;})
                         record_arr.push(record_obj);
                     }
                     // add tags
@@ -233,15 +225,7 @@ export const getUserProfile = async (req, res, next) => {
                             }
                             wallet_obj.tags = tag_arr;
                         })
-                        .catch(err => {
-                            var response = {
-                                success: false,
-                                message: "取得user資料失敗 error2: " + err.message,
-                                data: {}
-                            }
-                            console.log(response);
-                            res.status(400).json(response);
-                        })
+                        .catch(err => {throw err;})
                 }
                 if(j == 0) i++;
                 else
@@ -266,21 +250,13 @@ export const getUserProfile = async (req, res, next) => {
                         Data.data.debtors.push(debtor_obj);
                     }
                 })
-                .catch(err => {
-                    var response = {
-                        success: false,
-                        message: "取得user資料失敗 error3: " + err.message,
-                        data: {}
-                    }
-                    console.log(response);
-                    res.status(400).json(response);
-                })
+                .catch(err => {throw err;})
             console.log(Data);
             res.status(201).json(Data);
         }).catch(err => {
             var response = {
                 success: false,
-                message: "取得user資料失敗 error4: " + err.message,
+                message: "取得user資料失敗 error: " + err.message,
                 data: {}
             }
             console.log(response);
