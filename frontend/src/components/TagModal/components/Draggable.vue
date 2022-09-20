@@ -34,7 +34,7 @@
               <v-btn icon>
                 <v-icon @click="editTag(tag)">mdi-pencil</v-icon>
               </v-btn>
-              <v-btn icon color="error" @click="deleteTag(tag.tag_id)">
+              <v-btn icon color="error" @click="deleteTag(tag.tag_id)" :disabled="cantDelete(tag.tag_id)">
                 <v-icon>mdi-delete</v-icon>
               </v-btn>
             </span>
@@ -47,7 +47,7 @@
 
 <script>
 import draggable from "vuedraggable";
-import { mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 
 export default {
   name: "Draggable",
@@ -84,6 +84,9 @@ export default {
     }
   },
   computed: {
+    ...mapGetters({
+      getWalletId: "wallet/getWalletId"
+    }),
     renderList: {
       get() {
         return this.list;
@@ -92,6 +95,11 @@ export default {
         this.$emit("handleChange", value);
       },
     },
+    cantDelete() {
+      return (id) => {
+        return id === "tag_income_" + this.getWalletId || id === "tag_expense_" + this.getWalletId
+      }
+    }
   },
 };
 </script>
