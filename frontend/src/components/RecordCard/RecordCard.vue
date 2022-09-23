@@ -95,8 +95,6 @@ export default {
     },
     tag(id) {
       const res = this.getAllWalletTags.find((tag) => tag.tag_id == id);
-      if (!res)
-        return  this.getAllWalletTags.find((tag) => tag.tag_id == "tag_default");
       return res;
     },
     deleteRec() {

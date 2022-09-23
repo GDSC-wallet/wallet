@@ -108,6 +108,7 @@ const record = {
         }
       }).then(res => {
         console.log(res.data);
+        dispatch("closeModal");
         dispatch("auth/getProfile", null, { root: true });
       }).catch((err) => {
         console.log(err);

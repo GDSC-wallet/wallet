@@ -1,16 +1,5 @@
 import ajax from "../api";
 
-/* const default_tag = {
-  tag_created_time: null,
-  tag_color: "#000000",
-  tag_id: "tag_default",
-  tag_name: "NULL",
-  tag_ordinary: null,
-  tag_type: null,
-  tag_updated_time: null,
-  tag_wallet_id: "wallet_default",
-}; */
-
 const wallet = {
   namespaced: true,
   state: {
@@ -171,8 +160,14 @@ const wallet = {
     },
   },
   getters: {
-    getRecords(state) {
-      if (state.wallet) return state.wallet.records;
+    getRecords(state, getters) {
+      if (state.wallet) return state.wallet.records.map(record => {
+        if(record.wallet_record_tag_id === "tag_default") {
+          const tagId = "tag_" + record.record_type + "_" + getters.getWalletId
+          record.wallet_record_tag_id = tagId;
+        }
+        return record;
+      });
       return [];
     },
     getWalletId(state) {
