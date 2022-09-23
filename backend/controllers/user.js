@@ -123,6 +123,7 @@ export const getUserProfile = async (req, res, next) => {
     //從資料庫取得使用者資料
     await User.get_user(user_id, current_time)
         .then(async results => {
+            console.log(results);
             if(results.length > 0)
                 user_status = true;
             else
@@ -171,7 +172,7 @@ export const getUserProfile = async (req, res, next) => {
                 // construct record and tag array
                 var record_arr = [];
                 var j = 0;
-                if(results[i].selected == 1) {
+                if(results[i].selected == 1 && results[i].record_id) {
                     for(j = 0; j < results[i].record_num; ++j) {
                         // 若已經沒有資料或已是不同wallet,則提早break
                         if(i + j >= results.length || results[i+j].wallet_id != results[i].wallet_id)

@@ -26,48 +26,49 @@ export const get_wallet = async (req, res, next) => {
             };
             if(results[1][0].wallet_barcode)
                 response['wallet_barcode'] = results[1][0].wallet_barcode.slice(1, results[1][0].wallet_barcode.length-1);
+            // avoid empty record
+            if(results[1][0].record_id) {
+                for(var i = 0; i < results[1][0].record_num; ++i) {
+                    if(i >= results[1].length) break;
+                    var record_data = {
+                        "record_id": results[1][i].record_id,
+                        "wallet_record_tag_id": results[1][i].wallet_record_tag_id,
+                        "record_ordinary": results[1][i].record_ordinary,
+                        "record_name": results[1][i].record_name.slice(1, results[1][i].record_name.length-1),
+                        "record_description": results[1][i].record_description.slice(1, results[1][i].record_description.length-1),
+                        "record_amount": results[1][i].record_amount,
+                        "record_type": results[1][i].record_type,
+                        "record_date": results[1][i].record_date,
+                        "record_debtors": [],
+                        "record_created_time": results[1][i].record_created_time,
+                        "record_updated_time": results[1][i].record_updated_time
+                    }
 
-            //console.log(results);
-            for(var i = 0; i < results[1][0].record_num; ++i) {
-                if(i >= results[1].length) break;
-                var record_data = {
-                    "record_id": results[1][i].record_id,
-                    "wallet_record_tag_id": results[1][i].wallet_record_tag_id,
-                    "record_ordinary": results[1][i].record_ordinary,
-                    "record_name": results[1][i].record_name.slice(1, results[1][i].record_name.length-1),
-                    "record_description": results[1][i].record_description.slice(1, results[1][i].record_description.length-1),
-                    "record_amount": results[1][i].record_amount,
-                    "record_type": results[1][i].record_type,
-                    "record_date": results[1][i].record_date,
-                    "record_debtors": [],
-                    "record_created_time": results[1][i].record_created_time,
-                    "record_updated_time": results[1][i].record_updated_time
-                }
-
-                // add record_debtors
-                await Debtor.get_record_debtors(results[1][i].record_id)
-                    .then(result => {
-                        if(result.length > 0) {
-                            for(var j = 0; j < result.length; ++j) {
-                                var record_debtor_obj = {
-                                    debtor_id: result[j].debtor_id,
-                                    debtor_name: result[j].debtor_name,
-                                    debtor_record_amount: result[j].debtor_record_amount
+                    // add record_debtors
+                    await Debtor.get_record_debtors(results[1][i].record_id)
+                        .then(result => {
+                            if(result.length > 0) {
+                                for(var j = 0; j < result.length; ++j) {
+                                    var record_debtor_obj = {
+                                        debtor_id: result[j].debtor_id,
+                                        debtor_name: result[j].debtor_name,
+                                        debtor_record_amount: result[j].debtor_record_amount
+                                    }
+                                    record_data.record_debtors.push(record_debtor_obj);
                                 }
-                                record_data.record_debtors.push(record_debtor_obj);
                             }
-                        }
-                    })
-                    .catch(err => {
-                        var response = {
-                            "success": false,
-                            "message": "取得wallet資料失敗 error: " + err.message,
-                            "data": {}
-                        }
-                        console.log(response);
-                        res.status(400).json(response);
-                    })
-                response.data.records.push(record_data);
+                        })
+                        .catch(err => {
+                            var response = {
+                                "success": false,
+                                "message": "取得wallet資料失敗 error: " + err.message,
+                                "data": {}
+                            }
+                            console.log(response);
+                            res.status(400).json(response);
+                        })
+                    response.data.records.push(record_data);
+                }
             }
 
             await User.get_wallet_tag(wallet_id)
@@ -89,15 +90,7 @@ export const get_wallet = async (req, res, next) => {
                     //console.log(tag_arr);
                     response.data.tags = tag_arr;
                 })
-                .catch(err => {
-                    var response = {
-                        "success": false,
-                        "message": "取得wallet資料失敗 error: " + err.message,
-                        "data": {}
-                    }
-                    console.log(response);
-                    res.status(400).json(response);
-                })
+                .catch(err => { throw err; })
             console.log(response);
             res.status(201).json(response);
         })
