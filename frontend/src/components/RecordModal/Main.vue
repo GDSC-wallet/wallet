@@ -191,7 +191,7 @@ export default {
     sendRecord() {
       if (!this.$refs.form.validate()) return;
       if (!this.data.wallet_record_tag_id) {
-        this.data.wallet_record_tag_id = this.walletTags.find(tag => tag.text === "其他")?.value?.tag_id;
+        this.data.wallet_record_tag_id = "tag_" + this.data.record_type + "_" + this.getWalletId
       }
       if (this.data.record_name === "") {
         this.data.record_name = this.selectedTag?.tag_name;
@@ -222,6 +222,7 @@ export default {
       _walletTags: "wallet/getWalletTags",
       calendarDate: "calendar/getDate",
       getDebtorNames: "debtor/getDebtorNames",
+      getWalletId: "wallet/getWalletId",
     }),
     walletTags() {
       return this._walletTags(this.data.record_type).map((tag) => {
