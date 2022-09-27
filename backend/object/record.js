@@ -135,7 +135,7 @@ export const delete_record_check = async (req, res, next) => {
             res.status(401).json({success:false,msg:"record_wallet_id is required"})
             return;
         }
-        if(!!!body.record_amount){
+        if(body.record_amount == null || body.record_amount == undefined){
             res.status(401).json({success:false,msg:"record_amount is required"})
             return;
         }
