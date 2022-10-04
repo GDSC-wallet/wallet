@@ -9,7 +9,7 @@
       ref="calendar"
     >
       <template v-slot:footer>
-        <div>
+        <div style="height: 30px;">
           <v-btn small text outlined @click="toToday" class="back-to-today-btn">
             today
           </v-btn>
