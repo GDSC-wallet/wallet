@@ -219,10 +219,11 @@ export default {
 
       ajax("/api/einvoice/headers", "get", {
         params: {
-          startDate: String(this.year) + "/0" + String(this.mon) + "/" + "01",
+          startDate: String(this.year) + "/" + (this.mon >= 10 ? "" : "0") + String(this.mon) + "/" + "01",
           endDate:
             String(this.year) +
-            "/0" +
+            "/" +
+            (this.mon >= 10 ? "" : "0") +
             String(this.mon) +
             "/" +
             String(daysInMonth),
