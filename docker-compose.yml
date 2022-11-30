@@ -16,7 +16,7 @@ services:
       - ./backend:/app
       - ./dist:/app/dist
       - ./logs:/root/.pm2/logs:Z
-    command: bash -c "cd ./app && npm install && node index.js"
+    command: bash -c "cd /app && npm install && node index.js"
     environment:
       - MYSQL_HOST=database
       - MYSQL_USER=root
