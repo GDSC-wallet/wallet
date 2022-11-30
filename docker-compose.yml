@@ -8,12 +8,14 @@ services:
       - wallet-data:/var/lib/mysql
   backend: 
     container_name: backend
+    restart: unless-stopped
     build: backend
     depends_on:
       - database
     volumes:
       - ./backend:/app
       - ./dist:/app/dist
+      - ./logs:/root/.pm2/logs:Z
     command: bash -c "cd ./app && npm install && node index.js"
     environment:
       - MYSQL_HOST=database
