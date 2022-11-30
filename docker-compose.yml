@@ -7,8 +7,8 @@ services:
     volumes:
       - wallet-data:/var/lib/mysql
   backend: 
-    image: node
     container_name: backend
+    build: backend
     depends_on:
       - database
     volumes:
